@@ -1,0 +1,12 @@
+// Despliegue en Cloudflare Workers (archivos estáticos del build de Vite).
+// not_found_handling hace que rutas como /fincas/123 sirvan index.html
+// y las resuelva React Router, en vez de responder 404.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "rizomas-web",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
