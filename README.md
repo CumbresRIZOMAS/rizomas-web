@@ -1,6 +1,6 @@
 # rizomas-web
 
-Panel web técnico/administrativo de RIZOMAS. React + Vite + TypeScript, desplegado en Cloudflare Pages. Consume la API de [`RIZOMAS_back`](https://github.com/CumbresRIZOMAS/RIZOMAS_back).
+Panel web técnico/administrativo de RIZOMAS. React + Vite + TypeScript, desplegado en Cloudflare Workers. Consume la API de [`RIZOMAS_back`](https://github.com/CumbresRIZOMAS/RIZOMAS_back).
 
 ## Levantar el entorno local
 
@@ -30,8 +30,11 @@ Todo lo que empieza por `VITE_` queda expuesto en el navegador: aquí solo van v
 src/
   app/          raíz de la aplicación (App, rutas, layout)
   shared/
-    api/        cliente HTTP contra rizomas-backend
+    api/        cliente HTTP, hooks (useApiQuery / useApiMutation) y tipos de la API
+    auth/       sesión de Supabase Auth y rol del usuario
     config/     lectura de variables de entorno
+    ui.tsx      componentes compartidos (campos, encabezados, estados)
+  test/         utilidades de prueba (sesión y backend simulados)
   features/     un folder por módulo del dominio
     usuarios        RF-01, RF-22
     fincas          RF-02
@@ -49,11 +52,36 @@ src/
     reportes        RF-20, RF-21
 ```
 
-## Despliegue (Cloudflare Pages)
+## Pantallas
+
+| Ruta | Qué hace |
+|---|---|
+| `/fincas` | Lista de fincas; crear finca |
+| `/fincas/:id` | Resumen, editar datos, lotes y labores de la finca |
+| `/lotes/:id` | Cultivos del lote (agregar cultivo) y sus labores |
+| `/suelos/rangos` | Catálogo de rangos de referencia de suelo (RF-11) |
+
+Las labores respetan la regla xor del dominio: se registran sobre un lote **o** sobre un cultivo, nunca ambos. Una cosecha siempre va sobre un cultivo.
+
+Los botones se muestran u ocultan según el rol del token (claim `user_role`), pero eso es solo cosmético: los permisos reales los valida el backend (ASR-01). Si el token no trae rol, se muestran las acciones y el backend responde 403 cuando no corresponde.
+
+## Pruebas
+
+```bash
+npm test
+```
+
+Vitest + Testing Library, con el backend simulado (`src/test/utils.tsx`).
+
+## Despliegue (Cloudflare Workers)
+
+Cada push a `main` se despliega en https://rizomas-web.c-tellezs.workers.dev.
 
 - Build command: `npm run build`
-- Output directory: `dist`
-- Variables de entorno: las de la tabla anterior, configuradas en el proyecto de Pages.
+- Deploy command: `npx wrangler deploy` (usa `wrangler.jsonc`)
+- `wrangler.jsonc` sirve `dist/` y redirige cualquier ruta a `index.html` para que funcionen las URLs del panel.
+- Variables de entorno: las de la tabla anterior, configuradas como **variables de build** del proyecto en Cloudflare (Vite las incrusta al compilar). Sin ellas, el panel muestra qué falta en lugar de romperse.
+- El origen del panel debe estar en `CORS_ORIGIN` del backend y en el CORS del bucket R2.
 
 ## Convenciones
 
