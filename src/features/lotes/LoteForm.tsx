@@ -23,8 +23,8 @@ export function LoteForm({ farmId, onSaved, onCancel }: { farmId: string; onSave
 
   return (
     <FormCard title="Nuevo lote">
-      <form className="form" onSubmit={onSubmit}>
-        <div className="form-row">
+      <form onSubmit={onSubmit}>
+        <div className="form-grid">
           <TextField label="Nombre" required value={name} onChange={(e) => setName(e.target.value)} placeholder="Ej: La Esperanza" />
           <TextField label="Identificador" optional value={identifier} onChange={(e) => setIdentifier(e.target.value)} />
           <TextField label="Área (ha)" optional inputMode="decimal" value={area} onChange={(e) => setArea(e.target.value)} />

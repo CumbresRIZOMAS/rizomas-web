@@ -4,6 +4,8 @@ export const env = {
   apiUrl: (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, ''),
   supabaseUrl: import.meta.env.VITE_SUPABASE_URL ?? '',
   supabaseAnonKey: import.meta.env.VITE_SUPABASE_ANON_KEY ?? '',
+  /** Opcional: correo de contacto del portal público ("Vincular mi finca"). Sin él, esos botones no se muestran. */
+  contactEmail: import.meta.env.VITE_CONTACT_EMAIL ?? '',
 }
 
 /** Variables que faltan para que el panel funcione; se muestran en pantalla en vez de romper la app. */

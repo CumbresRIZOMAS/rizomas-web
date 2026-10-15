@@ -1,14 +1,7 @@
 import { createContext, useContext } from 'react'
+import type { Role } from '../api/types'
 
-export type Role =
-  | 'ADMIN_CUMBRES'
-  | 'ADMIN_FINCA'
-  | 'TECNICO'
-  | 'AGRICULTOR'
-  | 'PROVEEDOR'
-  | 'COMPRADOR_CERTIFICADORA'
-  | 'CLIENTE'
-  | 'PUBLICO'
+export type { Role }
 
 export type Auth = {
   token: string | null
@@ -56,4 +49,9 @@ export const ROLES = {
   registrarEnFinca: ['ADMIN_CUMBRES', 'ADMIN_FINCA', 'TECNICO', 'AGRICULTOR'],
   verRangosSuelo: ['ADMIN_CUMBRES', 'ADMIN_FINCA', 'TECNICO'],
   editarRangosSuelo: ['ADMIN_CUMBRES', 'TECNICO'],
+  registrarSuelo: ['ADMIN_CUMBRES', 'ADMIN_FINCA', 'TECNICO'],
+  verComercial: ['ADMIN_CUMBRES', 'ADMIN_FINCA'],
+  gestionarUsuarios: ['ADMIN_CUMBRES', 'ADMIN_FINCA'],
+  moderarEvidencias: ['ADMIN_CUMBRES', 'ADMIN_FINCA', 'TECNICO'],
+  verReportes: ['ADMIN_CUMBRES', 'ADMIN_FINCA', 'TECNICO'],
 } as const satisfies Record<string, readonly Role[]>

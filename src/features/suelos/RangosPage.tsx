@@ -148,8 +148,8 @@ function RangoForm({ rango, onSaved, onCancel }: { rango?: ReferenceRange; onSav
 
   return (
     <FormCard title={rango ? `Editar rango de ${rango.parameter}` : 'Nuevo rango'}>
-      <form className="form" onSubmit={onSubmit}>
-        <div className="form-row">
+      <form onSubmit={onSubmit}>
+        <div className="form-grid">
           <TextField label="Parámetro" required value={parameter} onChange={(e) => setParameter(e.target.value)} placeholder="Ej: pH, Fósforo" />
           <TextField
             label="Cultivo"
@@ -160,12 +160,12 @@ function RangoForm({ rango, onSaved, onCancel }: { rango?: ReferenceRange; onSav
             hint="Escríbelo igual que en el cultivo del lote, p. ej. “Café arábica”."
           />
         </div>
-        <div className="form-row">
+        <div className="form-grid">
           <TextField label="Mínimo" inputMode="decimal" value={min} onChange={(e) => setMin(e.target.value)} />
           <TextField label="Máximo" inputMode="decimal" value={max} onChange={(e) => setMax(e.target.value)} />
           <TextField label="Unidad" optional value={unit} onChange={(e) => setUnit(e.target.value)} placeholder="Ej: mg/kg" />
         </div>
-        <div className="form-row">
+        <div className="form-grid">
           <TextField label="Fuente" optional value={source} onChange={(e) => setSource(e.target.value)} placeholder="Ej: Cenicafé, Avance Técnico 2023" />
           <TextField label="Notas" optional value={notes} onChange={(e) => setNotes(e.target.value)} />
         </div>

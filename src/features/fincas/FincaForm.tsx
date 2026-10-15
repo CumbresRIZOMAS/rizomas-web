@@ -42,16 +42,16 @@ export function FincaForm({
 
   return (
     <FormCard title={title}>
-      <form className="form" onSubmit={onSubmit}>
-        <div className="form-row">
+      <form onSubmit={onSubmit}>
+        <div className="form-grid">
           <TextField label="Nombre" required value={name} onChange={(e) => setName(e.target.value)} placeholder="Ej: El Porvenir" />
           <TextField label="Identificador" optional value={identifier} onChange={(e) => setIdentifier(e.target.value)} />
         </div>
-        <div className="form-row">
+        <div className="form-grid">
           <TextField label="Municipio" optional value={municipality} onChange={(e) => setMunicipality(e.target.value)} placeholder="Ej: Pitalito" />
           <TextField label="Departamento / región" optional value={region} onChange={(e) => setRegion(e.target.value)} placeholder="Ej: Huila" />
         </div>
-        <div className="form-row">
+        <div className="form-grid">
           <TextField label="Área (ha)" optional inputMode="decimal" value={area} onChange={(e) => setArea(e.target.value)} />
           <TextField label="Clima" optional value={climate} onChange={(e) => setClimate(e.target.value)} placeholder="Ej: Templado húmedo" />
           <SelectField label="Tipo de finca" value={farmType} onChange={(e) => setFarmType(e.target.value as FarmType)}>
