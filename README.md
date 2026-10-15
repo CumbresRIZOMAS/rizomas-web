@@ -21,6 +21,7 @@ El backend debe permitir este origen en su `CORS_ORIGIN` (por defecto `http://lo
 | `VITE_API_URL` | URL base de rizomas-backend, sin `/api/v1` |
 | `VITE_SUPABASE_URL` | URL del proyecto Supabase |
 | `VITE_SUPABASE_ANON_KEY` | Anon key de Supabase (pública) |
+| `VITE_CONTACT_EMAIL` | Opcional. Correo de contacto del portal público; sin él no se muestran los botones de contacto |
 
 Todo lo que empieza por `VITE_` queda expuesto en el navegador: aquí solo van valores públicos, nunca secretos.
 

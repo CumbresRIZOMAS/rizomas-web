@@ -65,3 +65,64 @@ export function optionalText(text: string): string | undefined {
   const limpio = text.trim()
   return limpio ? limpio : undefined
 }
+
+const fechaCorta = new Intl.DateTimeFormat('es-CO', { day: '2-digit', month: 'short', timeZone: 'UTC' })
+const fechaLarga = new Intl.DateTimeFormat('es-CO', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
+const pesos = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 })
+
+/** "18 jun" (fechas de timeline y listas). */
+export function formatShortDate(iso: string | null | undefined): string {
+  return iso ? fechaCorta.format(new Date(iso)).replace(' de ', ' ').replace('.', '') : '—'
+}
+
+/** "18 de junio de 2025". */
+export function formatLongDate(iso: string | Date | null | undefined): string {
+  return iso ? fechaLarga.format(typeof iso === 'string' ? new Date(iso) : iso) : '—'
+}
+
+export function formatMoney(value: Decimal | null | undefined): string {
+  const n = toNumber(value)
+  return n === null ? '—' : pesos.format(n)
+}
+
+/** "$ 7,8 M" para KPIs. */
+export function formatMoneyShort(value: number): string {
+  if (Math.abs(value) >= 1_000_000) return `$ ${numero.format(Math.round(value / 100_000) / 10)} M`
+  return pesos.format(value)
+}
+
+export const MONTHS = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+
+export const ROLE_LABEL: Record<string, string> = {
+  ADMIN_CUMBRES: 'Administrador de empresa',
+  ADMIN_FINCA: 'Administrador de finca',
+  TECNICO: 'Técnico',
+  AGRICULTOR: 'Agricultor',
+  CLIENTE: 'Cliente',
+  PROVEEDOR: 'Proveedor',
+  COMPRADOR_CERTIFICADORA: 'Comprador / certificadora',
+  PUBLICO: 'Público',
+}
+
+export const FARM_TYPE_TONE: Record<FarmType, 'green' | 'amber' | 'gray'> = {
+  REGENERATIVA: 'green',
+  EN_TRANSICION: 'amber',
+  CONVENCIONAL: 'gray',
+}
+
+export const DIAGNOSIS_LABEL: Record<string, { label: string; tone: 'green' | 'blue' | 'terra' | 'gray' }> = {
+  OPTIMO: { label: 'Óptimo', tone: 'green' },
+  BAJO: { label: 'Bajo', tone: 'blue' },
+  ALTO: { label: 'Alto', tone: 'terra' },
+  SIN_REFERENCIA: { label: 'Sin referencia', tone: 'gray' },
+}
+
+export function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase()
+}

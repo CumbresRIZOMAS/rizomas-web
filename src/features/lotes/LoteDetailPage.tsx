@@ -1,18 +1,17 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useParams } from 'react-router'
 import { useApiMutation, useApiQuery } from '../../shared/api/hooks'
-import type { Crop, FarmDetail, LotDetail } from '../../shared/api/types'
+import type { Crop, Labor, LotDetail } from '../../shared/api/types'
 import { canDo, ROLES, useAuth } from '../../shared/auth/context'
 import { formatDate, formatHa, optionalText } from '../../shared/format'
-import { Empty, ErrorNotice, FormCard, Loading, PageHeader, TextField } from '../../shared/ui'
-import { LaboresPanel } from '../labores/LaboresPanel'
+import { Button, Card, CardTitle, Empty, ErrorNotice, FormCard, Loading, PageHeader, TextField } from '../../shared/ui'
+import { LaborTimeline } from '../labores/LaborTimeline'
 
 export function LoteDetailPage() {
   const { lotId = '' } = useParams()
   const { role } = useAuth()
   const lote = useApiQuery<LotDetail>(`/lots/${lotId}`)
-  // Las labores necesitan los lotes y cultivos de toda la finca (regla xor).
-  const finca = useApiQuery<FarmDetail>(lote.data ? `/farms/${lote.data.farmId}` : null)
+  const labores = useApiQuery<Labor[]>(lote.data ? `/farms/${lote.data.farmId}/labors` : null)
   const [agregandoCultivo, setAgregandoCultivo] = useState(false)
 
   if (lote.loading && !lote.data) return <Loading />
@@ -25,24 +24,23 @@ export function LoteDetailPage() {
       <PageHeader
         breadcrumb={
           <>
-            <Link to="/fincas">Fincas</Link> / <Link to={`/fincas/${l.farm.id}`}>{l.farm.name}</Link>
+            <Link to="/fincas">Fincas</Link> / <Link to={`/fincas/${l.farm.id}`}>{l.farm.name}</Link> / <span>{l.name}</span>
           </>
         }
         eyebrow="Lote"
-        title={l.name}
+        title={`Lote ${l.name}`}
         subtitle={[formatHa(l.areaHa), l.identifier].filter(Boolean).join(' · ')}
       />
 
       <div className="stack">
-        <section className="card">
-          <div className="section-head">
-            <h2 className="section-title">Cultivos</h2>
+        <Card className="card-pad">
+          <CardTitle title="Cultivos" subtitle="Especies y variedades sembradas en el lote">
             {canDo(role, ROLES.registrarEnFinca) && !agregandoCultivo && (
-              <button type="button" className="btn btn-secondary" onClick={() => setAgregandoCultivo(true)}>
-                + Agregar cultivo
-              </button>
+              <Button variant="secondary" icon="plus" onClick={() => setAgregandoCultivo(true)}>
+                Agregar cultivo
+              </Button>
             )}
-          </div>
+          </CardTitle>
           {l.crops.length === 0 ? (
             <Empty title="Sin cultivos">Registra la especie y variedad sembrada en este lote.</Empty>
           ) : (
@@ -71,7 +69,7 @@ export function LoteDetailPage() {
               </table>
             </div>
           )}
-        </section>
+        </Card>
 
         {agregandoCultivo && (
           <CultivoForm
@@ -80,16 +78,21 @@ export function LoteDetailPage() {
             onSaved={() => {
               setAgregandoCultivo(false)
               lote.reload()
-              finca.reload()
             }}
           />
         )}
 
-        <div>
-          <h2 className="section-title">Labores del lote</h2>
-          {finca.error && <ErrorNotice message={finca.error} onRetry={finca.reload} />}
-          {finca.data ? <LaboresPanel farmId={l.farmId} lots={finca.data.lots} lotId={l.id} /> : !finca.error && <Loading />}
-        </div>
+        <Card className="card-pad">
+          <CardTitle title="Labores del lote" subtitle="Incluye las registradas sobre sus cultivos" />
+        </Card>
+        {labores.error && <ErrorNotice message={labores.error} onRetry={labores.reload} />}
+        {labores.loading && !labores.data && <Loading />}
+        {labores.data && (
+          <LaborTimeline
+            labors={labores.data.filter((x) => x.lotId === l.id || (x.cropId !== null && l.crops.some((c) => c.id === x.cropId)))}
+            lotName={(id) => (id === l.id ? l.name : undefined)}
+          />
+        )}
       </div>
     </>
   )
@@ -116,8 +119,8 @@ function CultivoForm({ lotId, onSaved, onCancel }: { lotId: string; onSaved: (c:
 
   return (
     <FormCard title="Agregar cultivo">
-      <form className="form" onSubmit={onSubmit}>
-        <div className="form-row">
+      <form onSubmit={onSubmit}>
+        <div className="form-grid">
           <TextField label="Especie" required value={species} onChange={(e) => setSpecies(e.target.value)} />
           <TextField label="Variedad" optional value={variety} onChange={(e) => setVariety(e.target.value)} placeholder="Ej: Castillo" />
           <TextField label="Fecha de siembra" optional type="date" value={plantingDate} onChange={(e) => setPlantingDate(e.target.value)} />
@@ -125,12 +128,12 @@ function CultivoForm({ lotId, onSaved, onCancel }: { lotId: string; onSaved: (c:
         </div>
         {error && <ErrorNotice message={error} />}
         <div className="form-actions">
-          <button type="button" className="btn btn-secondary" onClick={onCancel}>
+          <Button variant="ghost" onClick={onCancel}>
             Cancelar
-          </button>
-          <button type="submit" className="btn btn-primary" disabled={saving || !species.trim()}>
+          </Button>
+          <Button type="submit" icon="check" disabled={saving || !species.trim()}>
             {saving ? 'Guardando…' : 'Guardar cultivo'}
-          </button>
+          </Button>
         </div>
       </form>
     </FormCard>

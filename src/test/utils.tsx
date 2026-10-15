@@ -3,6 +3,7 @@ import type { ReactElement } from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { vi } from 'vitest'
 import { AuthContext, type Auth, type Role } from '../shared/auth/context'
+import { ActiveFarmProvider } from '../shared/farm/ActiveFarmProvider'
 
 export type FetchCall = { url: string; method: string; body: unknown }
 
@@ -40,16 +41,18 @@ export function fakeAuth(role: Role | null = 'TECNICO', overrides: Partial<Auth>
   }
 }
 
-/** Renderiza con sesión simulada y router en la ruta indicada. */
+/** Renderiza con sesión simulada, finca activa (GET /farms) y router en la ruta indicada. */
 export function renderWithAuth(ui: ReactElement, { auth = fakeAuth(), path = '/', route = '/' }: { auth?: Auth; path?: string; route?: string } = {}) {
   return render(
     <AuthContext.Provider value={auth}>
-      <MemoryRouter initialEntries={[route]}>
-        <Routes>
-          <Route path={path} element={ui} />
-          <Route path="*" element={<p>Otra página</p>} />
-        </Routes>
-      </MemoryRouter>
+      <ActiveFarmProvider>
+        <MemoryRouter initialEntries={[route]}>
+          <Routes>
+            <Route path={path} element={ui} />
+            <Route path="*" element={<p>Otra página</p>} />
+          </Routes>
+        </MemoryRouter>
+      </ActiveFarmProvider>
     </AuthContext.Provider>,
   )
 }

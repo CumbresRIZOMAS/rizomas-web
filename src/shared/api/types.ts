@@ -58,7 +58,7 @@ export type Labor = {
   observations: string | null
   lot?: Pick<Lot, 'id' | 'name'> | null
   crop?: Pick<Crop, 'id' | 'species' | 'variety' | 'lotId'> | null
-  harvest?: { quantity: Decimal; unit: string } | null
+  harvest?: { id?: string; quantity: Decimal; unit: string; quality?: string | null } | null
   management?: { type: AgronomicManagementType; quantity: Decimal | null } | null
 }
 
@@ -73,6 +73,7 @@ export type Farm = {
   farmType: FarmType
   createdAt: string
   lots?: Lot[]
+  owner?: { id: string; name: string } | null
 }
 
 export type LotWithCrops = Omit<Lot, 'crops'> & { crops: Crop[] }
@@ -80,6 +81,7 @@ export type LotWithCrops = Omit<Lot, 'crops'> & { crops: Crop[] }
 export type FarmDetail = Omit<Farm, 'lots'> & {
   lots: LotWithCrops[]
   labors: Labor[]
+  soilAnalyses?: { id: string; date: string; lotId: string | null; laboratory: string | null }[]
 }
 
 export type LotDetail = Lot & {
@@ -98,4 +100,177 @@ export type ReferenceRange = {
   source: string | null
   notes: string | null
   updatedAt: string
+}
+
+export type Role =
+  | 'ADMIN_CUMBRES'
+  | 'ADMIN_FINCA'
+  | 'TECNICO'
+  | 'AGRICULTOR'
+  | 'PROVEEDOR'
+  | 'COMPRADOR_CERTIFICADORA'
+  | 'CLIENTE'
+  | 'PUBLICO'
+
+export type AppUser = {
+  id: string
+  name: string
+  email: string
+  role: Role
+  active: boolean
+  createdAt: string
+}
+
+/** BAJO | OPTIMO | ALTO | SIN_REFERENCIA (RF-11). */
+export type DiagnosisStatus = 'BAJO' | 'OPTIMO' | 'ALTO' | 'SIN_REFERENCIA'
+
+export type Recommendation = {
+  id: string
+  diagnosisId: string | null
+  type: 'PRACTICA' | 'BIOINSUMO'
+  description: string
+  automatic: boolean
+  createdAt: string
+  bioinput?: { id: string; name: string } | null
+}
+
+export type Diagnosis = {
+  id: string
+  parameter: string
+  value: Decimal | null
+  unit: string | null
+  referenceMin: Decimal | null
+  referenceMax: Decimal | null
+  status: DiagnosisStatus | string
+  recommendations: Recommendation[]
+}
+
+export type SoilAnalysis = {
+  id: string
+  farmId: string
+  lotId: string | null
+  date: string
+  laboratory: string | null
+  observations: string | null
+  lot?: { id: string; name: string } | null
+  diagnostics: Diagnosis[]
+}
+
+export type Ingredient = { name: string; quantity?: number; unit?: string }
+
+export type Bioinput = {
+  id: string
+  farmId: string
+  name: string
+  ingredients: Ingredient[] | null
+  preparation: string | null
+  producedAt: string | null
+  quantity: Decimal | null
+  unit: string | null
+  createdAt: string
+  _count?: { applications: number }
+}
+
+export type BioinputApplication = {
+  id: string
+  lotId: string
+  appliedAt: string
+  quantity: Decimal | null
+  unit: string | null
+  observations: string | null
+  lot?: { id: string; name: string }
+  labor?: { id: string; name: string; startDate: string } | null
+}
+
+export type BioinputDetail = Bioinput & { applications: BioinputApplication[] }
+
+export type Certification = { id: string; certifier: string; status: string }
+
+export type ProductFinal = {
+  id: string
+  finalizedAt: string | null
+  destination: string | null
+  certifications?: Certification[]
+}
+
+export type CoffeeProcess = {
+  id: string
+  farmId: string
+  harvestId: string | null
+  currentStage: string
+  startedAt: string
+  finishedAt: string | null
+  notes: string | null
+  harvest?: { id: string; quantity: Decimal; unit: string } | null
+  products: ProductFinal[]
+}
+
+export type Purchase = {
+  id: string
+  date: string
+  itemName: string
+  isBioinput: boolean
+  quantity: Decimal
+  unit: string | null
+  value: Decimal | null
+  supplier?: { name: string } | null
+}
+
+export type Sale = {
+  id: string
+  date: string
+  productName: string
+  buyer: string | null
+  quantity: Decimal
+  unit: string | null
+  value: Decimal | null
+}
+
+export type Ledger = { purchases: Purchase[]; sales: Sale[] }
+
+export type EvidenceStatus = 'PENDIENTE' | 'EN_REVISION' | 'APROBADA' | 'RECHAZADA' | 'CUARENTENA'
+
+export type Evidence = {
+  id: string
+  farmId: string | null
+  lotId: string | null
+  laborId: string | null
+  objectKey: string
+  capturedAt: string | null
+  status: EvidenceStatus
+  visibility: 'PRIVADA' | 'FINCA' | 'ORGANIZACION' | 'PUBLICA'
+  moderationScore: Decimal | null
+  moderationEngine: string | null
+  rejectionReason: string | null
+  geolocation: unknown
+  createdAt: string
+}
+
+export type SignedUrl = { objectKey?: string; url: string; expiresIn: number }
+
+export type ProductionReport = {
+  type: 'production'
+  farmId?: string
+  totals: { labors: number; harvestEvents: number; harvestedQuantity: number; purchaseValue: number; saleValue: number }
+}
+
+/** Respuesta de GET /traceability/farms/:id (vista interna). */
+export type FarmTraceability = Omit<Farm, 'lots'> & {
+  lots: (Lot & {
+    crops: (Crop & { harvests: { id: string; quantity: Decimal; unit: string }[] })[]
+    soilAnalyses: { id: string; date: string; laboratory: string | null; diagnostics: Diagnosis[] }[]
+  })[]
+  labors: Labor[]
+  coffeeProcesses: CoffeeProcess[]
+}
+
+/** Publicación pública (RF-18): sin datos personales, comerciales ni coordenadas exactas. */
+export type Publication = {
+  id: string
+  title: string
+  region: string | null
+  quantity: Decimal | null
+  unit: string | null
+  publishedAt: string | null
+  evidences: { evidence: { id: string; url: string | null } }[]
 }
