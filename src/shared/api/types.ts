@@ -259,6 +259,7 @@ export type FarmTraceability = Omit<Farm, 'lots'> & {
   lots: (Lot & {
     crops: (Crop & { harvests: { id: string; quantity: Decimal; unit: string }[] })[]
     soilAnalyses: { id: string; date: string; laboratory: string | null; diagnostics: Diagnosis[] }[]
+    bioinputApplications: { id: string; appliedAt: string; quantity: Decimal | null; unit: string | null; bioinput: { id: string; name: string } }[]
   })[]
   labors: Labor[]
   coffeeProcesses: CoffeeProcess[]
@@ -273,4 +274,31 @@ export type Publication = {
   unit: string | null
   publishedAt: string | null
   evidences: { evidence: { id: string; url: string | null } }[]
+}
+
+/** Publicación vista desde el panel (GET /publications/farms/:id), activa o no. */
+export type FarmPublication = {
+  id: string
+  title: string
+  region: string | null
+  quantity: Decimal | null
+  unit: string | null
+  active: boolean
+  publishedAt: string | null
+  harvest: { id: string; quantity: Decimal; unit: string; labor: { startDate: string; name: string } } | null
+}
+
+/** GET /publications/:id/traceability: read model público, sin datos privados. */
+export type PublicTraceability = {
+  publication: { id: string; title: string; region: string | null; quantity: string | null; unit: string | null; publishedAt: string | null }
+  origin: { region: string | null; farmType: FarmType | null }
+  crop: { species: string; variety: string | null } | null
+  harvest: { date: string; quantity: string; unit: string; quality: string | null } | null
+  practices: { laborsByType: Partial<Record<LaborType, number>>; soilAnalyses: number; bioinputApplications: number }
+  processes: {
+    stage: string
+    startedAt: string
+    finishedAt: string | null
+    products: { finalizedAt: string | null; destination: string | null; certifications: { certifier: string; status: string }[] }[]
+  }[]
 }

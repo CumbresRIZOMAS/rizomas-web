@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useApiQuery } from '../../shared/api/hooks'
+import { canDo, ROLES, useAuth } from '../../shared/auth/context'
+import { Publicaciones } from './Publicaciones'
 import type { Farm, FarmTraceability } from '../../shared/api/types'
 import { RequireFarm } from '../../shared/farm/RequireFarm'
 import { formatDate, formatHa, formatNumber, toNumber } from '../../shared/format'
@@ -19,6 +21,7 @@ type Paso = { titulo: string; texto: string; icon: IconName; verificado?: boolea
  * contenido que ven compradores sale del read model público del backend.
  */
 function Trazabilidad({ farm }: { farm: Farm }) {
+  const { role } = useAuth()
   const { data, error, loading, reload } = useApiQuery<FarmTraceability>(`/traceability/farms/${farm.id}`)
   const [publica, setPublica] = useState(true)
 
@@ -29,6 +32,9 @@ function Trazabilidad({ farm }: { farm: Farm }) {
   const cultivos = data.lots.flatMap((l) => l.crops)
   const variedades = [...new Set(cultivos.map((c) => [c.species, c.variety].filter(Boolean).join(' ')))]
   const analisis = data.lots.flatMap((l) => l.soilAnalyses).sort((a, b) => b.date.localeCompare(a.date))
+  const recomendaciones = analisis.flatMap((a) => a.diagnostics.flatMap((d) => d.recommendations))
+  const aplicaciones = data.lots.flatMap((l) => l.bioinputApplications ?? [])
+  const bioinsumos = [...new Set(aplicaciones.map((a) => a.bioinput.name))]
   const unidad = mainUnit(data.labors)
   const cosechado = harvestTotal(data.labors, unidad)
   const areaLotes = data.lots.reduce((s, l) => s + (toNumber(l.areaHa) ?? 0), 0)
@@ -52,6 +58,18 @@ function Trazabilidad({ farm }: { farm: Farm }) {
       titulo: 'Análisis de suelo',
       texto: analisis.length ? `${analisis.length} análisis · último ${formatDate(analisis[0].date)}${!publica && analisis[0].laboratory ? ` (${analisis[0].laboratory})` : ''}` : 'Sin análisis registrados',
       icon: 'soil',
+    },
+    {
+      titulo: 'Recomendaciones',
+      texto: recomendaciones.length
+        ? `${recomendaciones.length} recomendaciones · ${recomendaciones.filter((r) => r.type === 'BIOINSUMO').length} con bioinsumo`
+        : 'Sin recomendaciones registradas',
+      icon: 'leaf',
+    },
+    {
+      titulo: 'Bioinsumos',
+      texto: aplicaciones.length ? `${aplicaciones.length} aplicaciones · ${bioinsumos.join(', ')}` : 'Sin aplicaciones de bioinsumos',
+      icon: 'drop',
     },
     { titulo: 'Cosecha', texto: cosechado > 0 ? `${formatNumber(cosechado)} ${unidad} cosechados` : 'Sin cosechas registradas', icon: 'coffee' },
     {
@@ -128,6 +146,11 @@ function Trazabilidad({ farm }: { farm: Farm }) {
           </div>
         </Card>
       </div>
+      {canDo(role, ROLES.publicar) && (
+        <div style={{ marginTop: 14 }}>
+          <Publicaciones farm={farm} traza={data} />
+        </div>
+      )}
     </div>
   )
 }

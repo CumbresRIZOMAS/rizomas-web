@@ -11,7 +11,7 @@ const evidencia = {
   laborId: 'labor-1',
   objectKey: 'farms/finca-1/evidence/x-foto.jpg',
   capturedAt: '2026-06-18T13:14:00.000Z',
-  status: 'PENDIENTE',
+  status: 'EN_REVISION',
   visibility: 'PRIVADA',
   moderationScore: '0.9200',
   moderationEngine: 'NSFWJS',
@@ -23,7 +23,8 @@ const evidencia = {
 function api(extra: Record<string, unknown> = {}) {
   return mockApi({
     'GET /farms': [],
-    'GET /evidence/moderation/pending': [evidencia],
+    'GET /evidence/moderation/summary': { PENDIENTE: 0, EN_REVISION: 1, CUARENTENA: 0, APROBADA: 0, RECHAZADA: 0 },
+    'GET /evidence/moderation?status=EN_REVISION': [evidencia],
     'POST /evidence/download-url': { url: 'https://r2.test/foto.jpg', expiresIn: 300 },
     ...extra,
   })
@@ -49,5 +50,22 @@ describe('EvidenciasPage', () => {
     await user.click(rechazar)
 
     expect(calls.find((c) => c.method === 'PATCH')?.body).toMatchObject({ status: 'RECHAZADA', rejectionReason: 'Foto borrosa' })
+  })
+
+  it('al aprobar puede autorizarla para el portal público', async () => {
+    const calls = api({ 'PATCH /evidence/e1/moderation': { ...evidencia, status: 'APROBADA' } })
+    renderWithAuth(<EvidenciasPage />)
+    const user = userEvent.setup()
+
+    await user.click(await screen.findByLabelText(/Autorizar para el portal público/))
+    await user.click(screen.getByRole('button', { name: 'Aprobar' }))
+    expect(calls.find((c) => c.method === 'PATCH')?.body).toMatchObject({ status: 'APROBADA', visibility: 'PUBLICA' })
+  })
+
+  it('muestra los conteos de cada bandeja', async () => {
+    api()
+    renderWithAuth(<EvidenciasPage />)
+    expect(await screen.findByRole('tab', { name: 'Por revisar 1' })).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByRole('tab', { name: 'Cuarentena 0' })).toBeInTheDocument()
   })
 })
