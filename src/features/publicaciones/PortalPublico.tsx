@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { api } from '../../shared/api/client'
-import type { Publication } from '../../shared/api/types'
+import type { Publication, PublicTraceability } from '../../shared/api/types'
 import { useAuth } from '../../shared/auth/context'
 import { env } from '../../shared/config/env'
-import { formatLongDate, formatNumber } from '../../shared/format'
+import { FARM_TYPE_LABEL, formatLongDate, formatNumber } from '../../shared/format'
 import { Button, Chip, Icon, type IconName } from '../../shared/ui'
 
 // Fotos de paisaje del diseño (decorativas, no son de una finca concreta).
@@ -15,6 +15,14 @@ const FOTO_PROMO = 'https://images.unsplash.com/photo-1532185922611-3410b1898a1c
 const FOTO_ORIGEN = 'https://images.unsplash.com/photo-1672015151052-d6fa87fc8aba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=85&w=1500'
 
 const TODAS = 'Todas las regiones'
+
+/**
+ * Fotos aprobadas de la publicación. El bucket es privado: el backend redirige
+ * cada una a una URL firmada de corta duración.
+ */
+function fotosDe(p: Publication): string[] {
+  return p.evidences.map((e) => `${env.apiUrl}/api/v1/publications/${p.id}/photos/${e.evidence.id}`)
+}
 const ANIO = new Date().getFullYear()
 
 function scrollTo(id: string) {
@@ -259,7 +267,7 @@ export function PortalPublico() {
                 {activa && (
                   <div className="active-farm-card">
                     <div className="active-farm-photo">
-                      <img src={activa.evidences[0]?.evidence.url ?? FOTO_FINCA} alt={`Origen ${activa.title}`} />
+                      <img src={fotosDe(activa)[0] ?? FOTO_FINCA} alt={`Origen ${activa.title}`} />
                       <Chip tone="green">Verificado</Chip>
                     </div>
                     <div>
@@ -354,13 +362,60 @@ export function PortalPublico() {
   )
 }
 
-function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Publication; contacto: string; onClose: () => void }) {
-  const fotos = p.evidences.map((e) => e.evidence.url).filter((u): u is string => Boolean(u))
-  const pasos: [string, string, string, IconName][] = [
+type Paso = [string, string, string, IconName]
+
+function pasosBasicos(p: Publication): Paso[] {
+  return [
     ['Origen', p.region ?? 'Colombia', 'Ubicación regional, sin coordenadas exactas', 'farm'],
     ['Cosecha', p.quantity !== null ? `${formatNumber(p.quantity)} ${p.unit ?? ''}` : 'Cantidad no publicada', 'Registrada en la finca', 'coffee'],
     ['Producto', p.title, `Publicado el ${formatLongDate(p.publishedAt)}`, 'report'],
   ]
+}
+
+/** Pasos del read model público (región, cultivo, prácticas, cosecha, beneficio, producto). */
+function pasosPublicos(t: PublicTraceability): Paso[] {
+  const practicas = Object.values(t.practices.laborsByType).reduce((s, n) => s + (n ?? 0), 0)
+  const ultimo = t.processes.at(-1)
+  const producto = t.processes.flatMap((p) => p.products).at(-1)
+  const certificaciones = t.processes.flatMap((p) => p.products.flatMap((x) => x.certifications))
+  const pasos: Paso[] = [
+    ['Origen', t.origin.region ?? 'Colombia', t.origin.farmType ? `Finca ${FARM_TYPE_LABEL[t.origin.farmType].toLowerCase()}` : 'Ubicación regional', 'farm'],
+  ]
+  if (t.crop) pasos.push(['Cultivo', [t.crop.species, t.crop.variety].filter(Boolean).join(' '), 'Variedad sembrada en el lote', 'leaf'])
+  pasos.push([
+    'Prácticas',
+    `${practicas} labores documentadas`,
+    [t.practices.soilAnalyses && `${t.practices.soilAnalyses} análisis de suelo`, t.practices.bioinputApplications && `${t.practices.bioinputApplications} aplicaciones de bioinsumos`]
+      .filter(Boolean)
+      .join(' · ') || 'Manejo registrado en RIZOMAS',
+    'tool',
+  ])
+  if (t.harvest) pasos.push(['Cosecha', `${formatNumber(t.harvest.quantity)} ${t.harvest.unit}`, [formatLongDate(t.harvest.date), t.harvest.quality].filter(Boolean).join(' · '), 'coffee'])
+  if (ultimo) pasos.push(['Beneficio', ultimo.finishedAt ? 'Proceso finalizado' : ultimo.stage, `Desde el ${formatLongDate(ultimo.startedAt)}`, 'drop'])
+  pasos.push([
+    'Producto',
+    producto?.destination ?? t.publication.title,
+    certificaciones.length ? certificaciones.map((c) => c.certifier).join(' · ') : `Publicado el ${formatLongDate(t.publication.publishedAt)}`,
+    'report',
+  ])
+  return pasos
+}
+
+function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Publication; contacto: string; onClose: () => void }) {
+  const fotos = fotosDe(p)
+  const [traza, setTraza] = useState<PublicTraceability | null>(null)
+
+  useEffect(() => {
+    let vigente = true
+    api<PublicTraceability>(`/publications/${p.id}/traceability`)
+      .then((t) => vigente && setTraza(t))
+      .catch(() => vigente && setTraza(null))
+    return () => {
+      vigente = false
+    }
+  }, [p.id])
+
+  const pasos = traza ? pasosPublicos(traza) : pasosBasicos(p)
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()

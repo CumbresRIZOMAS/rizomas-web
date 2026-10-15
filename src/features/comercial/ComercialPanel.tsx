@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useApiMutation, useApiQuery } from '../../shared/api/hooks'
-import type { Ledger } from '../../shared/api/types'
+import type { Ledger, Supplier } from '../../shared/api/types'
 import { formatMoney, formatMoneyShort, formatNumber, formatShortDate, optionalText, parseOptionalNumber, toNumber } from '../../shared/format'
 import { Button, Card, CardTitle, Chip, Empty, ErrorNotice, FormCard, Icon, Kpi, Loading, SelectField, TextField } from '../../shared/ui'
 
@@ -138,6 +138,7 @@ export function MovimientoForm({
   onCancel: () => void
 }) {
   const { mutate, saving, error } = useApiMutation()
+  const proveedores = useApiQuery<Supplier[]>('/commercial/suppliers')
   const [tipo, setTipo] = useState<'compra' | 'venta'>(tipoInicial)
   const [date, setDate] = useState(hoy())
   const [concepto, setConcepto] = useState('')
@@ -153,7 +154,7 @@ export function MovimientoForm({
     const base = { farmId, date, quantity: cantidad, unit: optionalText(unit), value: parseOptionalNumber(value) }
     const ok =
       tipo === 'compra'
-        ? await mutate('/commercial/purchases', 'POST', { ...base, itemName: concepto.trim(), isBioinput })
+        ? await mutate('/commercial/purchases', 'POST', { ...base, itemName: concepto.trim(), isBioinput, supplierName: optionalText(tercero) })
         : await mutate('/commercial/sales', 'POST', { ...base, productName: concepto.trim(), buyer: optionalText(tercero) })
     if (ok) onSaved()
   }
@@ -175,6 +176,21 @@ export function MovimientoForm({
             placeholder={tipo === 'compra' ? 'Ej. Melaza y minerales' : 'Ej. Café cereza'}
           />
           {tipo === 'venta' && <TextField label="Comprador" optional value={tercero} onChange={(e) => setTercero(e.target.value)} />}
+          {tipo === 'compra' && (
+            <TextField
+              label="Proveedor"
+              optional
+              list="proveedores"
+              value={tercero}
+              onChange={(e) => setTercero(e.target.value)}
+              hint="Si no está en la lista, se agrega al catálogo."
+            />
+          )}
+          <datalist id="proveedores">
+            {(proveedores.data ?? []).map((p) => (
+              <option key={p.id} value={p.name} />
+            ))}
+          </datalist>
           <TextField label="Cantidad *" required inputMode="decimal" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
           <TextField label="Unidad" optional value={unit} onChange={(e) => setUnit(e.target.value)} />
           <TextField label="Valor (COP)" optional inputMode="decimal" value={value} onChange={(e) => setValue(e.target.value)} />

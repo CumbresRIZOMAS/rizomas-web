@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router'
 import { useApiQuery } from '../shared/api/hooks'
-import type { Evidence, Role } from '../shared/api/types'
+import type { EvidenceStatus, Role } from '../shared/api/types'
 import { canDo, ROLES, useAuth } from '../shared/auth/context'
 import { useActiveFarm } from '../shared/farm/context'
 import { ROLE_LABEL, initials } from '../shared/format'
@@ -34,8 +34,9 @@ export function AppLayout() {
   const [profileOpen, setProfileOpen] = useState(false)
   const [search, setSearch] = useState('')
   const puedeModerar = canDo(role, ROLES.moderarEvidencias)
-  const pendientes = useApiQuery<Evidence[]>(puedeModerar ? '/evidence/moderation/pending' : null)
-  const pendientesCount = pendientes.data?.length ?? 0
+  // Fotos que esperan decisión humana (revisión, cuarentena o sin moderar).
+  const resumen = useApiQuery<Record<EvidenceStatus, number>>(puedeModerar ? '/evidence/moderation/summary' : null)
+  const pendientesCount = resumen.data ? resumen.data.EN_REVISION + resumen.data.CUARENTENA + resumen.data.PENDIENTE : 0
 
   const items = NAV.filter((item) => !item.roles || canDo(role, item.roles))
   const actual = items.find((item) => pathname.startsWith(item.to))

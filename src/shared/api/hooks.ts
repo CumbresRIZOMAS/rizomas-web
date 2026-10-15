@@ -47,7 +47,7 @@ export function useApiMutation() {
   const [error, setError] = useState<string | null>(null)
 
   const mutate = useCallback(
-    async <T>(path: string, method: 'POST' | 'PATCH' | 'DELETE', body?: unknown): Promise<T | null> => {
+    async <T>(path: string, method: 'POST' | 'PATCH' | 'PUT' | 'DELETE', body?: unknown): Promise<T | null> => {
       setSaving(true)
       setError(null)
       try {

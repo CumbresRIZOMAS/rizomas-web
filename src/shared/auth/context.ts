@@ -53,5 +53,7 @@ export const ROLES = {
   verComercial: ['ADMIN_CUMBRES', 'ADMIN_FINCA'],
   gestionarUsuarios: ['ADMIN_CUMBRES', 'ADMIN_FINCA'],
   moderarEvidencias: ['ADMIN_CUMBRES', 'ADMIN_FINCA', 'TECNICO'],
+  certificar: ['ADMIN_CUMBRES', 'ADMIN_FINCA', 'TECNICO'],
+  publicar: ['ADMIN_CUMBRES', 'ADMIN_FINCA', 'TECNICO'],
   verReportes: ['ADMIN_CUMBRES', 'ADMIN_FINCA', 'TECNICO'],
 } as const satisfies Record<string, readonly Role[]>

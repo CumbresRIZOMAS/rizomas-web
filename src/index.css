@@ -855,3 +855,5 @@ td.num { font-variant-numeric: tabular-nums; }
 nav.back-link { display: flex; gap: 7px; align-items: center; color: #a5a69f; margin-top: 6px; }
 nav.back-link a { color: var(--forest); font-weight: 600; }
 .farm-selector .farm-select { display: flex; align-items: center; gap: 7px; color: var(--forest-dark); }
+.process-note > .note-actions { flex: 0 0 auto; flex-direction: row; display: flex; gap: 8px; flex-wrap: wrap; }
+.process-note .rec-form { padding-top: 6px; }
