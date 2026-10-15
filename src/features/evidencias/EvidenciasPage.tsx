@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
-import { api } from '../../shared/api/client'
+import { useState } from 'react'
 import { useApiMutation, useApiQuery } from '../../shared/api/hooks'
-import type { Evidence, EvidenceStatus, SignedUrl } from '../../shared/api/types'
+import type { Evidence, EvidenceStatus } from '../../shared/api/types'
+import { EvidencePhoto } from '../../shared/EvidencePhoto'
 import { canDo, useAuth } from '../../shared/auth/context'
 import { useActiveFarm } from '../../shared/farm/context'
 import { formatDate, formatShortDate, toNumber } from '../../shared/format'
-import { Button, Card, Chip, EmptyState, ErrorNotice, Icon, Loading, PageHeader, type ChipTone } from '../../shared/ui'
+import { Button, Card, Chip, EmptyState, ErrorNotice, Loading, PageHeader, type ChipTone } from '../../shared/ui'
 
 const ESTADO: Record<EvidenceStatus, { label: string; tone: ChipTone }> = {
   PENDIENTE: { label: 'Pendiente', tone: 'amber' },
@@ -15,25 +15,8 @@ const ESTADO: Record<EvidenceStatus, { label: string; tone: ChipTone }> = {
   CUARENTENA: { label: 'Cuarentena', tone: 'gray' },
 }
 
-/** URL prefirmada temporal para ver la foto; el bucket de R2 nunca es público. */
-function useFoto(objectKey: string): string | null {
-  const { token } = useAuth()
-  const [url, setUrl] = useState<{ key: string; url: string | null } | null>(null)
-  useEffect(() => {
-    let vigente = true
-    api<SignedUrl>('/evidence/download-url', { method: 'POST', token: token ?? undefined, body: { objectKey } })
-      .then((r) => vigente && setUrl({ key: objectKey, url: r.url }))
-      .catch(() => vigente && setUrl({ key: objectKey, url: null }))
-    return () => {
-      vigente = false
-    }
-  }, [objectKey, token])
-  return url?.key === objectKey ? url.url : null
-}
-
 function Foto({ evidence, size }: { evidence: Evidence; size: number }) {
-  const url = useFoto(evidence.objectKey)
-  return url ? <img src={url} alt={`Evidencia del ${formatDate(evidence.capturedAt ?? evidence.createdAt)}`} /> : <Icon name="camera" size={size} />
+  return <EvidencePhoto objectKey={evidence.objectKey} alt={`Evidencia del ${formatDate(evidence.capturedAt ?? evidence.createdAt)}`} size={size} />
 }
 
 type Bandeja = 'EN_REVISION' | 'CUARENTENA' | 'PENDIENTE'

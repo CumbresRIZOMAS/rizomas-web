@@ -15,6 +15,14 @@ const FOTO_PROMO = 'https://images.unsplash.com/photo-1532185922611-3410b1898a1c
 const FOTO_ORIGEN = 'https://images.unsplash.com/photo-1672015151052-d6fa87fc8aba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=85&w=1500'
 
 const TODAS = 'Todas las regiones'
+
+/**
+ * Fotos aprobadas de la publicación. El bucket es privado: el backend redirige
+ * cada una a una URL firmada de corta duración.
+ */
+function fotosDe(p: Publication): string[] {
+  return p.evidences.map((e) => `${env.apiUrl}/api/v1/publications/${p.id}/photos/${e.evidence.id}`)
+}
 const ANIO = new Date().getFullYear()
 
 function scrollTo(id: string) {
@@ -259,7 +267,7 @@ export function PortalPublico() {
                 {activa && (
                   <div className="active-farm-card">
                     <div className="active-farm-photo">
-                      <img src={activa.evidences[0]?.evidence.url ?? FOTO_FINCA} alt={`Origen ${activa.title}`} />
+                      <img src={fotosDe(activa)[0] ?? FOTO_FINCA} alt={`Origen ${activa.title}`} />
                       <Chip tone="green">Verificado</Chip>
                     </div>
                     <div>
@@ -394,7 +402,7 @@ function pasosPublicos(t: PublicTraceability): Paso[] {
 }
 
 function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Publication; contacto: string; onClose: () => void }) {
-  const fotos = p.evidences.map((e) => e.evidence.url).filter((u): u is string => Boolean(u))
+  const fotos = fotosDe(p)
   const [traza, setTraza] = useState<PublicTraceability | null>(null)
 
   useEffect(() => {

@@ -3,6 +3,7 @@ import { useApiMutation, useApiQuery } from '../../shared/api/hooks'
 import type { Farm, FarmPublication, FarmTraceability } from '../../shared/api/types'
 import { formatDate, formatNumber, optionalText, parseOptionalNumber, toNumber } from '../../shared/format'
 import { Button, Card, CardTitle, Chip, Empty, ErrorNotice, Loading, SelectField, TextField } from '../../shared/ui'
+import { FotosPublicacion } from './FotosPublicacion'
 
 /**
  * Publicación selectiva en el portal (RF-18): se elige qué cosecha mostrar y
@@ -12,6 +13,7 @@ export function Publicaciones({ farm, traza }: { farm: Farm; traza: FarmTraceabi
   const { data, error, loading, reload } = useApiQuery<FarmPublication[]>(`/publications/farms/${farm.id}`)
   const estado = useApiMutation()
   const [creando, setCreando] = useState(false)
+  const [fotosDe, setFotosDe] = useState<string | null>(null)
   const cosechas = traza.labors.filter((l) => l.type === 'COSECHA' && l.harvest?.id)
 
   async function cambiar(p: FarmPublication) {
@@ -43,22 +45,37 @@ export function Publicaciones({ farm, traza }: { farm: Farm; traza: FarmTraceabi
       {estado.error && <ErrorNotice message={estado.error} />}
       {data && data.length === 0 && !creando && <Empty title="Esta finca no tiene publicaciones">Publica una cosecha para que aparezca en el portal de orígenes.</Empty>}
       {data?.map((p) => (
-        <div className="application-row" key={p.id}>
-          <div className="date-box">{p.active ? 'ON' : 'OFF'}</div>
-          <div>
-            <strong>{p.title}</strong>
-            <span>
-              {[p.region, p.quantity !== null && `${formatNumber(p.quantity)} ${p.unit ?? ''}`, p.harvest && `cosecha del ${formatDate(p.harvest.labor.startDate)}`]
-                .filter(Boolean)
-                .join(' · ')}
-            </span>
+        <div key={p.id}>
+          <div className="application-row">
+            <div className="date-box">{p.active ? 'ON' : 'OFF'}</div>
+            <div>
+              <strong>{p.title}</strong>
+              <span>
+                {[p.region, p.quantity !== null && `${formatNumber(p.quantity)} ${p.unit ?? ''}`, p.harvest && `cosecha del ${formatDate(p.harvest.labor.startDate)}`]
+                  .filter(Boolean)
+                  .join(' · ')}
+              </span>
+            </div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <Chip tone={p.active ? 'green' : 'gray'}>{p.active ? 'Publicada' : 'Borrador'}</Chip>
+              <Button variant="secondary" icon="camera" onClick={() => setFotosDe(fotosDe === p.id ? null : p.id)}>
+                Fotos ({p.evidences?.length ?? 0})
+              </Button>
+              <Button variant={p.active ? 'ghost' : 'primary'} disabled={estado.saving} onClick={() => void cambiar(p)}>
+                {p.active ? 'Retirar' : 'Publicar'}
+              </Button>
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <Chip tone={p.active ? 'green' : 'gray'}>{p.active ? 'Publicada' : 'Borrador'}</Chip>
-            <Button variant={p.active ? 'ghost' : 'primary'} disabled={estado.saving} onClick={() => void cambiar(p)}>
-              {p.active ? 'Retirar' : 'Publicar'}
-            </Button>
-          </div>
+          {fotosDe === p.id && (
+            <FotosPublicacion
+              publicationId={p.id}
+              onCancel={() => setFotosDe(null)}
+              onSaved={() => {
+                setFotosDe(null)
+                reload()
+              }}
+            />
+          )}
         </div>
       ))}
     </Card>
@@ -125,7 +142,7 @@ function PublicacionForm({
         </div>
       </div>
       <p className="muted" style={{ fontSize: 9 }}>
-        Se crea como borrador y no sale en el portal hasta que la publiques. Por ahora se publica sin fotos: asociar evidencias aprobadas a una publicación todavía no está disponible.
+        Se crea como borrador y no sale en el portal hasta que la publiques. Después puedes elegir sus fotos entre las aprobadas como públicas en Evidencias.
       </p>
       {error && <ErrorNotice message={error} />}
       <div className="form-actions">

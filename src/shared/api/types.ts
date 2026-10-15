@@ -205,6 +205,8 @@ export type CoffeeProcess = {
   products: ProductFinal[]
 }
 
+export type Supplier = { id: string; name: string; inputType: string | null }
+
 export type Purchase = {
   id: string
   date: string
@@ -273,7 +275,7 @@ export type Publication = {
   quantity: Decimal | null
   unit: string | null
   publishedAt: string | null
-  evidences: { evidence: { id: string; url: string | null } }[]
+  evidences: { evidence: { id: string; capturedAt: string | null } }[]
 }
 
 /** Publicación vista desde el panel (GET /publications/farms/:id), activa o no. */
@@ -286,7 +288,11 @@ export type FarmPublication = {
   active: boolean
   publishedAt: string | null
   harvest: { id: string; quantity: Decimal; unit: string; labor: { startDate: string; name: string } } | null
+  evidences: { evidenceId: string }[]
 }
+
+/** Foto aprobada y autorizada como pública que se puede poner en una publicación. */
+export type PhotoCandidate = { id: string; objectKey: string; capturedAt: string | null; laborId: string | null; linked: boolean }
 
 /** GET /publications/:id/traceability: read model público, sin datos privados. */
 export type PublicTraceability = {
