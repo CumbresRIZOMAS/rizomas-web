@@ -4,7 +4,7 @@ import { api } from '../../shared/api/client'
 import type { Publication, PublicTraceability } from '../../shared/api/types'
 import { useAuth } from '../../shared/auth/context'
 import { env } from '../../shared/config/env'
-import { FARM_TYPE_LABEL, formatLongDate, formatNumber } from '../../shared/format'
+import { FARM_TYPE_LABEL, formatLongDate, formatNumber, toNumber } from '../../shared/format'
 import { Button, Chip, Icon, type IconName } from '../../shared/ui'
 
 // Fotos de paisaje del diseño (decorativas, no son de una finca concreta).
@@ -15,6 +15,13 @@ const FOTO_PROMO = 'https://images.unsplash.com/photo-1532185922611-3410b1898a1c
 const FOTO_ORIGEN = 'https://images.unsplash.com/photo-1672015151052-d6fa87fc8aba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=85&w=1500'
 
 const TODAS = 'Todas las regiones'
+
+const PASOS = [
+  { emoji: '👩‍🌾', titulo: 'La finca registra', texto: 'Labores, cosechas y fotos desde la app, incluso sin señal en el lote.' },
+  { emoji: '🧪', titulo: 'El técnico acompaña', texto: 'Analiza el suelo y recomienda prácticas y bioinsumos para regenerarlo.' },
+  { emoji: '☕', titulo: 'Cosecha y beneficio', texto: 'Cada etapa, del despulpado al tostado, queda documentada y verificada.' },
+  { emoji: '🔍', titulo: 'Tú conoces su historia', texto: 'Ves el origen y las prácticas, sin coordenadas exactas ni datos privados.' },
+]
 
 /**
  * Fotos aprobadas de la publicación. El bucket es privado: el backend redirige
@@ -59,6 +66,9 @@ export function PortalPublico() {
   const filtradas = lista.filter((p) => region === TODAS || p.region === region)
   const activa = filtradas.find((p) => p.id === seleccion) ?? filtradas[0] ?? null
   const contacto = env.contactEmail
+  // Kilos de café documentados en las publicaciones (solo las que están en kg).
+  const kilos = lista.filter((p) => (p.unit ?? 'kg') === 'kg').reduce((s, p) => s + (toNumber(p.quantity) ?? 0), 0)
+  const destacada = lista[0] ?? null
 
   return (
     <div className="public-site">
@@ -140,6 +150,8 @@ export function PortalPublico() {
               <small>Información desde la finca</small>
             </div>
           </div>
+          <span className="hero-chip chip-1">🌱 Prácticas documentadas</span>
+          <span className="hero-chip chip-2">☕ Del cafetal a tu taza</span>
           <svg className="hero-route" viewBox="0 0 180 90" aria-hidden="true">
             <path d="M5 80C50 5 105 100 175 12" />
             <circle cx="5" cy="80" r="4" />
@@ -147,14 +159,26 @@ export function PortalPublico() {
           </svg>
         </div>
         <div className="public-stats">
-          <span>
-            <strong>{publicaciones ? lista.length : '—'}</strong>
-            <small>Orígenes publicados</small>
+          <span className="stat-emoji">
+            <i aria-hidden="true">☕</i>
+            <span>
+              <strong>{publicaciones ? lista.length : '—'}</strong>
+              <small>Orígenes publicados</small>
+            </span>
           </span>
-          <i />
-          <span>
-            <strong>{publicaciones ? regiones.length : '—'}</strong>
-            <small>Regiones cafeteras</small>
+          <span className="stat-emoji">
+            <i aria-hidden="true">🗺️</i>
+            <span>
+              <strong>{publicaciones ? regiones.length : '—'}</strong>
+              <small>Regiones cafeteras</small>
+            </span>
+          </span>
+          <span className="stat-emoji">
+            <i aria-hidden="true">⚖️</i>
+            <span>
+              <strong>{publicaciones ? formatNumber(kilos) : '—'}</strong>
+              <small>Kilos de café documentados</small>
+            </span>
           </span>
           <span className="trace-stat">
             <Icon name="trace" size={20} />
@@ -164,6 +188,23 @@ export function PortalPublico() {
               <b>abierta y confiable</b>
             </small>
           </span>
+        </div>
+      </section>
+
+      <section className="como-funciona" aria-labelledby="como-funciona-titulo">
+        <span className="public-kicker">Cómo funciona</span>
+        <h2 id="como-funciona-titulo">Así llega la historia de tu café 🌄</h2>
+        <div className="pasos">
+          {PASOS.map((paso, i) => (
+            <article key={paso.titulo}>
+              <span className="paso-emoji" aria-hidden="true">
+                {paso.emoji}
+              </span>
+              <small>Paso {i + 1}</small>
+              <strong>{paso.titulo}</strong>
+              <p>{paso.texto}</p>
+            </article>
+          ))}
         </div>
       </section>
 
@@ -296,6 +337,51 @@ export function PortalPublico() {
         </div>
       </section>
 
+      <section className="territorio-taza">
+        <div>
+          <span className="public-kicker">Trazabilidad abierta</span>
+          <h2>
+            Del territorio a tu taza,
+            <br />
+            sin perder la historia.
+          </h2>
+          <p>
+            Cada finca comparte su región, sus prácticas, variedades y procesos. Así puedes conocer a las personas y el paisaje detrás de cada café, sin
+            exponer sus datos privados.
+          </p>
+          <div className="territorio-checks">
+            <span>
+              <Icon name="check" size={14} /> Origen verificado
+            </span>
+            <span>
+              <Icon name="check" size={14} /> Prácticas documentadas
+            </span>
+            <span>
+              <Icon name="check" size={14} /> Información para compradores
+            </span>
+          </div>
+          <Button variant="secondary" onClick={() => scrollTo('explorar')}>
+            Ver los orígenes publicados
+          </Button>
+        </div>
+        <div className="territorio-foto">
+          <img src={FOTO_ORIGEN} alt="Paisaje cafetero colombiano con palmas de cera" />
+          {destacada && (
+            <button type="button" className="territorio-producto" onClick={() => { setSeleccion(destacada.id); setDetalle(true) }}>
+              <Icon name="coffee" size={24} />
+              <span>
+                <small>Producto trazado</small>
+                <strong>
+                  {destacada.title}
+                  {destacada.region ? ` · ${destacada.region}` : ''}
+                </strong>
+              </span>
+              <em>Verificado</em>
+            </button>
+          )}
+        </div>
+      </section>
+
       <section className="origin-section join-promo" id="vincular">
         <div className="origin-copy">
           <span className="public-kicker">Haz parte de Rizomas</span>
@@ -336,7 +422,7 @@ export function PortalPublico() {
             <Icon name="farm" />
             <span>
               <small>Comunidad Rizomas</small>
-              <strong>{publicaciones ? `${lista.length} orígenes ya están mostrando su historia` : 'Fincas mostrando su origen'}</strong>
+              <strong>{publicaciones ? `${lista.length} ${lista.length === 1 ? 'origen ya está' : 'orígenes ya están'} mostrando su historia` : 'Fincas mostrando su origen'}</strong>
             </span>
             <Chip tone="green">Únete</Chip>
           </div>

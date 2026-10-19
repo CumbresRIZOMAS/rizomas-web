@@ -857,3 +857,50 @@ nav.back-link a { color: var(--forest); font-weight: 600; }
 .farm-selector .farm-select { display: flex; align-items: center; gap: 7px; color: var(--forest-dark); }
 .process-note > .note-actions { flex: 0 0 auto; flex-direction: row; display: flex; gap: 8px; flex-wrap: wrap; }
 .process-note .rec-form { padding-top: 6px; }
+
+/* ── Portal: etiquetas del hero, cifras con emoji y secciones nuevas ── */
+.hero-chip { position: absolute; z-index: 3; padding: 8px 12px; border-radius: 20px; background: rgba(255,255,255,.94); box-shadow: 0 8px 22px rgba(43,58,38,.16); font-size: 9px; font-weight: 650; color: var(--forest); white-space: nowrap; animation: flotar 5s ease-in-out infinite; }
+.hero-chip.chip-1 { left: 2%; top: 46%; }
+.hero-chip.chip-2 { right: 34%; bottom: -6px; animation-delay: -2.5s; }
+@keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .hero-chip { animation: none; } }
+.public-stats .stat-emoji { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.public-stats .stat-emoji i { flex: 0 0 auto; width: 46px; height: 46px; border-radius: 50%; background: white; box-shadow: 0 4px 12px rgba(60,70,50,.08); display: grid; place-items: center; font-size: 22px; font-style: normal; }
+.public-stats .stat-emoji > span { display: flex; flex-direction: column; gap: 2px; }
+.public-stats .stat-emoji strong { line-height: 1; }
+.como-funciona { padding: 70px clamp(24px,6vw,86px) 60px; text-align: center; }
+.como-funciona h2 { font-family: Georgia,serif; font-weight: 500; color: #2a4f2d; font-size: clamp(26px,3vw,38px); margin: 10px 0 34px; }
+.pasos { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; position: relative; }
+.pasos::before { content: ""; position: absolute; top: 34px; left: 12%; right: 12%; border-top: 2px dashed #c9d6bf; }
+.pasos article { position: relative; background: white; border: 1px solid #e3e3da; border-radius: 18px; padding: 22px 18px; box-shadow: 0 10px 28px rgba(48,60,40,.06); transition: transform .2s, box-shadow .2s; }
+.pasos article:hover { transform: translateY(-4px); box-shadow: 0 16px 34px rgba(48,60,40,.1); }
+.paso-emoji { width: 64px; height: 64px; margin: -54px auto 12px; border-radius: 50%; background: linear-gradient(140deg,#eef4e6,#dcebcc); border: 4px solid #f4f1e8; display: grid; place-items: center; font-size: 30px; }
+.pasos small { color: var(--coffee); text-transform: uppercase; letter-spacing: .8px; font-size: 8px; font-weight: 700; }
+.pasos strong { display: block; margin: 6px 0; font-size: 13px; color: #2b2c28; }
+.pasos p { font-size: 10px; line-height: 1.6; color: var(--muted); }
+.territorio-taza { padding: 40px clamp(24px,8vw,120px) 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+.territorio-taza h2 { font-family: Georgia,serif; font-weight: 500; color: #2a4f2d; font-size: clamp(28px,3.2vw,44px); line-height: 1.08; margin: 13px 0 16px; }
+.territorio-taza p { color: #696d64; font-size: 11px; line-height: 1.8; max-width: 520px; }
+.territorio-checks { display: flex; flex-wrap: wrap; gap: 14px; margin: 22px 0 26px; }
+.territorio-checks span { display: flex; align-items: center; gap: 6px; font-size: 9px; font-weight: 600; color: #3d5140; }
+.territorio-checks .icon { width: 22px; height: 22px; padding: 4px; border-radius: 50%; background: #dce9cf; color: var(--forest); }
+.territorio-foto { order: -1; position: relative; height: 420px; border-radius: 110px 16px 110px 16px; overflow: hidden; box-shadow: 0 24px 55px rgba(42,63,37,.2); }
+.territorio-foto img { width: 100%; height: 100%; object-fit: cover; }
+.territorio-producto { position: absolute; left: 22px; right: 22px; bottom: 22px; border: 0; border-radius: 14px; padding: 14px 16px; background: rgba(255,255,255,.92); backdrop-filter: blur(8px); display: flex; align-items: center; gap: 12px; color: var(--forest); text-align: left; cursor: pointer; }
+.territorio-producto span { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+.territorio-producto small { font-size: 8px; color: var(--muted); }
+.territorio-producto strong { font-size: 11px; color: #2b2c28; }
+.territorio-producto em { font-style: normal; font-size: 9px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; background: #e4efd5; color: var(--forest-dark); padding: 7px 14px; border-radius: 20px; }
+@media (max-width: 850px) {
+  .pasos { grid-template-columns: repeat(2,1fr); row-gap: 50px; }
+  .pasos::before { display: none; }
+  .territorio-taza { grid-template-columns: 1fr; gap: 34px; padding-inline: 40px; }
+  .territorio-foto { order: 0; }
+  .hero-chip.chip-2 { right: 10%; }
+}
+@media (max-width: 600px) {
+  .pasos { grid-template-columns: 1fr; }
+  .territorio-taza { padding: 30px 20px 60px; }
+  .territorio-foto { height: 320px; border-radius: 60px 12px 60px 12px; }
+  .hero-chip { display: none; }
+}
