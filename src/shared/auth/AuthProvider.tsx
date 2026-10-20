@@ -2,6 +2,7 @@ import { createClient, type Session, type SupabaseClient } from '@supabase/supab
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { Role } from '../api/types'
 import { api, ApiError } from '../api/client'
+import { clearApiQueryCache } from '../api/hooks'
 import { env, missingEnv } from '../config/env'
 import { AuthContext, roleFromToken, type Auth } from './context'
 
@@ -25,6 +26,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data } = auth.onAuthStateChange((event, next) => {
       if (!mounted) return
       if (event === 'SIGNED_OUT') {
+        clearApiQueryCache()
         setSession(null)
         setBackendRole(null)
       } else if (event === 'TOKEN_REFRESHED' || event === 'SIGNED_IN') {
@@ -92,6 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
       signOut: async () => {
         await supabase().auth.signOut()
+        clearApiQueryCache()
         setSession(null)
         setBackendRole(null)
       },

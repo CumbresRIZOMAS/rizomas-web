@@ -48,12 +48,13 @@ function scrollTo(id: string) {
 /**
  * Portal público (RF-18). Solo consume el endpoint público de publicaciones:
  * región, cantidad producida y fotos aprobadas. Nunca coordenadas exactas,
- * datos personales ni comerciales (ASR-15), por eso el mapa ubica orígenes por
- * región y no por punto.
+ * datos personales ni comerciales (ASR-15). El mapa usa únicamente la
+ * ubicación pública/aproximada que la finca autorizó compartir.
  */
 export function PortalPublico() {
   const { token } = useAuth()
   const [publicaciones, setPublicaciones] = useState<Publication[] | null>(null)
+  const [origenes, setOrigenes] = useState<Publication[] | null>(null)
   const [fallo, setFallo] = useState(false)
   const [region, setRegion] = useState(TODAS)
   const [seleccion, setSeleccion] = useState<string | null>(null)
@@ -62,8 +63,12 @@ export function PortalPublico() {
 
   useEffect(() => {
     let vigente = true
-    api<Publication[]>('/publications')
-      .then((data) => vigente && setPublicaciones(data))
+    Promise.all([api<Publication[]>('/publications'), api<Publication[]>('/publications/origins')])
+      .then(([data, listaOrigenes]) => {
+        if (!vigente) return
+        setPublicaciones(data)
+        setOrigenes(listaOrigenes)
+      })
       .catch(() => vigente && setFallo(true))
     return () => {
       vigente = false
@@ -71,13 +76,14 @@ export function PortalPublico() {
   }, [])
 
   const lista = publicaciones ?? []
-  const regiones = [...new Set(lista.map((p) => p.region).filter((r): r is string => Boolean(r)))].sort()
-  const filtradas = lista.filter((p) => region === TODAS || p.region === region)
+  const listaOrigenes = origenes ?? []
+  const regiones = [...new Set(listaOrigenes.map((p) => p.region).filter((r): r is string => Boolean(r)))].sort()
+  const filtradas = listaOrigenes.filter((p) => region === TODAS || p.region === region)
   const activa = filtradas.find((p) => p.id === seleccion) ?? filtradas[0] ?? null
   const contacto = env.contactEmail
   // Kilos de café documentados en las publicaciones (solo las que están en kg).
   const kilos = lista.filter((p) => (p.unit ?? 'kg') === 'kg').reduce((s, p) => s + (toNumber(p.quantity) ?? 0), 0)
-  const destacada = lista[0] ?? null
+  const destacada = listaOrigenes[0] ?? null
   const mapaActivo = urlMapaPublico(activa?.publicLocation)
 
   return (
@@ -172,8 +178,8 @@ export function PortalPublico() {
           <span className="stat-emoji">
             <i aria-hidden="true">☕</i>
             <span>
-              <strong>{publicaciones ? lista.length : '—'}</strong>
-              <small>Orígenes publicados</small>
+              <strong>{origenes ? listaOrigenes.length : '—'}</strong>
+              <small>Fincas con origen publicado</small>
             </span>
           </span>
           <span className="stat-emoji">
@@ -226,7 +232,7 @@ export function PortalPublico() {
             </span>
             <div>
               <strong>Mapa de orígenes</strong>
-              <small>Explora las regiones con café publicado</small>
+              <small>Selecciona una finca para ver su origen y trazabilidad</small>
             </div>
           </div>
           <div className="map-filters">
@@ -261,7 +267,7 @@ export function PortalPublico() {
               >
                 {r.toUpperCase()}
                 <span>
-                  {lista.filter((p) => p.region === r).length} {lista.filter((p) => p.region === r).length === 1 ? 'origen' : 'orígenes'}
+              {listaOrigenes.filter((p) => p.region === r).length} {listaOrigenes.filter((p) => p.region === r).length === 1 ? 'finca' : 'fincas'}
                 </span>
               </button>
             ))}
@@ -273,7 +279,7 @@ export function PortalPublico() {
             <div className="drawer-head">
               <div>
                 <span>{filtradas.length} resultados</span>
-                <strong>Orígenes en el territorio</strong>
+                <strong>Fincas con origen publicado</strong>
               </div>
               <button type="button" onClick={() => setListaAbierta(!listaAbierta)} aria-label={listaAbierta ? 'Cerrar lista' : 'Abrir lista'}>
                 <Icon name={listaAbierta ? 'close' : 'menu'} />
@@ -281,9 +287,9 @@ export function PortalPublico() {
             </div>
             {listaAbierta && (
               <>
-                {!publicaciones && !fallo && <p className="loading">Cargando orígenes…</p>}
+                {!origenes && !fallo && <p className="loading">Cargando fincas…</p>}
                 {fallo && <p className="loading">No se pudieron cargar los orígenes. Intenta más tarde.</p>}
-                {publicaciones && filtradas.length === 0 && <p className="loading">Todavía no hay orígenes publicados{region !== TODAS ? ' en esta región' : ''}.</p>}
+                {origenes && filtradas.length === 0 && <p className="loading">Todavía no hay fincas con origen publicado{region !== TODAS ? ' en esta región' : ''}.</p>}
                 <div className="drawer-list">
                   {filtradas.map((p) => (
                     <button
@@ -299,7 +305,7 @@ export function PortalPublico() {
                         <Icon name="leaf" />
                       </div>
                       <div>
-                        <span>Origen verificado</span>
+                        <span>Finca con origen publicado</span>
                         <strong>{p.title}</strong>
                         <small>
                           <Icon name="location" size={12} />
@@ -433,7 +439,7 @@ export function PortalPublico() {
             <Icon name="farm" />
             <span>
               <small>Comunidad Rizomas</small>
-              <strong>{publicaciones ? `${lista.length} ${lista.length === 1 ? 'origen ya está' : 'orígenes ya están'} mostrando su historia` : 'Fincas mostrando su origen'}</strong>
+              <strong>{origenes ? `${listaOrigenes.length} ${listaOrigenes.length === 1 ? 'finca ya está' : 'fincas ya están'} mostrando su historia` : 'Fincas mostrando su origen'}</strong>
             </span>
             <Chip tone="green">Únete</Chip>
           </div>

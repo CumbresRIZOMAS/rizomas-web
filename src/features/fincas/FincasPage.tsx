@@ -45,8 +45,8 @@ export function FincasPage() {
     <div>
       <PageHeader
         eyebrow="Administración"
-        title="Fincas"
-        subtitle="Consulta y administra las fincas vinculadas a Cumbres Sacras SAS."
+        title={role === 'ADMIN_FINCA' ? 'Mis fincas' : 'Fincas'}
+        subtitle={role === 'ADMIN_FINCA' ? 'Consulta y administra únicamente las fincas a las que tienes acceso.' : 'Consulta y administra las fincas vinculadas a Cumbres Sacras SAS.'}
         actions={
           canDo(role, ROLES.crearFinca) &&
           !creando && (

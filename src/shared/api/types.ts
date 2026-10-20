@@ -119,6 +119,8 @@ export type AppUser = {
   role: Role
   active: boolean
   createdAt: string
+  farmMembers?: { role: Role; farm: Pick<Farm, 'id' | 'name'> }[]
+  ownedFarms?: Pick<Farm, 'id' | 'name'>[]
 }
 
 /** BAJO | OPTIMO | ALTO | SIN_REFERENCIA (RF-11). */
