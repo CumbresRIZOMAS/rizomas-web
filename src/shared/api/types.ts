@@ -201,9 +201,14 @@ export type CoffeeProcess = {
   startedAt: string
   finishedAt: string | null
   notes: string | null
+  lotId?: string | null
+  lot?: { id: string; name: string; crops?: Crop[] } | null
   harvest?: { id: string; quantity: Decimal; unit: string } | null
+  events?: CoffeeProcessEvent[]
   products: ProductFinal[]
 }
+
+export type CoffeeProcessEvent = { id: string; stage: string; recordedAt: string; inputKg: Decimal | null; outputKg: Decimal | null; waterLiters: Decimal | null; wastewaterLiters: Decimal | null; compostReuse: boolean; durationHours: Decimal | null; method: string | null; brix: Decimal | null; ph: Decimal | null; moisturePercent: Decimal | null; scaScore: Decimal | null; notes: string | null }
 
 export type Supplier = { id: string; name: string; inputType: string | null }
 
@@ -271,9 +276,11 @@ export type FarmTraceability = Omit<Farm, 'lots'> & {
 export type Publication = {
   id: string
   title: string
+  description?: string | null
   region: string | null
   quantity: Decimal | null
   unit: string | null
+  publicLocation?: { latitude?: number; longitude?: number } | null
   publishedAt: string | null
   evidences: { evidence: { id: string; capturedAt: string | null } }[]
 }
@@ -282,9 +289,11 @@ export type Publication = {
 export type FarmPublication = {
   id: string
   title: string
+  description?: string | null
   region: string | null
   quantity: Decimal | null
   unit: string | null
+  publicLocation?: { latitude?: number; longitude?: number } | null
   active: boolean
   publishedAt: string | null
   harvest: { id: string; quantity: Decimal; unit: string; labor: { startDate: string; name: string } } | null

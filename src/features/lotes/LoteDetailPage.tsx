@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useParams } from 'react-router'
 import { useApiMutation, useApiQuery } from '../../shared/api/hooks'
-import type { Crop, Labor, LotDetail } from '../../shared/api/types'
+import type { CoffeeProcess, Crop, Labor, LotDetail } from '../../shared/api/types'
 import { canDo, ROLES, useAuth } from '../../shared/auth/context'
 import { formatDate, formatHa, optionalText } from '../../shared/format'
 import { Button, Card, CardTitle, Empty, ErrorNotice, FormCard, Loading, PageHeader, TextField } from '../../shared/ui'
@@ -12,6 +12,7 @@ export function LoteDetailPage() {
   const { role } = useAuth()
   const lote = useApiQuery<LotDetail>(`/lots/${lotId}`)
   const labores = useApiQuery<Labor[]>(lote.data ? `/farms/${lote.data.farmId}/labors` : null)
+  const procesos = useApiQuery<CoffeeProcess[]>(lote.data ? `/coffee-processes/farms/${lote.data.farmId}` : null)
   const [agregandoCultivo, setAgregandoCultivo] = useState(false)
 
   if (lote.loading && !lote.data) return <Loading />
@@ -81,6 +82,14 @@ export function LoteDetailPage() {
             }}
           />
         )}
+
+        <Card className="card-pad">
+          <CardTitle title="Trazabilidad del café" subtitle="Poscosecha registrada para este lote" />
+          {procesos.loading && !procesos.data && <Loading />}
+          {procesos.error && <ErrorNotice message={procesos.error} onRetry={procesos.reload} />}
+          {procesos.data?.filter((p) => p.lotId === l.id || p.lot?.id === l.id).length === 0 && <Empty title="Sin procesos de café">Registra una etapa de poscosecha desde Procesos de café o la aplicación móvil.</Empty>}
+          {procesos.data?.filter((p) => p.lotId === l.id || p.lot?.id === l.id).map((p) => <div key={p.id} className="application-row"><div><strong>{p.currentStage}</strong><div>{p.lot?.crops?.map((c) => c.variety).filter(Boolean).join(', ') || 'Variedad sin registrar'} · {formatDate(p.startedAt)}</div>{p.events?.map((e) => <div key={e.id}>{e.stage}: {e.inputKg ?? '—'} kg → {e.outputKg ?? '—'} kg{e.stage === 'Lavado' ? ` · ${e.waterLiters ?? '—'} L agua · ${e.wastewaterLiters ?? '—'} L residual${e.compostReuse ? ' (compostaje)' : ''}` : ''}</div>)}</div></div>)}
+        </Card>
 
         <Card className="card-pad">
           <CardTitle title="Labores del lote" subtitle="Incluye las registradas sobre sus cultivos" />

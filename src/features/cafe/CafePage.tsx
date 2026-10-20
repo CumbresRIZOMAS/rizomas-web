@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useApiMutation, useApiQuery } from '../../shared/api/hooks'
-import type { CoffeeProcess, Farm, Labor, ProductFinal } from '../../shared/api/types'
+import type { CoffeeProcess, Farm, Labor, Lot, ProductFinal } from '../../shared/api/types'
 import { canDo, ROLES, useAuth } from '../../shared/auth/context'
 import { RequireFarm } from '../../shared/farm/RequireFarm'
 import { formatDate, formatNumber, formatShortDate, optionalText } from '../../shared/format'
@@ -15,6 +15,7 @@ function Procesos({ farm }: { farm: Farm }) {
   const { role } = useAuth()
   const procesos = useApiQuery<CoffeeProcess[]>(`/coffee-processes/farms/${farm.id}`)
   const labores = useApiQuery<Labor[]>(`/farms/${farm.id}/labors`)
+  const lotes = useApiQuery<Lot[]>(`/farms/${farm.id}/lots`)
   const [seleccion, setSeleccion] = useState<string | null>(null)
   const [creando, setCreando] = useState(false)
   const lista = procesos.data ?? []
@@ -27,7 +28,7 @@ function Procesos({ farm }: { farm: Farm }) {
       <PageHeader
         eyebrow={actual ? `Lote de proceso ${codigoProceso(actual)}` : `Finca ${farm.name}`}
         title="Proceso de café"
-        subtitle="Beneficio, fermentación, lavado, secado, almacenamiento y tostado de cada cosecha."
+        subtitle="Del despulpado y la fermentación hasta el café tostado y catado, con trazabilidad por lote."
         actions={
           canDo(role, ROLES.registrarEnFinca) &&
           !creando && (
@@ -42,6 +43,7 @@ function Procesos({ farm }: { farm: Farm }) {
           <ProcesoForm
             farmId={farm.id}
             cosechas={cosechas}
+            lotes={lotes.data ?? []}
             onCancel={() => setCreando(false)}
             onSaved={(p) => {
               setCreando(false)
@@ -80,6 +82,7 @@ function Detalle({ proceso, origen, onChanged }: { proceso: CoffeeProcess; orige
   const [editandoNotas, setEditandoNotas] = useState(false)
   const [notas, setNotas] = useState(proceso.notes ?? '')
   const [agregandoProducto, setAgregandoProducto] = useState(false)
+  const [agregandoEtapa, setAgregandoEtapa] = useState(false)
   const indice = proceso.finishedAt ? ETAPAS.length : etapaIndex(proceso)
   const siguiente = !proceso.finishedAt && indice >= 0 ? ETAPAS[indice + 1] : undefined
 
@@ -138,6 +141,14 @@ function Detalle({ proceso, origen, onChanged }: { proceso: CoffeeProcess; orige
       </div>
       {indice === -1 && <div className="notice notice-warn">La etapa registrada (“{proceso.currentStage}”) no coincide con las etapas estándar del proceso.</div>}
       <div className="stack">
+        <Card className="card-pad">
+          <CardTitle title="Cadena de poscosecha" subtitle="Mediciones por etapa, incluido el destino del agua del lavado">
+            {puedeEditar && !agregandoEtapa && <Button variant="secondary" icon="plus" onClick={() => setAgregandoEtapa(true)}>Registrar etapa</Button>}
+          </CardTitle>
+          {agregandoEtapa && <EtapaForm processId={proceso.id} onCancel={() => setAgregandoEtapa(false)} onSaved={() => { setAgregandoEtapa(false); onChanged() }} />}
+          {(proceso.events ?? []).map((e) => <div className="application-row" key={e.id}><div className="date-box">{formatShortDate(e.recordedAt)}</div><div><strong>{e.stage}</strong><div>{e.inputKg ?? '—'} kg entran → {e.outputKg ?? '—'} kg salen</div>{e.stage === 'Lavado' && <div>Agua limpia {e.waterLiters ?? '—'} L · Agua residual con mucílago {e.wastewaterLiters ?? '—'} L · {e.compostReuse ? 'Reutilizada para compostaje' : 'Destino no indicado'}</div>}{e.durationHours != null && <div>{e.durationHours} h</div>}{e.method && <div>{e.method}</div>}{e.brix != null && <div>{e.brix} °Brix</div>}{e.ph != null && <div>pH {e.ph}</div>}{e.moisturePercent != null && <div>Humedad {e.moisturePercent}%</div>}{e.scaScore != null && <div>Puntaje SCA {e.scaScore}</div>}{e.notes && <small>{e.notes}</small>}</div></div>)}
+          {!proceso.events?.length && !agregandoEtapa && <p className="muted">Aún no se han registrado etapas con mediciones.</p>}
+        </Card>
         {error && <ErrorNotice message={error} />}
         <Card className="process-note">
           <Icon name="sync" />
@@ -225,6 +236,21 @@ const ESTADO_CERTIFICACION_LABEL: Record<string, { label: string; tone: 'amber' 
   EN_TRAMITE: { label: 'En trámite', tone: 'amber' },
   VIGENTE: { label: 'Vigente', tone: 'green' },
   VENCIDA: { label: 'Vencida', tone: 'gray' },
+}
+
+function EtapaForm({ processId, onSaved, onCancel }: { processId: string; onSaved: () => void; onCancel: () => void }) {
+  const { mutate, saving, error } = useApiMutation()
+  const [stage, setStage] = useState('Despulpado')
+  const [date, setDate] = useState(hoy())
+  const [input, setInput] = useState(''); const [output, setOutput] = useState(''); const [water, setWater] = useState(''); const [waste, setWaste] = useState('')
+  const [compost, setCompost] = useState(false); const [hours, setHours] = useState(''); const [method, setMethod] = useState(''); const [notes, setNotes] = useState('')
+  const [brix, setBrix] = useState(''); const [ph, setPh] = useState(''); const [moisture, setMoisture] = useState(''); const [sca, setSca] = useState('')
+  const numeric = (v: string) => v.trim() ? Number(v) : undefined
+  async function submit(e: FormEvent) { e.preventDefault(); if (await mutate(`/coffee-processes/${processId}/events`, 'POST', { stage, recordedAt: date, inputKg: numeric(input), outputKg: numeric(output), waterLiters: numeric(water), wastewaterLiters: numeric(waste), compostReuse: compost, durationHours: numeric(hours), method: optionalText(method), brix: numeric(brix), ph: numeric(ph), moisturePercent: numeric(moisture), scaScore: numeric(sca), notes: optionalText(notes) })) onSaved() }
+  return <form className="rec-form" onSubmit={submit}><div className="form-grid three"><SelectField label="Etapa" value={stage} onChange={(e) => setStage(e.target.value)}>{['Cosecha','Despulpado','Fermentación','Lavado','Secado','Trilla','Tostión','Catación'].map((x) => <option key={x}>{x}</option>)}</SelectField><TextField label="Fecha" type="date" required value={date} onChange={(e) => setDate(e.target.value)} /><TextField label="Duración (horas)" type="number" min="0" step="any" value={hours} onChange={(e) => setHours(e.target.value)} /></div>
+    <div className="form-grid three"><TextField label="Cantidad que entra (kg)" type="number" min="0" step="any" value={input} onChange={(e) => setInput(e.target.value)} /><TextField label="Cantidad que sale (kg)" type="number" min="0" step="any" value={output} onChange={(e) => setOutput(e.target.value)} /><TextField label="Método" value={method} onChange={(e) => setMethod(e.target.value)} placeholder="Ej. fermentación láctica" /></div>
+    {stage === 'Lavado' && <><div className="form-grid two"><TextField label="Agua limpia utilizada (L)" type="number" min="0" step="any" value={water} onChange={(e) => setWater(e.target.value)} /><TextField label="Agua residual con mucílago (L)" type="number" min="0" step="any" value={waste} onChange={(e) => setWaste(e.target.value)} /></div><label><input type="checkbox" checked={compost} onChange={(e) => setCompost(e.target.checked)} /> Reutilizar agua residual para compostaje</label></>}
+    <div className="form-grid three"><TextField label="°Brix" type="number" min="0" step="any" value={brix} onChange={(e) => setBrix(e.target.value)} /><TextField label="pH" type="number" min="0" step="any" value={ph} onChange={(e) => setPh(e.target.value)} /><TextField label="Humedad final (%)" type="number" min="0" step="any" value={moisture} onChange={(e) => setMoisture(e.target.value)} /><TextField label="Puntaje SCA" type="number" min="0" step="any" value={sca} onChange={(e) => setSca(e.target.value)} /></div><TextAreaField label="Notas" value={notes} onChange={(e) => setNotes(e.target.value)} />{error && <ErrorNotice message={error} />}<div className="form-actions"><Button variant="ghost" onClick={onCancel}>Cancelar</Button><Button type="submit" disabled={saving}>Guardar etapa</Button></div></form>
 }
 
 function Producto({ producto, puedeCertificar, onChanged }: { producto: ProductFinal; puedeCertificar: boolean; onChanged: () => void }) {
@@ -324,10 +350,11 @@ function hoy(): string {
   return new Date().toISOString().slice(0, 10)
 }
 
-function ProcesoForm({ farmId, cosechas, onSaved, onCancel }: { farmId: string; cosechas: Labor[]; onSaved: (p: CoffeeProcess) => void; onCancel: () => void }) {
+function ProcesoForm({ farmId, cosechas, lotes, onSaved, onCancel }: { farmId: string; cosechas: Labor[]; lotes: Lot[]; onSaved: (p: CoffeeProcess) => void; onCancel: () => void }) {
   const { mutate, saving, error } = useApiMutation()
   const [harvestId, setHarvestId] = useState(cosechas[0]?.harvest?.id ?? '')
-  const [currentStage, setCurrentStage] = useState('Beneficio')
+  const [lotId, setLotId] = useState(cosechas[0] ? (cosechas[0].lotId ?? cosechas[0].crop?.lotId ?? '') : lotes[0]?.id ?? '')
+  const [currentStage, setCurrentStage] = useState('Cosecha')
   const [startedAt, setStartedAt] = useState(hoy())
   const [notes, setNotes] = useState('')
 
@@ -336,6 +363,7 @@ function ProcesoForm({ farmId, cosechas, onSaved, onCancel }: { farmId: string; 
     const creado = await mutate<CoffeeProcess>('/coffee-processes', 'POST', {
       farmId,
       harvestId: harvestId || undefined,
+      lotId: harvestId ? (cosechas.find((c) => c.harvest?.id === harvestId)?.lotId ?? cosechas.find((c) => c.harvest?.id === harvestId)?.crop?.lotId) : lotId || undefined,
       currentStage,
       startedAt,
       notes: optionalText(notes),
@@ -347,13 +375,16 @@ function ProcesoForm({ farmId, cosechas, onSaved, onCancel }: { farmId: string; 
     <FormCard title="Nuevo proceso de café">
       <form onSubmit={onSubmit}>
         <div className="form-grid three">
-          <SelectField label="Cosecha de origen" value={harvestId} onChange={(e) => setHarvestId(e.target.value)}>
+          <SelectField label="Cosecha de origen" value={harvestId} onChange={(e) => { const id = e.target.value; setHarvestId(id); const labor = cosechas.find((c) => c.harvest?.id === id); if (labor) setLotId(labor.lotId ?? labor.crop?.lotId ?? '') }}>
             <option value="">Sin cosecha asociada</option>
             {cosechas.map((l) => (
               <option key={l.id} value={l.harvest!.id}>
                 {formatShortDate(l.startDate)} · {l.name} · {formatNumber(l.harvest!.quantity)} {l.harvest!.unit}
               </option>
             ))}
+          </SelectField>
+          <SelectField label="Lote asociado *" value={lotId} onChange={(e) => setLotId(e.target.value)}>
+            {lotes.map((lot) => <option key={lot.id} value={lot.id}>{lot.name}</option>)}
           </SelectField>
           <SelectField label="Etapa actual *" value={currentStage} onChange={(e) => setCurrentStage(e.target.value)}>
             {ETAPAS.map((e) => (
@@ -368,7 +399,7 @@ function ProcesoForm({ farmId, cosechas, onSaved, onCancel }: { farmId: string; 
           <Button variant="ghost" onClick={onCancel}>
             Cancelar
           </Button>
-          <Button type="submit" icon="check" disabled={saving}>
+          <Button type="submit" icon="check" disabled={saving || !lotId}>
             {saving ? 'Guardando…' : 'Guardar proceso'}
           </Button>
         </div>

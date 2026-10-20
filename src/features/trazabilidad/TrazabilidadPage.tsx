@@ -42,6 +42,13 @@ function Trazabilidad({ farm }: { farm: Farm }) {
   const productos = procesos.flatMap((p) => p.products)
   const certificaciones = productos.flatMap((p) => p.certifications ?? [])
   const ultimoProceso = procesos[0]
+  const medicionesPoscosecha = ultimoProceso?.events?.map((e) => {
+    const kilos = `${e.inputKg ?? '—'} kg → ${e.outputKg ?? '—'} kg`
+    const lavado = e.stage === 'Lavado'
+      ? ` · ${e.waterLiters ?? '—'} L agua limpia · ${e.wastewaterLiters ?? '—'} L residual${e.compostReuse ? ' para compostaje' : ''}`
+      : ''
+    return `${e.stage}: ${kilos}${lavado}`
+  }).join(' · ')
 
   const pasos: Paso[] = [
     {
@@ -74,7 +81,7 @@ function Trazabilidad({ farm }: { farm: Farm }) {
     { titulo: 'Cosecha', texto: cosechado > 0 ? `${formatNumber(cosechado)} ${unidad} cosechados` : 'Sin cosechas registradas', icon: 'coffee' },
     {
       titulo: 'Procesamiento',
-      texto: procesos.length ? `${procesos.length} procesos · ${ultimoProceso.finishedAt ? 'último finalizado' : `último en ${ultimoProceso.currentStage.toLowerCase()}`}` : 'Sin procesos registrados',
+      texto: procesos.length ? `${procesos.length} procesos · ${ultimoProceso.finishedAt ? 'último finalizado' : `último en ${ultimoProceso.currentStage.toLowerCase()}`}${medicionesPoscosecha ? ` · ${medicionesPoscosecha}` : ''}` : 'Sin procesos registrados',
       icon: 'process',
     },
     { titulo: 'Producto final', texto: productos.length ? `${productos.length} productos finales${productos[0].destination ? ` · ${productos[0].destination}` : ''}` : 'Sin producto final todavía', icon: 'coffee' },

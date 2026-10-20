@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
 import { LoginPage } from '../features/auth/LoginPage'
+import { RestablecerContrasenaPage } from '../features/auth/RestablecerContrasenaPage'
 import { BioinsumosPage } from '../features/bioinsumos/BioinsumosPage'
 import { CafePage } from '../features/cafe/CafePage'
 import { ComercialPage } from '../features/comercial/ComercialPage'
@@ -39,6 +40,7 @@ export function AppRoutes() {
     <Routes>
       <Route index element={<PortalPublico />} />
       <Route path="ingresar" element={token ? <Navigate to="/inicio" replace /> : <LoginPage />} />
+      <Route path="restablecer-contrasena" element={<RestablecerContrasenaPage />} />
       <Route element={token ? <Panel /> : <Navigate to="/ingresar" replace />}>
         <Route path="inicio" element={<InicioPage />} />
         <Route path="fincas" element={<FincasPage />} />

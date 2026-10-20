@@ -36,6 +36,7 @@ export function fakeAuth(role: Role | null = 'TECNICO', overrides: Partial<Auth>
     role,
     loading: false,
     signIn: vi.fn(),
+    setPassword: vi.fn(),
     signOut: vi.fn(async () => {}),
     ...overrides,
   }

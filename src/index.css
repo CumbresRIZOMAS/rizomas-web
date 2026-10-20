@@ -471,6 +471,7 @@ td { padding: 14px; border-top: 1px solid #eeece5; color: #4c4f48; white-space: 
 .map-body { height: 650px; display: grid; grid-template-columns: minmax(0,1fr) 330px; }
 .map-canvas { position: relative; overflow: hidden; background: #607e56; isolation: isolate; }
 .map-canvas > img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.73) contrast(.88) brightness(.86); transform: scale(1.06); }
+.map-canvas > iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .map-shade { position: absolute; inset: 0; background: linear-gradient(120deg,rgba(23,56,27,.25),rgba(239,228,191,.16)); mix-blend-mode: multiply; }
 .contour-lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .contour-lines path { fill: none; stroke: rgba(255,255,230,.32); stroke-width: 1.3; stroke-dasharray: 5 3; }
@@ -789,6 +790,13 @@ td { padding: 14px; border-top: 1px solid #eeece5; color: #4c4f48; white-space: 
 .notice { border-radius: 10px; padding: 11px 13px; font-size: 10px; line-height: 1.5; display: flex; gap: 10px; align-items: center; justify-content: space-between; }
 .notice-error { background: #fff4f0; color: #94482f; border: 1px solid #e4b5a5; }
 .notice-warn { background: #fbf3df; color: #73530e; border: 1px solid #ecd9a6; }
+.notice-success { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: #eef5e7; color: #35552d; border: 1px solid #c6d9b5; border-radius: 8px; font-size: 12px; }
+.notice-success button { border: 0; background: transparent; color: inherit; font-size: 18px; cursor: pointer; }
+.public-map-detail { margin: 22px 0; padding: 18px; border: 1px solid #e1e3dc; border-radius: 12px; }
+.public-map-detail h2 { margin: 0 0 4px; font-family: Georgia,serif; font-size: 20px; }
+.public-map-detail p { margin: 0 0 12px; color: var(--muted); font-size: 12px; }
+.public-map-detail iframe { display: block; width: 100%; height: 260px; border: 0; border-radius: 8px; }
+.public-map-detail a { display: inline-block; margin-top: 10px; color: var(--forest); font-size: 12px; font-weight: 700; }
 .notice .btn { min-height: 30px; }
 .empty-inline { padding: 26px 15px; text-align: center; display: flex; flex-direction: column; gap: 5px; align-items: center; }
 .empty-inline strong { font-size: 11px; color: #3d403a; }

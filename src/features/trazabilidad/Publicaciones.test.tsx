@@ -24,7 +24,7 @@ describe('Publicaciones', () => {
     await user.type(screen.getByLabelText(/Título/), 'Castillo lavado')
     await user.click(screen.getByRole('button', { name: /Guardar borrador/ }))
 
-    expect(calls.find((c) => c.method === 'POST')?.body).toEqual({ farmId: 'finca-1', harvestId: 'h1', title: 'Castillo lavado', region: 'Huila', quantity: 680, unit: 'kg' })
+    expect(calls.find((c) => c.method === 'POST')?.body).toEqual({ farmId: 'finca-1', harvestId: 'h1', title: 'Castillo lavado', region: 'Huila', quantity: 680, unit: 'kg', publicLocation: null })
   })
 
   it('publica y retira', async () => {

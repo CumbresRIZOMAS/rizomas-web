@@ -9,6 +9,7 @@ export type Auth = {
   role: Role | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<void>
+  setPassword: (password: string) => Promise<void>
   signOut: () => Promise<void>
 }
 
