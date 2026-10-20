@@ -15,5 +15,11 @@
     "VITE_API_URL": "https://rizomas-back.onrender.com",
     "VITE_SUPABASE_ANON_KEY": "sb_publishable_7znUNh2oez_xKzXLSldL0w_CJA7iAef",
     "VITE_SUPABASE_URL": "https://jbrslictkcyjwlvzabxo.supabase.co"
+  },
+  "observability": {
+    "logs": {
+      "enabled": false,
+      "invocation_logs": true
+    }
   }
 }
