@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { useApiMutation, useApiQuery } from '../../shared/api/hooks'
 import type { AppUser, Farm, Role } from '../../shared/api/types'
-import { canDo, ROLES, useAuth } from '../../shared/auth/context'
+import { useAuth } from '../../shared/auth/context'
 import { useActiveFarm } from '../../shared/farm/context'
 import { initials, ROLE_LABEL } from '../../shared/format'
 import { Button, Card, Chip, Empty, ErrorNotice, FormCard, Icon, Loading, PageHeader, SelectField, TextField } from '../../shared/ui'
