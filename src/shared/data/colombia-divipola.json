@@ -1,0 +1,4490 @@
+[
+  {
+    "dpto": "AMAZONAS",
+    "nom_mpio": "EL ENCANTO"
+  },
+  {
+    "dpto": "AMAZONAS",
+    "nom_mpio": "LA CHORRERA"
+  },
+  {
+    "dpto": "AMAZONAS",
+    "nom_mpio": "LA PEDRERA"
+  },
+  {
+    "dpto": "AMAZONAS",
+    "nom_mpio": "LA VICTORIA"
+  },
+  {
+    "dpto": "AMAZONAS",
+    "nom_mpio": "LETICIA"
+  },
+  {
+    "dpto": "AMAZONAS",
+    "nom_mpio": "MIRITÍ - PARANÁ"
+  },
+  {
+    "dpto": "AMAZONAS",
+    "nom_mpio": "PUERTO ALEGRÍA"
+  },
+  {
+    "dpto": "AMAZONAS",
+    "nom_mpio": "PUERTO ARICA"
+  },
+  {
+    "dpto": "AMAZONAS",
+    "nom_mpio": "PUERTO NARIÑO"
+  },
+  {
+    "dpto": "AMAZONAS",
+    "nom_mpio": "PUERTO SANTANDER"
+  },
+  {
+    "dpto": "AMAZONAS",
+    "nom_mpio": "TARAPACÁ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "ABEJORRAL"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "ABRIAQUÍ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "ALEJANDRÍA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "AMAGÁ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "AMALFI"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "ANDES"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "ANGELÓPOLIS"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "ANGOSTURA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "ANORÍ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "ANZÁ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "APARTADÓ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "ARBOLETES"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "ARGELIA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "ARMENIA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "BARBOSA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "BELLO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "BELMIRA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "BETANIA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "BETULIA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "BRICEÑO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "BURITICÁ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "CÁCERES"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "CAICEDO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "CALDAS"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "CAMPAMENTO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "CAÑASGORDAS"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "CARACOLÍ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "CARAMANTA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "CAREPA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "CAROLINA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "CAUCASIA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "CHIGORODÓ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "CISNEROS"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "CIUDAD BOLÍVAR"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "COCORNÁ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "CONCEPCIÓN"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "CONCORDIA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "COPACABANA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "DABEIBA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "DONMATÍAS"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "EBÉJICO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "EL BAGRE"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "EL CARMEN DE VIBORAL"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "EL SANTUARIO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "ENTRERRÍOS"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "ENVIGADO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "FREDONIA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "FRONTINO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "GIRALDO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "GIRARDOTA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "GÓMEZ PLATA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "GRANADA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "GUADALUPE"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "GUARNE"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "GUATAPÉ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "HELICONIA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "HISPANIA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "ITAGÜÍ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "ITUANGO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "JARDÍN"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "JERICÓ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "LA CEJA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "LA ESTRELLA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "LA PINTADA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "LA UNIÓN"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "LIBORINA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "MACEO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "MARINILLA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "MEDELLÍN"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "MONTEBELLO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "MURINDÓ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "MUTATÁ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "NARIÑO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "NECHÍ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "NECOCLÍ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "OLAYA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "PEÑOL"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "PEQUE"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "PUEBLORRICO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "PUERTO BERRÍO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "PUERTO NARE"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "PUERTO TRIUNFO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "REMEDIOS"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "RETIRO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "RIONEGRO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SABANALARGA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SABANETA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SALGAR"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SAN ANDRÉS DE CUERQUÍA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SAN CARLOS"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SAN FRANCISCO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SAN JERÓNIMO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SAN JOSÉ DE LA MONTAÑA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SAN JUAN DE URABÁ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SAN LUIS"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SAN PEDRO DE LOS MILAGROS"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SAN PEDRO DE URABÁ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SAN RAFAEL"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SAN ROQUE"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SANTA BÁRBARA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SANTA FÉ DE ANTIOQUIA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SANTA ROSA DE OSOS"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SANTO DOMINGO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SAN VICENTE FERRER"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SEGOVIA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SONSÓN"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "SOPETRÁN"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "TÁMESIS"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "TARAZÁ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "TARSO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "TITIRIBÍ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "TOLEDO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "TURBO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "URAMITA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "URRAO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "VALDIVIA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "VALPARAÍSO"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "VEGACHÍ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "VENECIA"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "VIGÍA DEL FUERTE"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "YALÍ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "YARUMAL"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "YOLOMBÓ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "YONDÓ"
+  },
+  {
+    "dpto": "ANTIOQUIA",
+    "nom_mpio": "ZARAGOZA"
+  },
+  {
+    "dpto": "ARAUCA",
+    "nom_mpio": "ARAUCA"
+  },
+  {
+    "dpto": "ARAUCA",
+    "nom_mpio": "ARAUQUITA"
+  },
+  {
+    "dpto": "ARAUCA",
+    "nom_mpio": "CRAVO NORTE"
+  },
+  {
+    "dpto": "ARAUCA",
+    "nom_mpio": "FORTUL"
+  },
+  {
+    "dpto": "ARAUCA",
+    "nom_mpio": "PUERTO RONDÓN"
+  },
+  {
+    "dpto": "ARAUCA",
+    "nom_mpio": "SARAVENA"
+  },
+  {
+    "dpto": "ARAUCA",
+    "nom_mpio": "TAME"
+  },
+  {
+    "dpto": "ARCHIPIÉLAGO DE SAN ANDRÉS, PROVIDENCIA Y SANTA CATALINA",
+    "nom_mpio": "PROVIDENCIA"
+  },
+  {
+    "dpto": "ARCHIPIÉLAGO DE SAN ANDRÉS, PROVIDENCIA Y SANTA CATALINA",
+    "nom_mpio": "SAN ANDRÉS"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "BARANOA"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "BARRANQUILLA"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "CAMPO DE LA CRUZ"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "CANDELARIA"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "GALAPA"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "JUAN DE ACOSTA"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "LURUACO"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "MALAMBO"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "MANATÍ"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "PALMAR DE VARELA"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "PIOJÓ"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "POLONUEVO"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "PONEDERA"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "PUERTO COLOMBIA"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "REPELÓN"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "SABANAGRANDE"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "SABANALARGA"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "SANTA LUCÍA"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "SANTO TOMÁS"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "SOLEDAD"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "SUAN"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "TUBARÁ"
+  },
+  {
+    "dpto": "ATLÁNTICO",
+    "nom_mpio": "USIACURÍ"
+  },
+  {
+    "dpto": "BOGOTÁ, D.C.",
+    "nom_mpio": "BOGOTÁ, D.C."
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "ACHÍ"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "ALTOS DEL ROSARIO"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "ARENAL"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "ARJONA"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "ARROYOHONDO"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "BARRANCO DE LOBA"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "CALAMAR"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "CANTAGALLO"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "CARTAGENA DE INDIAS"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "CICUCO"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "CLEMENCIA"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "CÓRDOBA"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "EL CARMEN DE BOLÍVAR"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "EL GUAMO"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "EL PEÑÓN"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "HATILLO DE LOBA"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "MAGANGUÉ"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "MAHATES"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "MARGARITA"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "MARÍA LA BAJA"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "MONTECRISTO"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "MORALES"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "NOROSÍ"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "PINILLOS"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "REGIDOR"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "RÍO VIEJO"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "SAN CRISTÓBAL"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "SAN ESTANISLAO"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "SAN FERNANDO"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "SAN JACINTO"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "SAN JACINTO DEL CAUCA"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "SAN JUAN NEPOMUCENO"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "SAN MARTÍN DE LOBA"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "SAN PABLO"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "SANTA CATALINA"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "SANTA CRUZ DE MOMPOX"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "SANTA ROSA"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "SANTA ROSA DEL SUR"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "SIMITÍ"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "SOPLAVIENTO"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "TALAIGUA NUEVO"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "TIQUISIO"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "TURBACO"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "TURBANÁ"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "VILLANUEVA"
+  },
+  {
+    "dpto": "BOLÍVAR",
+    "nom_mpio": "ZAMBRANO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "ALMEIDA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "AQUITANIA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "ARCABUCO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "BELÉN"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "BERBEO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "BETÉITIVA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "BOAVITA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "BOYACÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "BRICEÑO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "BUENAVISTA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "BUSBANZÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CALDAS"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CAMPOHERMOSO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CERINZA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CHINAVITA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CHIQUINQUIRÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CHÍQUIZA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CHISCAS"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CHITA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CHITARAQUE"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CHIVATÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CHIVOR"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CIÉNEGA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CÓMBITA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "COPER"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CORRALES"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "COVARACHÍA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CUBARÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CUCAITA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "CUÍTIVA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "DUITAMA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "EL COCUY"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "EL ESPINO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "FIRAVITOBA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "FLORESTA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "GACHANTIVÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "GÁMEZA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "GARAGOA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "GUACAMAYAS"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "GUATEQUE"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "GUAYATÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "GÜICÁN DE LA SIERRA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "IZA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "JENESANO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "JERICÓ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "LABRANZAGRANDE"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "LA CAPILLA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "LA UVITA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "LA VICTORIA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "MACANAL"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "MARIPÍ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "MIRAFLORES"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "MONGUA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "MONGUÍ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "MONIQUIRÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "MOTAVITA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "MUZO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "NOBSA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "NUEVO COLÓN"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "OICATÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "OTANCHE"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "PACHAVITA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "PÁEZ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "PAIPA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "PAJARITO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "PANQUEBA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "PAUNA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "PAYA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "PAZ DE RÍO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "PESCA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "PISBA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "PUERTO BOYACÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "QUÍPAMA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "RAMIRIQUÍ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "RÁQUIRA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "RONDÓN"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SABOYÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SÁCHICA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SAMACÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SAN EDUARDO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SAN JOSÉ DE PARE"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SAN LUIS DE GACENO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SAN MATEO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SAN MIGUEL DE SEMA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SAN PABLO DE BORBUR"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SANTA MARÍA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SANTANA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SANTA ROSA DE VITERBO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SANTA SOFÍA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SATIVANORTE"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SATIVASUR"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SIACHOQUE"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SOATÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SOCHA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SOCOTÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SOGAMOSO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SOMONDOCO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SORA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SORACÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SOTAQUIRÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SUSACÓN"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SUTAMARCHÁN"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "SUTATENZA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "TASCO"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "TENZA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "TIBANÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "TIBASOSA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "TINJACÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "TIPACOQUE"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "TOCA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "TOGÜÍ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "TÓPAGA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "TOTA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "TUNJA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "TUNUNGUÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "TURMEQUÉ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "TUTA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "TUTAZÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "ÚMBITA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "VENTAQUEMADA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "VILLA DE LEYVA"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "VIRACACHÁ"
+  },
+  {
+    "dpto": "BOYACÁ",
+    "nom_mpio": "ZETAQUIRA"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "AGUADAS"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "ANSERMA"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "ARANZAZU"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "BELALCÁZAR"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "CHINCHINÁ"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "FILADELFIA"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "LA DORADA"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "LA MERCED"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "MANIZALES"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "MANZANARES"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "MARMATO"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "MARQUETALIA"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "MARULANDA"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "NEIRA"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "NORCASIA"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "PÁCORA"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "PALESTINA"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "PENSILVANIA"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "RIOSUCIO"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "RISARALDA"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "SALAMINA"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "SAMANÁ"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "SAN JOSÉ"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "SUPÍA"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "VICTORIA"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "VILLAMARÍA"
+  },
+  {
+    "dpto": "CALDAS",
+    "nom_mpio": "VITERBO"
+  },
+  {
+    "dpto": "CAQUETÁ",
+    "nom_mpio": "ALBANIA"
+  },
+  {
+    "dpto": "CAQUETÁ",
+    "nom_mpio": "BELÉN DE LOS ANDAQUÍES"
+  },
+  {
+    "dpto": "CAQUETÁ",
+    "nom_mpio": "CARTAGENA DEL CHAIRÁ"
+  },
+  {
+    "dpto": "CAQUETÁ",
+    "nom_mpio": "CURILLO"
+  },
+  {
+    "dpto": "CAQUETÁ",
+    "nom_mpio": "EL DONCELLO"
+  },
+  {
+    "dpto": "CAQUETÁ",
+    "nom_mpio": "EL PAUJÍL"
+  },
+  {
+    "dpto": "CAQUETÁ",
+    "nom_mpio": "FLORENCIA"
+  },
+  {
+    "dpto": "CAQUETÁ",
+    "nom_mpio": "LA MONTAÑITA"
+  },
+  {
+    "dpto": "CAQUETÁ",
+    "nom_mpio": "MILÁN"
+  },
+  {
+    "dpto": "CAQUETÁ",
+    "nom_mpio": "MORELIA"
+  },
+  {
+    "dpto": "CAQUETÁ",
+    "nom_mpio": "PUERTO RICO"
+  },
+  {
+    "dpto": "CAQUETÁ",
+    "nom_mpio": "SAN JOSÉ DEL FRAGUA"
+  },
+  {
+    "dpto": "CAQUETÁ",
+    "nom_mpio": "SAN VICENTE DEL CAGUÁN"
+  },
+  {
+    "dpto": "CAQUETÁ",
+    "nom_mpio": "SOLANO"
+  },
+  {
+    "dpto": "CAQUETÁ",
+    "nom_mpio": "SOLITA"
+  },
+  {
+    "dpto": "CAQUETÁ",
+    "nom_mpio": "VALPARAÍSO"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "AGUAZUL"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "CHÁMEZA"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "HATO COROZAL"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "LA SALINA"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "MANÍ"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "MONTERREY"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "NUNCHÍA"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "OROCUÉ"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "PAZ DE ARIPORO"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "PORE"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "RECETOR"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "SABANALARGA"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "SÁCAMA"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "SAN LUIS DE PALENQUE"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "TÁMARA"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "TAURAMENA"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "TRINIDAD"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "VILLANUEVA"
+  },
+  {
+    "dpto": "CASANARE",
+    "nom_mpio": "YOPAL"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "ALMAGUER"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "ARGELIA"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "BALBOA"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "BOLÍVAR"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "BUENOS AIRES"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "CAJIBÍO"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "CALDONO"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "CALOTO"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "CORINTO"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "EL TAMBO"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "FLORENCIA"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "GUACHENÉ"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "GUAPI"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "INZÁ"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "JAMBALÓ"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "LA SIERRA"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "LA VEGA"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "LÓPEZ DE MICAY"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "MERCADERES"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "MIRANDA"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "MORALES"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "PADILLA"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "PÁEZ"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "PATÍA"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "PIAMONTE"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "PIENDAMÓ - TUNÍA"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "POPAYÁN"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "PUERTO TEJADA"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "PURACÉ"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "ROSAS"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "SAN SEBASTIÁN"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "SANTANDER DE QUILICHAO"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "SANTA ROSA"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "SILVIA"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "SOTARÁ - PAISPAMBA"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "SUÁREZ"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "SUCRE"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "TIMBÍO"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "TIMBIQUÍ"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "TORIBÍO"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "TOTORÓ"
+  },
+  {
+    "dpto": "CAUCA",
+    "nom_mpio": "VILLA RICA"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "AGUACHICA"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "AGUSTÍN CODAZZI"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "ASTREA"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "BECERRIL"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "BOSCONIA"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "CHIMICHAGUA"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "CHIRIGUANÁ"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "CURUMANÍ"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "EL COPEY"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "EL PASO"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "GAMARRA"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "GONZÁLEZ"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "LA GLORIA"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "LA JAGUA DE IBIRICO"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "LA PAZ"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "MANAURE BALCÓN DEL CESAR"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "PAILITAS"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "PELAYA"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "PUEBLO BELLO"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "RÍO DE ORO"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "SAN ALBERTO"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "SAN DIEGO"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "SAN MARTÍN"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "TAMALAMEQUE"
+  },
+  {
+    "dpto": "CESAR",
+    "nom_mpio": "VALLEDUPAR"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "ACANDÍ"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "ALTO BAUDÓ"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "ATRATO"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "BAGADÓ"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "BAHÍA SOLANO"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "BAJO BAUDÓ"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "BOJAYÁ"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "CARMEN DEL DARIÉN"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "CÉRTEGUI"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "CONDOTO"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "EL CANTÓN DEL SAN PABLO"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "EL CARMEN DE ATRATO"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "EL LITORAL DEL SAN JUAN"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "ISTMINA"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "JURADÓ"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "LLORÓ"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "MEDIO ATRATO"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "MEDIO BAUDÓ"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "MEDIO SAN JUAN"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "NÓVITA"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "NUEVO BELÉN DE BAJIRÁ"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "NUQUÍ"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "QUIBDÓ"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "RÍO IRÓ"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "RÍO QUITO"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "RIOSUCIO"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "SAN JOSÉ DEL PALMAR"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "SIPÍ"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "TADÓ"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "UNGUÍA"
+  },
+  {
+    "dpto": "CHOCÓ",
+    "nom_mpio": "UNIÓN PANAMERICANA"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "AYAPEL"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "BUENAVISTA"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "CANALETE"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "CERETÉ"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "CHIMÁ"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "CHINÚ"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "CIÉNAGA DE ORO"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "COTORRA"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "LA APARTADA"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "LORICA"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "LOS CÓRDOBAS"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "MOMIL"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "MOÑITOS"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "MONTELÍBANO"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "MONTERÍA"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "PLANETA RICA"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "PUEBLO NUEVO"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "PUERTO ESCONDIDO"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "PUERTO LIBERTADOR"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "PURÍSIMA DE LA CONCEPCIÓN"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "SAHAGÚN"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "SAN ANDRÉS DE SOTAVENTO"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "SAN ANTERO"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "SAN BERNARDO DEL VIENTO"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "SAN CARLOS"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "SAN JOSÉ DE URÉ"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "SAN PELAYO"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "TIERRALTA"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "TUCHÍN"
+  },
+  {
+    "dpto": "CÓRDOBA",
+    "nom_mpio": "VALENCIA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "AGUA DE DIOS"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "ALBÁN"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "ANAPOIMA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "ANOLAIMA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "APULO"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "ARBELÁEZ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "BELTRÁN"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "BITUIMA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "BOJACÁ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "CABRERA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "CACHIPAY"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "CAJICÁ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "CAPARRAPÍ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "CÁQUEZA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "CARMEN DE CARUPA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "CHAGUANÍ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "CHÍA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "CHIPAQUE"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "CHOACHÍ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "CHOCONTÁ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "COGUA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "COTA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "CUCUNUBÁ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "EL COLEGIO"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "EL PEÑÓN"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "EL ROSAL"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "FACATATIVÁ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "FÓMEQUE"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "FOSCA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "FUNZA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "FÚQUENE"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "FUSAGASUGÁ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "GACHALÁ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "GACHANCIPÁ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "GACHETÁ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "GAMA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "GIRARDOT"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "GRANADA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "GUACHETÁ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "GUADUAS"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "GUASCA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "GUATAQUÍ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "GUATAVITA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "GUAYABAL DE SÍQUIMA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "GUAYABETAL"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "GUTIÉRREZ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "JERUSALÉN"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "JUNÍN"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "LA CALERA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "LA MESA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "LA PALMA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "LA PEÑA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "LA VEGA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "LENGUAZAQUE"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "MACHETÁ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "MADRID"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "MANTA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "MEDINA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "MOSQUERA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "NARIÑO"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "NEMOCÓN"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "NILO"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "NIMAIMA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "NOCAIMA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "PACHO"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "PAIME"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "PANDI"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "PARATEBUENO"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "PASCA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "PUERTO SALGAR"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "PULÍ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "QUEBRADANEGRA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "QUETAME"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "QUIPILE"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "RICAURTE"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SAN ANTONIO DEL TEQUENDAMA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SAN BERNARDO"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SAN CAYETANO"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SAN FRANCISCO"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SAN JUAN DE RIOSECO"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SASAIMA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SESQUILÉ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SIBATÉ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SILVANIA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SIMIJACA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SOACHA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SOPÓ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SUBACHOQUE"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SUESCA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SUPATÁ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SUSA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "SUTATAUSA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "TABIO"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "TAUSA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "TENA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "TENJO"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "TIBACUY"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "TIBIRITA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "TOCAIMA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "TOCANCIPÁ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "TOPAIPÍ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "UBALÁ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "UBAQUE"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "UNE"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "ÚTICA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "VENECIA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "VERGARA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "VIANÍ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "VILLA DE SAN DIEGO DE UBATÉ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "VILLAGÓMEZ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "VILLAPINZÓN"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "VILLETA"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "VIOTÁ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "YACOPÍ"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "ZIPACÓN"
+  },
+  {
+    "dpto": "CUNDINAMARCA",
+    "nom_mpio": "ZIPAQUIRÁ"
+  },
+  {
+    "dpto": "GUAINÍA",
+    "nom_mpio": "BARRANCOMINAS"
+  },
+  {
+    "dpto": "GUAINÍA",
+    "nom_mpio": "CACAHUAL"
+  },
+  {
+    "dpto": "GUAINÍA",
+    "nom_mpio": "INÍRIDA"
+  },
+  {
+    "dpto": "GUAINÍA",
+    "nom_mpio": "LA GUADALUPE"
+  },
+  {
+    "dpto": "GUAINÍA",
+    "nom_mpio": "MORICHAL"
+  },
+  {
+    "dpto": "GUAINÍA",
+    "nom_mpio": "PANA PANA"
+  },
+  {
+    "dpto": "GUAINÍA",
+    "nom_mpio": "PUERTO COLOMBIA"
+  },
+  {
+    "dpto": "GUAINÍA",
+    "nom_mpio": "SAN FELIPE"
+  },
+  {
+    "dpto": "GUAVIARE",
+    "nom_mpio": "CALAMAR"
+  },
+  {
+    "dpto": "GUAVIARE",
+    "nom_mpio": "EL RETORNO"
+  },
+  {
+    "dpto": "GUAVIARE",
+    "nom_mpio": "MIRAFLORES"
+  },
+  {
+    "dpto": "GUAVIARE",
+    "nom_mpio": "SAN JOSÉ DEL GUAVIARE"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "ACEVEDO"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "AGRADO"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "AIPE"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "ALGECIRAS"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "ALTAMIRA"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "BARAYA"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "CAMPOALEGRE"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "COLOMBIA"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "ELÍAS"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "GARZÓN"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "GIGANTE"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "GUADALUPE"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "HOBO"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "ÍQUIRA"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "ISNOS"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "LA ARGENTINA"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "LA PLATA"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "NÁTAGA"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "NEIVA"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "OPORAPA"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "PAICOL"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "PALERMO"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "PALESTINA"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "PITAL"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "PITALITO"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "RIVERA"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "SALADOBLANCO"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "SAN AGUSTÍN"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "SANTA MARÍA"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "SUAZA"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "TARQUI"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "TELLO"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "TERUEL"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "TESALIA"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "TIMANÁ"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "VILLAVIEJA"
+  },
+  {
+    "dpto": "HUILA",
+    "nom_mpio": "YAGUARÁ"
+  },
+  {
+    "dpto": "LA GUAJIRA",
+    "nom_mpio": "ALBANIA"
+  },
+  {
+    "dpto": "LA GUAJIRA",
+    "nom_mpio": "BARRANCAS"
+  },
+  {
+    "dpto": "LA GUAJIRA",
+    "nom_mpio": "DIBULLA"
+  },
+  {
+    "dpto": "LA GUAJIRA",
+    "nom_mpio": "DISTRACCIÓN"
+  },
+  {
+    "dpto": "LA GUAJIRA",
+    "nom_mpio": "EL MOLINO"
+  },
+  {
+    "dpto": "LA GUAJIRA",
+    "nom_mpio": "FONSECA"
+  },
+  {
+    "dpto": "LA GUAJIRA",
+    "nom_mpio": "HATONUEVO"
+  },
+  {
+    "dpto": "LA GUAJIRA",
+    "nom_mpio": "LA JAGUA DEL PILAR"
+  },
+  {
+    "dpto": "LA GUAJIRA",
+    "nom_mpio": "MAICAO"
+  },
+  {
+    "dpto": "LA GUAJIRA",
+    "nom_mpio": "MANAURE"
+  },
+  {
+    "dpto": "LA GUAJIRA",
+    "nom_mpio": "RIOHACHA"
+  },
+  {
+    "dpto": "LA GUAJIRA",
+    "nom_mpio": "SAN JUAN DEL CESAR"
+  },
+  {
+    "dpto": "LA GUAJIRA",
+    "nom_mpio": "URIBIA"
+  },
+  {
+    "dpto": "LA GUAJIRA",
+    "nom_mpio": "URUMITA"
+  },
+  {
+    "dpto": "LA GUAJIRA",
+    "nom_mpio": "VILLANUEVA"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "ALGARROBO"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "ARACATACA"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "ARIGUANÍ"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "CERRO DE SAN ANTONIO"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "CHIVOLO"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "CIÉNAGA"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "CONCORDIA"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "EL BANCO"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "EL PIÑÓN"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "EL RETÉN"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "FUNDACIÓN"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "GUAMAL"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "NUEVA GRANADA"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "PEDRAZA"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "PIJIÑO DEL CARMEN"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "PIVIJAY"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "PLATO"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "PUEBLOVIEJO"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "REMOLINO"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "SABANAS DE SAN ÁNGEL"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "SALAMINA"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "SAN SEBASTIÁN DE BUENAVISTA"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "SANTA ANA"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "SANTA BÁRBARA DE PINTO"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "SANTA MARTA"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "SAN ZENÓN"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "SITIONUEVO"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "TENERIFE"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "ZAPAYÁN"
+  },
+  {
+    "dpto": "MAGDALENA",
+    "nom_mpio": "ZONA BANANERA"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "ACACÍAS"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "BARRANCA DE UPÍA"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "CABUYARO"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "CASTILLA LA NUEVA"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "CUBARRAL"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "CUMARAL"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "EL CALVARIO"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "EL CASTILLO"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "EL DORADO"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "FUENTE DE ORO"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "GRANADA"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "GUAMAL"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "LA MACARENA"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "LEJANÍAS"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "MAPIRIPÁN"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "MESETAS"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "PUERTO CONCORDIA"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "PUERTO GAITÁN"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "PUERTO LLERAS"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "PUERTO LÓPEZ"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "PUERTO RICO"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "RESTREPO"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "SAN CARLOS DE GUAROA"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "SAN JUAN DE ARAMA"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "SAN JUANITO"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "SAN MARTÍN"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "URIBE"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "VILLAVICENCIO"
+  },
+  {
+    "dpto": "META",
+    "nom_mpio": "VISTAHERMOSA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "ALBÁN"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "ALDANA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "ANCUYA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "ARBOLEDA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "BARBACOAS"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "BELÉN"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "BUESACO"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "CHACHAGÜÍ"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "COLÓN"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "CONSACÁ"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "CONTADERO"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "CÓRDOBA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "CUASPUD CARLOSAMA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "CUMBAL"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "CUMBITARA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "EL CHARCO"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "EL PEÑOL"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "EL ROSARIO"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "EL TABLÓN DE GÓMEZ"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "EL TAMBO"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "FRANCISCO PIZARRO"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "FUNES"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "GUACHUCAL"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "GUAITARILLA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "GUALMATÁN"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "ILES"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "IMUÉS"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "IPIALES"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "LA CRUZ"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "LA FLORIDA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "LA LLANADA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "LA TOLA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "LA UNIÓN"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "LEIVA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "LINARES"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "LOS ANDES"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "MAGÜÍ"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "MALLAMA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "MOSQUERA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "NARIÑO"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "OLAYA HERRERA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "OSPINA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "PASTO"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "POLICARPA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "POTOSÍ"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "PROVIDENCIA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "PUERRES"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "PUPIALES"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "RICAURTE"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "ROBERTO PAYÁN"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "SAMANIEGO"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "SAN ANDRÉS DE TUMACO"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "SAN BERNARDO"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "SANDONÁ"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "SAN LORENZO"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "SAN PABLO"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "SAN PEDRO DE CARTAGO"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "SANTA BÁRBARA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "SANTACRUZ"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "SAPUYES"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "TAMINANGO"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "TANGUA"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "TÚQUERRES"
+  },
+  {
+    "dpto": "NARIÑO",
+    "nom_mpio": "YACUANQUER"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "ÁBREGO"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "ARBOLEDAS"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "BOCHALEMA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "BUCARASICA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "CÁCHIRA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "CÁCOTA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "CHINÁCOTA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "CHITAGÁ"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "CONVENCIÓN"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "CUCUTILLA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "DURANIA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "EL CARMEN"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "EL TARRA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "EL ZULIA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "GRAMALOTE"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "HACARÍ"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "HERRÁN"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "LABATECA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "LA ESPERANZA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "LA PLAYA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "LOS PATIOS"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "LOURDES"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "MUTISCUA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "OCAÑA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "PAMPLONA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "PAMPLONITA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "PUERTO SANTANDER"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "RAGONVALIA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "SALAZAR"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "SAN CALIXTO"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "SAN CAYETANO"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "SAN JOSÉ DE CÚCUTA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "SANTIAGO"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "SARDINATA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "SILOS"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "TEORAMA"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "TIBÚ"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "TOLEDO"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "VILLA CARO"
+  },
+  {
+    "dpto": "NORTE DE SANTANDER",
+    "nom_mpio": "VILLA DEL ROSARIO"
+  },
+  {
+    "dpto": "PUTUMAYO",
+    "nom_mpio": "COLÓN"
+  },
+  {
+    "dpto": "PUTUMAYO",
+    "nom_mpio": "MOCOA"
+  },
+  {
+    "dpto": "PUTUMAYO",
+    "nom_mpio": "ORITO"
+  },
+  {
+    "dpto": "PUTUMAYO",
+    "nom_mpio": "PUERTO ASÍS"
+  },
+  {
+    "dpto": "PUTUMAYO",
+    "nom_mpio": "PUERTO CAICEDO"
+  },
+  {
+    "dpto": "PUTUMAYO",
+    "nom_mpio": "PUERTO GUZMÁN"
+  },
+  {
+    "dpto": "PUTUMAYO",
+    "nom_mpio": "PUERTO LEGUÍZAMO"
+  },
+  {
+    "dpto": "PUTUMAYO",
+    "nom_mpio": "SAN FRANCISCO"
+  },
+  {
+    "dpto": "PUTUMAYO",
+    "nom_mpio": "SAN MIGUEL"
+  },
+  {
+    "dpto": "PUTUMAYO",
+    "nom_mpio": "SANTIAGO"
+  },
+  {
+    "dpto": "PUTUMAYO",
+    "nom_mpio": "SIBUNDOY"
+  },
+  {
+    "dpto": "PUTUMAYO",
+    "nom_mpio": "VALLE DEL GUAMUEZ"
+  },
+  {
+    "dpto": "PUTUMAYO",
+    "nom_mpio": "VILLAGARZÓN"
+  },
+  {
+    "dpto": "QUINDÍO",
+    "nom_mpio": "ARMENIA"
+  },
+  {
+    "dpto": "QUINDÍO",
+    "nom_mpio": "BUENAVISTA"
+  },
+  {
+    "dpto": "QUINDÍO",
+    "nom_mpio": "CALARCÁ"
+  },
+  {
+    "dpto": "QUINDÍO",
+    "nom_mpio": "CIRCASIA"
+  },
+  {
+    "dpto": "QUINDÍO",
+    "nom_mpio": "CÓRDOBA"
+  },
+  {
+    "dpto": "QUINDÍO",
+    "nom_mpio": "FILANDIA"
+  },
+  {
+    "dpto": "QUINDÍO",
+    "nom_mpio": "GÉNOVA"
+  },
+  {
+    "dpto": "QUINDÍO",
+    "nom_mpio": "LA TEBAIDA"
+  },
+  {
+    "dpto": "QUINDÍO",
+    "nom_mpio": "MONTENEGRO"
+  },
+  {
+    "dpto": "QUINDÍO",
+    "nom_mpio": "PIJAO"
+  },
+  {
+    "dpto": "QUINDÍO",
+    "nom_mpio": "QUIMBAYA"
+  },
+  {
+    "dpto": "QUINDÍO",
+    "nom_mpio": "SALENTO"
+  },
+  {
+    "dpto": "RISARALDA",
+    "nom_mpio": "APÍA"
+  },
+  {
+    "dpto": "RISARALDA",
+    "nom_mpio": "BALBOA"
+  },
+  {
+    "dpto": "RISARALDA",
+    "nom_mpio": "BELÉN DE UMBRÍA"
+  },
+  {
+    "dpto": "RISARALDA",
+    "nom_mpio": "DOSQUEBRADAS"
+  },
+  {
+    "dpto": "RISARALDA",
+    "nom_mpio": "GUÁTICA"
+  },
+  {
+    "dpto": "RISARALDA",
+    "nom_mpio": "LA CELIA"
+  },
+  {
+    "dpto": "RISARALDA",
+    "nom_mpio": "LA VIRGINIA"
+  },
+  {
+    "dpto": "RISARALDA",
+    "nom_mpio": "MARSELLA"
+  },
+  {
+    "dpto": "RISARALDA",
+    "nom_mpio": "MISTRATÓ"
+  },
+  {
+    "dpto": "RISARALDA",
+    "nom_mpio": "PEREIRA"
+  },
+  {
+    "dpto": "RISARALDA",
+    "nom_mpio": "PUEBLO RICO"
+  },
+  {
+    "dpto": "RISARALDA",
+    "nom_mpio": "QUINCHÍA"
+  },
+  {
+    "dpto": "RISARALDA",
+    "nom_mpio": "SANTA ROSA DE CABAL"
+  },
+  {
+    "dpto": "RISARALDA",
+    "nom_mpio": "SANTUARIO"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "AGUADA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "ALBANIA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "ARATOCA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "BARBOSA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "BARICHARA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "BARRANCABERMEJA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "BETULIA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "BOLÍVAR"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "BUCARAMANGA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "CABRERA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "CALIFORNIA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "CAPITANEJO"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "CARCASÍ"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "CEPITÁ"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "CERRITO"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "CHARALÁ"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "CHARTA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "CHIMA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "CHIPATÁ"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "CIMITARRA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "CONCEPCIÓN"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "CONFINES"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "CONTRATACIÓN"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "COROMORO"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "CURITÍ"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "EL CARMEN DE CHUCURÍ"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "EL GUACAMAYO"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "EL PEÑÓN"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "EL PLAYÓN"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "ENCINO"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "ENCISO"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "FLORIÁN"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "FLORIDABLANCA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "GALÁN"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "GÁMBITA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "GIRÓN"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "GUACA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "GUADALUPE"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "GUAPOTÁ"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "GUAVATÁ"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "GÜEPSA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "HATO"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "JESÚS MARÍA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "JORDÁN"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "LA BELLEZA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "LANDÁZURI"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "LA PAZ"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "LEBRIJA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "LOS SANTOS"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "MACARAVITA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "MÁLAGA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "MATANZA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "MOGOTES"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "MOLAGAVITA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "OCAMONTE"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "OIBA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "ONZAGA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "PALMAR"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "PALMAS DEL SOCORRO"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "PÁRAMO"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "PIEDECUESTA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "PINCHOTE"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "PUENTE NACIONAL"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "PUERTO PARRA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "PUERTO WILCHES"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "RIONEGRO"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "SABANA DE TORRES"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "SAN ANDRÉS"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "SAN BENITO"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "SAN GIL"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "SAN JOAQUÍN"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "SAN JOSÉ DE MIRANDA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "SAN MIGUEL"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "SANTA BÁRBARA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "SANTA HELENA DEL OPÓN"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "SAN VICENTE DE CHUCURÍ"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "SIMACOTA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "SOCORRO"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "SUAITA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "SUCRE"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "SURATÁ"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "TONA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "VALLE DE SAN JOSÉ"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "VÉLEZ"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "VETAS"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "VILLANUEVA"
+  },
+  {
+    "dpto": "SANTANDER",
+    "nom_mpio": "ZAPATOCA"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "BUENAVISTA"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "CAIMITO"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "CHALÁN"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "COLOSÓ"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "COROZAL"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "COVEÑAS"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "EL ROBLE"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "GALERAS"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "GUARANDA"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "LA UNIÓN"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "LOS PALMITOS"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "MAJAGUAL"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "MORROA"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "OVEJAS"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "PALMITO"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "SAMPUÉS"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "SAN BENITO ABAD"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "SAN JOSÉ DE TOLUVIEJO"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "SAN JUAN DE BETULIA"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "SAN LUIS DE SINCÉ"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "SAN MARCOS"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "SAN ONOFRE"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "SAN PEDRO"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "SANTIAGO DE TOLÚ"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "SINCELEJO"
+  },
+  {
+    "dpto": "SUCRE",
+    "nom_mpio": "SUCRE"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "ALPUJARRA"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "ALVARADO"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "AMBALEMA"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "ANZOÁTEGUI"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "ARMERO"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "ATACO"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "CAJAMARCA"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "CARMEN DE APICALÁ"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "CASABIANCA"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "CHAPARRAL"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "COELLO"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "COYAIMA"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "CUNDAY"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "DOLORES"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "ESPINAL"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "FALAN"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "FLANDES"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "FRESNO"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "GUAMO"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "HERVEO"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "HONDA"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "IBAGUÉ"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "ICONONZO"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "LÉRIDA"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "LÍBANO"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "MELGAR"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "MURILLO"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "NATAGAIMA"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "ORTEGA"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "PALOCABILDO"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "PIEDRAS"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "PLANADAS"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "PRADO"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "PURIFICACIÓN"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "RIOBLANCO"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "RONCESVALLES"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "ROVIRA"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "SALDAÑA"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "SAN ANTONIO"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "SAN LUIS"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "SAN SEBASTIÁN DE MARIQUITA"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "SANTA ISABEL"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "SUÁREZ"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "VALLE DE SAN JUAN"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "VENADILLO"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "VILLAHERMOSA"
+  },
+  {
+    "dpto": "TOLIMA",
+    "nom_mpio": "VILLARRICA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "ALCALÁ"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "ANDALUCÍA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "ANSERMANUEVO"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "ARGELIA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "BOLÍVAR"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "BUENAVENTURA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "BUGALAGRANDE"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "CAICEDONIA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "CALIMA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "CANDELARIA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "CARTAGO"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "DAGUA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "EL ÁGUILA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "EL CAIRO"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "EL CERRITO"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "EL DOVIO"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "FLORIDA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "GINEBRA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "GUACARÍ"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "GUADALAJARA DE BUGA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "JAMUNDÍ"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "LA CUMBRE"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "LA UNIÓN"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "LA VICTORIA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "OBANDO"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "PALMIRA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "PRADERA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "RESTREPO"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "RIOFRÍO"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "ROLDANILLO"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "SAN PEDRO"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "SANTIAGO DE CALI"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "SEVILLA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "TORO"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "TRUJILLO"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "TULUÁ"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "ULLOA"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "VERSALLES"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "VIJES"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "YOTOCO"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "YUMBO"
+  },
+  {
+    "dpto": "VALLE DEL CAUCA",
+    "nom_mpio": "ZARZAL"
+  },
+  {
+    "dpto": "VAUPÉS",
+    "nom_mpio": "CARURÚ"
+  },
+  {
+    "dpto": "VAUPÉS",
+    "nom_mpio": "MITÚ"
+  },
+  {
+    "dpto": "VAUPÉS",
+    "nom_mpio": "PACOA"
+  },
+  {
+    "dpto": "VAUPÉS",
+    "nom_mpio": "PAPUNAHUA"
+  },
+  {
+    "dpto": "VAUPÉS",
+    "nom_mpio": "TARAIRA"
+  },
+  {
+    "dpto": "VAUPÉS",
+    "nom_mpio": "YAVARATÉ"
+  },
+  {
+    "dpto": "VICHADA",
+    "nom_mpio": "CUMARIBO"
+  },
+  {
+    "dpto": "VICHADA",
+    "nom_mpio": "LA PRIMAVERA"
+  },
+  {
+    "dpto": "VICHADA",
+    "nom_mpio": "PUERTO CARREÑO"
+  },
+  {
+    "dpto": "VICHADA",
+    "nom_mpio": "SANTA ROSALÍA"
+  }
+]

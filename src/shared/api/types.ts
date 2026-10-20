@@ -279,6 +279,7 @@ export type Publication = {
   id: string
   title: string
   description?: string | null
+  municipality?: string | null
   region: string | null
   quantity: Decimal | null
   unit: string | null

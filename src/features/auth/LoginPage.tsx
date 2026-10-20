@@ -56,7 +56,7 @@ export function LoginPage() {
             <strong>RIZOMAS</strong>
           </div>
           <Link className="back-public" to="/">
-            ← Volver al portal público
+            ← Ir a la página principal
           </Link>
           <span className="eyebrow">Bienvenido de nuevo</span>
           <h1>Ingresa a tu cuenta</h1>

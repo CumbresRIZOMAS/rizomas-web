@@ -237,7 +237,7 @@ export function PortalPublico() {
           </div>
           <div className="map-filters">
             <label>
-              <span>Región</span>
+              <span>Departamento</span>
               <select value={region} onChange={(e) => setRegion(e.target.value)}>
                 <option>{TODAS}</option>
                 {regiones.map((r) => (
@@ -250,6 +250,13 @@ export function PortalPublico() {
         <div className="map-body">
           <div className="map-canvas">
             {mapaActivo ? <iframe title={`Mapa aproximado de ${activa?.title ?? 'origen cafetero'}`} src={mapaActivo} loading="lazy" /> : <img src={FOTO_PAISAJE} alt="Paisaje montañoso de una región cafetera colombiana" />}
+            {activa && (activa.municipality || activa.region) && (
+              <div className="map-location-note">
+                <Icon name="location" size={15} />
+                <span>Origen registrado</span>
+                <strong>{[activa.municipality, activa.region].filter(Boolean).join(', ')}</strong>
+              </div>
+            )}
             <div className="map-shade" />
             <svg className="contour-lines" viewBox="0 0 1000 620" preserveAspectRatio="none" aria-hidden="true">
               <path d="M-80 440C110 300 202 515 390 352s302-76 470-226 278 30 278 30" />
@@ -309,7 +316,7 @@ export function PortalPublico() {
                         <strong>{p.title}</strong>
                         <small>
                           <Icon name="location" size={12} />
-                          {p.region ?? 'Colombia'}
+                          {[p.municipality, p.region].filter(Boolean).join(', ') || 'Colombia'}
                         </small>
                         {p.quantity !== null && (
                           <em>
@@ -330,7 +337,7 @@ export function PortalPublico() {
                     <div>
                       <span>ORIGEN DESTACADO</span>
                       <h2>{activa.title}</h2>
-                      <p>{activa.region ?? 'Colombia'}</p>
+                      <p>{[activa.municipality, activa.region].filter(Boolean).join(', ') || 'Colombia'}</p>
                       {activa.description && <p>{activa.description}</p>}
                       <div className="farm-flavors">
                         <span>
@@ -546,7 +553,7 @@ function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Pub
         </header>
         <div className="origin-detail-body">
           {p.description && <section className="origin-impact"><div><Icon name="leaf" size={26} /><span><small>Historia del origen</small><strong>{p.description}</strong></span></div></section>}
-          {urlMapaPublico(p.publicLocation) && <section className="public-map-detail"><h2>Ubicación compartida</h2><p>{p.region ?? 'Ubicación aproximada de la finca'}</p><iframe title={`Mapa aproximado de ${p.title}`} src={urlMapaPublico(p.publicLocation)!} loading="lazy" /><a href={`https://www.openstreetmap.org/?mlat=${p.publicLocation!.latitude}&mlon=${p.publicLocation!.longitude}#map=11/${p.publicLocation!.latitude}/${p.publicLocation!.longitude}`} target="_blank" rel="noreferrer">Abrir mapa</a></section>}
+          {(p.municipality || p.region || urlMapaPublico(p.publicLocation)) && <section className="public-map-detail"><h2>Ubicación compartida</h2><p>{[p.municipality, p.region].filter(Boolean).join(', ') || 'Ubicación aproximada de la finca'}</p>{urlMapaPublico(p.publicLocation) && <><iframe title={`Mapa aproximado de ${p.title}`} src={urlMapaPublico(p.publicLocation)!} loading="lazy" /><a href={`https://www.openstreetmap.org/?mlat=${p.publicLocation!.latitude}&mlon=${p.publicLocation!.longitude}#map=11/${p.publicLocation!.latitude}/${p.publicLocation!.longitude}`} target="_blank" rel="noreferrer">Abrir mapa</a></>}</section>}
           {fotos.length > 0 && (
             <section className="process-gallery">
               <div className="origin-section-title">
