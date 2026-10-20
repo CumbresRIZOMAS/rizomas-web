@@ -63,13 +63,15 @@ export function PortalPublico() {
 
   useEffect(() => {
     let vigente = true
-    Promise.all([api<Publication[]>('/publications'), api<Publication[]>('/publications/origins')])
-      .then(([data, listaOrigenes]) => {
+    Promise.allSettled([api<Publication[]>('/publications'), api<Publication[]>('/publications/origins')])
+      .then(([publicacionesResult, origenesResult]) => {
         if (!vigente) return
-        setPublicaciones(data)
-        setOrigenes(listaOrigenes)
+        const dataPublicaciones = publicacionesResult.status === 'fulfilled' ? publicacionesResult.value : null
+        const dataOrigenes = origenesResult.status === 'fulfilled' ? origenesResult.value : dataPublicaciones
+        if (dataPublicaciones) setPublicaciones(dataPublicaciones)
+        if (dataOrigenes) setOrigenes(dataOrigenes)
+        setFallo(!dataPublicaciones && !dataOrigenes)
       })
-      .catch(() => vigente && setFallo(true))
     return () => {
       vigente = false
     }

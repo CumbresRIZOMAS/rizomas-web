@@ -76,14 +76,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const { data, error } = await supabase().auth.signInWithPassword({ email, password })
           if (error) throw new Error(error.message === 'Invalid login credentials' ? 'Correo o contraseña incorrectos' : error.message)
           if (!data.session) throw new Error('Supabase no devolvió una sesión válida')
-          const bootstrap = await api<{ user?: { role?: Role } | null }>('/sync/pull', { token: data.session.access_token })
           setSession(data.session)
-          setBackendRole(bootstrap.user?.role ?? null)
-        } catch (error) {
-          await supabase().auth.signOut()
-          setBackendRole(null)
-          if (error instanceof ApiError) throw new Error(`No se pudo validar el acceso con el servidor: ${error.message}`)
-          throw error
+          setBackendRole(roleFromToken(data.session.access_token))
+          // Carga el rol del backend en segundo plano; un fallo temporal de datos
+          // no debe bloquear ni borrar la sesión que Supabase acaba de validar.
+          void api<{ user?: { role?: Role } | null }>('/sync/pull', { token: data.session.access_token })
+            .then((bootstrap) => setBackendRole(bootstrap.user?.role ?? roleFromToken(data.session.access_token)))
+            .catch((bootstrapError) => {
+              if (bootstrapError instanceof ApiError && bootstrapError.status === 401) {
+                void supabase().auth.signOut().then(() => {
+                  setSession(null)
+                  setBackendRole(null)
+                }).catch(() => undefined)
+              }
+            })
         } finally {
           setValidatingLogin(false)
         }
