@@ -50,7 +50,7 @@ export function UsuariosPage() {
 
   return (
     <div>
-      <PageHeader eyebrow="Solo administradores" title="Gestión de usuarios" subtitle="Crea cuentas para la web y la app móvil, administra roles y controla el acceso a las fincas." actions={!invitando && <Button icon="plus" onClick={() => setInvitando(true)}>Crear usuario</Button>} />
+      <PageHeader eyebrow="Solo administradores" title="Gestión de usuarios" subtitle="Crea cuentas para la web y la app móvil, administra roles y controla el acceso a las fincas." actions={!invitando && <div style={{ display: 'flex', gap: 8 }}><Button variant="ghost" onClick={reload}>Actualizar lista</Button><Button icon="plus" onClick={() => setInvitando(true)}>Crear usuario</Button></div>} />
       <div className="stack">
         {invitando && <UsuarioForm farms={farms} roles={roles} roleActor={role} onCancel={() => setInvitando(false)} onSaved={() => { setInvitando(false); reload(); setMensaje('Cuenta creada en Supabase. Comparte la contraseña inicial por un canal seguro; la persona ya puede ingresar desde la app móvil.') }} />}
         {editando && <EditarUsuarioForm user={editando} farms={farms} roles={roles} onCancel={() => setEditando(null)} onSaved={() => { setEditando(null); reload() }} />}
