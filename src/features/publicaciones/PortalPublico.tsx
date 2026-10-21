@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { api } from '../../shared/api/client'
+import { useApiQuery } from '../../shared/api/hooks'
 import type { Publication, PublicTraceability } from '../../shared/api/types'
 import { useAuth } from '../../shared/auth/context'
 import { env } from '../../shared/config/env'
@@ -53,29 +54,15 @@ function scrollTo(id: string) {
  */
 export function PortalPublico() {
   const { token } = useAuth()
-  const [publicaciones, setPublicaciones] = useState<Publication[] | null>(null)
-  const [origenes, setOrigenes] = useState<Publication[] | null>(null)
-  const [fallo, setFallo] = useState(false)
+  const publicacionesQuery = useApiQuery<Publication[]>('/publications')
+  const origenesQuery = useApiQuery<Publication[]>('/publications/origins')
+  const publicaciones = publicacionesQuery.data
+  const origenes = origenesQuery.data ?? publicaciones
+  const fallo = !publicaciones && !origenesQuery.data
   const [region, setRegion] = useState(TODAS)
   const [seleccion, setSeleccion] = useState<string | null>(null)
   const [listaAbierta, setListaAbierta] = useState(true)
   const [detalle, setDetalle] = useState(false)
-
-  useEffect(() => {
-    let vigente = true
-    Promise.allSettled([api<Publication[]>('/publications'), api<Publication[]>('/publications/origins')])
-      .then(([publicacionesResult, origenesResult]) => {
-        if (!vigente) return
-        const dataPublicaciones = publicacionesResult.status === 'fulfilled' ? publicacionesResult.value : null
-        const dataOrigenes = origenesResult.status === 'fulfilled' ? origenesResult.value : dataPublicaciones
-        if (dataPublicaciones) setPublicaciones(dataPublicaciones)
-        if (dataOrigenes) setOrigenes(dataOrigenes)
-        setFallo(!dataPublicaciones && !dataOrigenes)
-      })
-    return () => {
-      vigente = false
-    }
-  }, [])
 
   const lista = publicaciones ?? []
   const listaOrigenes = origenes ?? []
@@ -288,7 +275,7 @@ export function PortalPublico() {
             <div className="drawer-head">
               <div>
                 <span>{filtradas.length} resultados</span>
-                <strong>Fincas con origen publicado</strong>
+                <strong>Fincas con origen registrado</strong>
               </div>
               <button type="button" onClick={() => setListaAbierta(!listaAbierta)} aria-label={listaAbierta ? 'Cerrar lista' : 'Abrir lista'}>
                 <Icon name={listaAbierta ? 'close' : 'menu'} />
@@ -298,7 +285,7 @@ export function PortalPublico() {
               <>
                 {!origenes && !fallo && <p className="loading">Cargando fincas…</p>}
                 {fallo && <p className="loading">No se pudieron cargar los orígenes. Intenta más tarde.</p>}
-                {origenes && filtradas.length === 0 && <p className="loading">Todavía no hay fincas con origen publicado{region !== TODAS ? ' en esta región' : ''}.</p>}
+                {origenes && filtradas.length === 0 && <p className="loading">Todavía no hay fincas con municipio o departamento registrado{region !== TODAS ? ' en esta región' : ''}.</p>}
                 <div className="drawer-list">
                   {filtradas.map((p) => (
                     <button
@@ -307,15 +294,15 @@ export function PortalPublico() {
                       key={p.id}
                       onClick={() => {
                         setSeleccion(p.id)
-                        setDetalle(true)
+                        setDetalle(p.isPublished !== false)
                       }}
                     >
                       <div className="farm-thumb">
                         <Icon name="leaf" />
                       </div>
                       <div>
-                        <span>Finca con origen publicado</span>
-                        <strong>{p.title}</strong>
+                        <span>{p.isPublished === false ? 'Ubicación registrada' : 'Origen publicado'}</span>
+                        <strong>{p.farmName ?? p.title}</strong>
                         <small>
                           <Icon name="location" size={12} />
                           {[p.municipality, p.region].filter(Boolean).join(', ') || 'Colombia'}
@@ -334,26 +321,28 @@ export function PortalPublico() {
                   <div className="active-farm-card">
                     <div className="active-farm-photo">
                       <img src={fotosDe(activa)[0] ?? FOTO_FINCA} alt={`Origen ${activa.title}`} />
-                      <Chip tone="green">Verificado</Chip>
+                      <Chip tone={activa.isPublished === false ? 'neutral' : 'green'}>{activa.isPublished === false ? 'Ubicación registrada' : 'Verificado'}</Chip>
                     </div>
                     <div>
-                      <span>ORIGEN DESTACADO</span>
-                      <h2>{activa.title}</h2>
+                      <span>{activa.isPublished === false ? 'FINCA REGISTRADA' : 'ORIGEN DESTACADO'}</span>
+                      <h2>{activa.farmName ?? activa.title}</h2>
                       <p>{[activa.municipality, activa.region].filter(Boolean).join(', ') || 'Colombia'}</p>
-                      {activa.description && <p>{activa.description}</p>}
+                      {activa.isPublished !== false && activa.description && <p>{activa.description}</p>}
                       <div className="farm-flavors">
                         <span>
                           <small>Producción</small>
                           <strong>{activa.quantity !== null ? `${formatNumber(activa.quantity)} ${activa.unit ?? ''}` : '—'}</strong>
                         </span>
                         <span>
-                          <small>Publicado</small>
-                          <strong>{formatLongDate(activa.publishedAt)}</strong>
+                          <small>{activa.isPublished === false ? 'Trazabilidad' : 'Publicado'}</small>
+                          <strong>{activa.isPublished === false ? 'Aún no publicada' : formatLongDate(activa.publishedAt)}</strong>
                         </span>
                       </div>
-                      <Button onClick={() => setDetalle(true)}>
-                        Conocer este origen <Icon name="arrow" size={16} />
-                      </Button>
+                      {activa.isPublished !== false ? (
+                        <Button onClick={() => setDetalle(true)}>
+                          Conocer este origen <Icon name="arrow" size={16} />
+                        </Button>
+                      ) : <p className="muted">La ubicación está registrada; la finca todavía no publicó su trazabilidad.</p>}
                     </div>
                   </div>
                 )}
@@ -448,7 +437,7 @@ export function PortalPublico() {
             <Icon name="farm" />
             <span>
               <small>Comunidad Rizomas</small>
-              <strong>{origenes ? `${listaOrigenes.length} ${listaOrigenes.length === 1 ? 'finca ya está' : 'fincas ya están'} mostrando su historia` : 'Fincas mostrando su origen'}</strong>
+              <strong>{origenes ? `${listaOrigenes.length} ${listaOrigenes.length === 1 ? 'finca tiene' : 'fincas tienen'} su ubicación registrada` : 'Fincas mostrando su origen'}</strong>
             </span>
             <Chip tone="green">Únete</Chip>
           </div>

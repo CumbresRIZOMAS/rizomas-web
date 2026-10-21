@@ -1,5 +1,5 @@
 import { createClient, type Session, type SupabaseClient } from '@supabase/supabase-js'
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { Role } from '../api/types'
 import { api, ApiError } from '../api/client'
 import { clearApiQueryCache } from '../api/hooks'
@@ -18,6 +18,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [backendRole, setBackendRole] = useState<Role | null>(null)
   const [initializing, setInitializing] = useState(configurado)
   const [validatingLogin, setValidatingLogin] = useState(false)
+  const signOut = useCallback(async () => {
+    await supabase().auth.signOut()
+    clearApiQueryCache()
+    setSession(null)
+    setBackendRole(null)
+  }, [])
 
   useEffect(() => {
     if (!configurado) return
@@ -98,14 +104,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const { error } = await supabase().auth.updateUser({ password })
         if (error) throw new Error(error.message)
       },
-      signOut: async () => {
-        await supabase().auth.signOut()
-        clearApiQueryCache()
-        setSession(null)
-        setBackendRole(null)
-      },
+      signOut,
     }
-  }, [session, backendRole, initializing, validatingLogin])
+  }, [session, backendRole, initializing, validatingLogin, signOut])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

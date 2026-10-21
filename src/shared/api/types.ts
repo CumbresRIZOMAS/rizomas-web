@@ -278,6 +278,8 @@ export type FarmTraceability = Omit<Farm, 'lots'> & {
 export type Publication = {
   id: string
   title: string
+  farmName?: string
+  isPublished?: boolean
   description?: string | null
   municipality?: string | null
   region: string | null
