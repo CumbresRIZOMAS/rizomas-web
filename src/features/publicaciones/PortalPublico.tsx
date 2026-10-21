@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
-import { api } from '../../shared/api/client'
+import { ApiError, api } from '../../shared/api/client'
 import { useApiQuery } from '../../shared/api/hooks'
-import type { Publication, PublicTraceability } from '../../shared/api/types'
+import type { Publication, PublicFarmTraceability, PublicTraceability } from '../../shared/api/types'
 import { useAuth } from '../../shared/auth/context'
 import { env } from '../../shared/config/env'
 import { FARM_TYPE_LABEL, LABOR_TYPE_LABEL, formatLongDate, formatNumber, toNumber } from '../../shared/format'
@@ -453,10 +453,14 @@ export function PortalPublico() {
 }
 
 type Paso = { etapa: string; detalle: string; fecha: string; icon: IconName; hecha: boolean }
+type TrazabilidadOrigen = Pick<PublicTraceability, 'origin' | 'processes'> &
+  Partial<Pick<PublicTraceability, 'crop' | 'harvest' | 'practices' | 'publication'>> &
+  Partial<Pick<PublicFarmTraceability, 'lotsCount' | 'cropsCount' | 'harvestsCount'>>
 
 /** Timeline público alineado con la secuencia Finca → Producto final de la app móvil. */
-function pasosPublicos(t: PublicTraceability, p: Publication): Paso[] {
-  const labores = Object.entries(t.practices.laborsByType).filter(([tipo]) => tipo !== 'COSECHA')
+function pasosPublicos(t: TrazabilidadOrigen, p: Publication): Paso[] {
+  const practices = t.practices ?? { laborsByType: {}, soilAnalyses: 0, bioinputApplications: 0, recommendations: 0 }
+  const labores = Object.entries(practices.laborsByType).filter(([tipo]) => tipo !== 'COSECHA')
   const totalLabores = labores.reduce((s, [, n]) => s + (n ?? 0), 0)
   const detalleLabores = labores
     .filter(([, cantidad]) => cantidad > 0)
@@ -473,36 +477,50 @@ function pasosPublicos(t: PublicTraceability, p: Publication): Paso[] {
       hecha: true,
     },
     {
-      etapa: 'Lote',
-      detalle: t.crop || t.harvest ? 'Lote asociado a los datos publicados' : 'Sin lote vinculado a esta publicación',
-      fecha: t.crop || t.harvest ? 'Registrado' : 'Pendiente',
+      etapa: 'Lotes',
+      detalle: t.lotsCount ? `${t.lotsCount} ${t.lotsCount === 1 ? 'lote registrado' : 'lotes registrados'}` : t.crop || t.harvest ? 'Lote asociado a los datos registrados' : 'Sin lotes registrados todavía',
+      fecha: (t.lotsCount ?? 0) > 0 || Boolean(t.crop || t.harvest) ? 'Registrado' : 'Pendiente',
       icon: 'location',
-      hecha: Boolean(t.crop || t.harvest),
+      hecha: (t.lotsCount ?? 0) > 0 || Boolean(t.crop || t.harvest),
     },
     {
       etapa: 'Cultivo',
-      detalle: t.crop ? [t.crop.species, t.crop.variety].filter(Boolean).join(' · ') : 'Sin cultivos registrados',
-      fecha: t.crop ? 'En curso' : 'Pendiente',
+      detalle: t.crop ? [t.crop.species, t.crop.variety].filter(Boolean).join(' · ') : t.cropsCount ? `${t.cropsCount} cultivos registrados` : 'Sin cultivos registrados todavía',
+      fecha: t.crop || (t.cropsCount ?? 0) > 0 ? 'Registrado' : 'Pendiente',
       icon: 'leaf',
-      hecha: Boolean(t.crop),
+      hecha: Boolean(t.crop) || (t.cropsCount ?? 0) > 0,
     },
     {
       etapa: 'Labores',
-      detalle: detalleLabores || 'Sin labores documentadas',
+      detalle: detalleLabores || 'Sin labores documentadas todavía',
       fecha: totalLabores ? `${totalLabores} ${totalLabores === 1 ? 'labor' : 'labores'}` : 'Pendiente',
       icon: 'tool',
       hecha: totalLabores > 0,
     },
     {
       etapa: 'Análisis de suelo',
-      detalle: t.practices.soilAnalyses ? `${t.practices.soilAnalyses} ${t.practices.soilAnalyses === 1 ? 'análisis registrado' : 'análisis registrados'}` : 'Sin análisis todavía',
-      fecha: t.practices.soilAnalyses ? 'Registrado' : 'Pendiente',
+      detalle: practices.soilAnalyses ? `${practices.soilAnalyses} ${practices.soilAnalyses === 1 ? 'análisis registrado' : 'análisis registrados'}` : 'Sin análisis todavía',
+      fecha: practices.soilAnalyses ? 'Registrado' : 'Pendiente',
       icon: 'leaf',
-      hecha: t.practices.soilAnalyses > 0,
+      hecha: practices.soilAnalyses > 0,
+    },
+    {
+      etapa: 'Recomendaciones',
+      detalle: practices.recommendations ? `${practices.recommendations} ${practices.recommendations === 1 ? 'recomendación registrada' : 'recomendaciones registradas'}` : 'Sin recomendaciones registradas',
+      fecha: practices.recommendations ? 'Registrado' : 'Pendiente',
+      icon: 'report',
+      hecha: practices.recommendations > 0,
+    },
+    {
+      etapa: 'Aplicación de bioinsumos',
+      detalle: practices.bioinputApplications ? `${practices.bioinputApplications} ${practices.bioinputApplications === 1 ? 'aplicación registrada' : 'aplicaciones registradas'}` : 'Sin aplicaciones registradas todavía',
+      fecha: practices.bioinputApplications ? 'Registrado' : 'Pendiente',
+      icon: 'drop',
+      hecha: practices.bioinputApplications > 0,
     },
     {
       etapa: 'Cosecha',
-      detalle: t.harvest ? `${formatNumber(t.harvest.quantity)} ${t.harvest.unit}${t.harvest.quality ? ` · ${t.harvest.quality}` : ''}` : 'Sin cosechas registradas',
+      detalle: t.harvest ? `${formatNumber(t.harvest.quantity)} ${t.harvest.unit}${t.harvest.quality ? ` · ${t.harvest.quality}` : ''}${(t.harvestsCount ?? 0) > 1 ? ` · ${t.harvestsCount} cosechas en total` : ''}` : 'Sin cosechas registradas todavía',
       fecha: t.harvest ? formatLongDate(t.harvest.date) : 'Pendiente',
       icon: 'coffee',
       hecha: Boolean(t.harvest),
@@ -511,29 +529,32 @@ function pasosPublicos(t: PublicTraceability, p: Publication): Paso[] {
   if (t.processes.length) {
     t.processes.forEach((process) => {
       const events = process.events ?? []
-      const detalle = events.length
-        ? events.map((event) => [
-            `${event.stage} (${formatLongDate(event.recordedAt)})`,
-            event.inputKg !== null && `Entrada ${formatNumber(event.inputKg)} kg`,
-            event.outputKg !== null && `Salida ${formatNumber(event.outputKg)} kg`,
-          ].filter(Boolean).join(' · ')).join('  |  ')
-        : `Etapa actual: ${process.stage}`
-      pasos.push({
-        etapa: 'Procesamiento',
-        detalle,
-        fecha: process.finishedAt ? `Finalizado ${formatLongDate(process.finishedAt)}` : `Inició ${formatLongDate(process.startedAt)}`,
+      events.forEach((event) => pasos.push({
+        etapa: event.stage,
+        detalle: [
+          event.inputKg !== null && `Entrada ${formatNumber(event.inputKg)} kg`,
+          event.outputKg !== null && `Salida ${formatNumber(event.outputKg)} kg`,
+        ].filter(Boolean).join(' · ') || 'Etapa registrada en la finca',
+        fecha: formatLongDate(event.recordedAt),
         icon: 'drop',
         hecha: true,
+      }))
+      pasos.push({
+        etapa: process.finishedAt ? 'Proceso finalizado' : 'Proceso en curso',
+        detalle: `Etapa actual: ${process.stage}`,
+        fecha: process.finishedAt ? formatLongDate(process.finishedAt) : `Inició ${formatLongDate(process.startedAt)}`,
+        icon: 'drop',
+        hecha: Boolean(process.finishedAt),
       })
     })
   } else {
-    pasos.push({ etapa: 'Procesamiento', detalle: 'Beneficio, fermentación, lavado y secado', fecha: 'Pendiente', icon: 'drop', hecha: false })
+    pasos.push({ etapa: 'Procesamiento', detalle: 'Sin procesos de beneficio registrados todavía', fecha: 'Pendiente', icon: 'drop', hecha: false })
   }
   const producto = productos.at(-1)
   pasos.push({
     etapa: 'Producto final',
     detalle: producto
-      ? [producto.destination ?? t.publication.title, certificaciones.length && `Certificaciones: ${certificaciones.map((c) => c.certifier).join(', ')}`].filter(Boolean).join(' · ')
+      ? [producto.destination ?? t.publication?.title ?? p.title, certificaciones.length && `Certificaciones: ${certificaciones.map((c) => c.certifier).join(', ')}`].filter(Boolean).join(' · ')
       : 'Sin producto final todavía',
     fecha: producto?.finalizedAt ? formatLongDate(producto.finalizedAt) : producto ? 'Registrado' : 'Pendiente',
     icon: 'report',
@@ -544,28 +565,31 @@ function pasosPublicos(t: PublicTraceability, p: Publication): Paso[] {
 
 function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Publication; contacto: string; onClose: () => void }) {
   const fotos = fotosDe(p)
-  const [traza, setTraza] = useState<PublicTraceability | null>(null)
-  const [estadoTraza, setEstadoTraza] = useState<'loading' | 'loaded' | 'unavailable' | 'registered'>('loading')
+  const [traza, setTraza] = useState<TrazabilidadOrigen | null>(null)
+  const [estadoTraza, setEstadoTraza] = useState<'loading' | 'loaded' | 'unavailable'>('loading')
+  const [errorTraza, setErrorTraza] = useState<string | null>(null)
   const [intentoTraza, setIntentoTraza] = useState(0)
 
   useEffect(() => {
-    if (p.isPublished === false) {
-      setTraza(null)
-      setEstadoTraza('registered')
-      return
-    }
     let vigente = true
     setTraza(null)
+    setErrorTraza(null)
     setEstadoTraza('loading')
-    api<PublicTraceability>(`/publications/${p.id}/traceability`)
+    const ruta = p.isPublished === false
+      ? `/publications/farms/${p.id.replace(/^farm:/, '')}/traceability`
+      : `/publications/${p.id}/traceability`
+    api<PublicTraceability | PublicFarmTraceability>(ruta)
       .then((t) => {
         if (!vigente) return
         setTraza(t)
         setEstadoTraza('loaded')
       })
-      .catch(() => {
+      .catch((error: unknown) => {
         if (!vigente) return
         setTraza(null)
+        setErrorTraza(error instanceof ApiError
+          ? `${error.status ? `HTTP ${error.status}: ` : ''}${error.message}`
+          : error instanceof Error ? error.message : 'Error desconocido')
         setEstadoTraza('unavailable')
       })
     return () => {
@@ -596,7 +620,7 @@ function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Pub
             </Chip>
             <span>{p.isPublished === false ? 'FINCA REGISTRADA' : 'CAFÉ DE ORIGEN'} · {(p.region ?? 'Colombia').toUpperCase()}</span>
             <h1>{p.title}</h1>
-            <p>{p.isPublished === false ? 'Finca con ubicación registrada en RIZOMAS' : p.quantity !== null ? `${formatNumber(p.quantity)} ${p.unit ?? ''} producidos` : 'Producción documentada en RIZOMAS'}</p>
+            <p>{p.isPublished === false ? 'Finca con origen y etapas registradas en RIZOMAS' : p.quantity !== null ? `${formatNumber(p.quantity)} ${p.unit ?? ''} producidos` : 'Producción documentada en RIZOMAS'}</p>
           </div>
         </header>
         <div className="origin-detail-body">
@@ -620,19 +644,19 @@ function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Pub
               </div>
             </section>
           )}
-          {p.isPublished !== false && <section className="public-trace">
+          <section className="public-trace">
             <div className="origin-section-title">
               <span>{fotos.length > 0 ? '02' : '01'}</span>
               <div>
                 <h2>Trazabilidad de {p.title}</h2>
-                <p>Cada paso fue documentado en RIZOMAS</p>
+                <p>Se muestran las etapas registradas hasta ahora; los procesos en curso también son visibles.</p>
               </div>
-              {estadoTraza === 'loaded' && <Chip tone="green"><Icon name="check" size={13} /> Información verificada</Chip>}
+              {estadoTraza === 'loaded' && p.isPublished !== false && <Chip tone="green"><Icon name="check" size={13} /> Información verificada</Chip>}
             </div>
             {estadoTraza === 'loading' && <p className="trace-feedback" role="status">Cargando la trazabilidad y los procesos…</p>}
-            {estadoTraza === 'unavailable' && <div className="trace-feedback" role="alert"><p>No se pudo cargar la trazabilidad de esta finca.</p><Button variant="secondary" onClick={() => setIntentoTraza((intento) => intento + 1)}>Intentar de nuevo</Button></div>}
+            {estadoTraza === 'unavailable' && <div className="trace-feedback" role="alert"><p>No se pudo cargar la trazabilidad de esta finca.</p>{errorTraza && <small>Detalle: {errorTraza}</small>}<Button variant="secondary" onClick={() => setIntentoTraza((intento) => intento + 1)}>Intentar de nuevo</Button></div>}
             {estadoTraza === 'loaded' && traza && <>
-              {traza.processes.length === 0 && <p className="trace-feedback">No hay procesos de beneficio publicados para este origen.</p>}
+              {traza.processes.length === 0 && <p className="trace-feedback">Aún no hay procesos de beneficio; los pasos pendientes se muestran en gris.</p>}
               <div className="public-trace-timeline">
                 {pasos.map((paso, i) => (
                   <article className={`public-trace-step ${paso.hecha ? 'done' : 'pending'}`} key={`${paso.etapa}-${i}`}>
@@ -648,8 +672,7 @@ function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Pub
                 ))}
               </div>
             </>}
-          </section>}
-          {p.isPublished === false && <section className="origin-impact"><div><Icon name="location" size={26} /><span><small>Información disponible</small><strong>La finca registró su ubicación regional. Su trazabilidad y sus fotos todavía no están publicadas.</strong></span></div></section>}
+          </section>
           <section className="origin-impact">
             <div>
               <Icon name="leaf" size={26} />

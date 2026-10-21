@@ -314,7 +314,7 @@ export type PublicTraceability = {
   origin: { region: string | null; farmType: FarmType | null }
   crop: { species: string; variety: string | null } | null
   harvest: { date: string; quantity: string; unit: string; quality: string | null } | null
-  practices: { laborsByType: Partial<Record<LaborType, number>>; soilAnalyses: number; bioinputApplications: number }
+  practices: { laborsByType: Partial<Record<LaborType, number>>; soilAnalyses: number; bioinputApplications: number; recommendations: number }
   processes: {
     stage: string
     startedAt: string
@@ -322,4 +322,16 @@ export type PublicTraceability = {
     events: { stage: string; recordedAt: string; inputKg: Decimal | null; outputKg: Decimal | null }[]
     products: { finalizedAt: string | null; destination: string | null; certifications: { certifier: string; status: string }[] }[]
   }[]
+}
+
+/** Etapas públicas de una finca del mapa, incluso sin publicación activa. */
+export type PublicFarmTraceability = {
+  origin: { region: string | null; farmType: FarmType | null }
+  crop: PublicTraceability['crop']
+  harvest: PublicTraceability['harvest']
+  practices: PublicTraceability['practices']
+  lotsCount: number
+  cropsCount: number
+  harvestsCount: number
+  processes: PublicTraceability['processes']
 }
