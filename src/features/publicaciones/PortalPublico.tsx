@@ -5,8 +5,9 @@ import { useApiQuery } from '../../shared/api/hooks'
 import type { Publication, PublicTraceability } from '../../shared/api/types'
 import { useAuth } from '../../shared/auth/context'
 import { env } from '../../shared/config/env'
-import { FARM_TYPE_LABEL, formatLongDate, formatNumber, toNumber } from '../../shared/format'
+import { FARM_TYPE_LABEL, LABOR_TYPE_LABEL, formatLongDate, formatNumber, toNumber } from '../../shared/format'
 import { Button, Chip, Icon, type IconName } from '../../shared/ui'
+import { ColombiaDepartmentsMap } from './ColombiaDepartmentsMap'
 
 // Fotos de paisaje del diseño (decorativas, no son de una finca concreta).
 const FOTO_PAISAJE = 'https://images.unsplash.com/photo-1568489711036-9c94a7d5aea6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=85&w=1600'
@@ -16,6 +17,10 @@ const FOTO_PROMO = 'https://images.unsplash.com/photo-1532185922611-3410b1898a1c
 const FOTO_ORIGEN = 'https://images.unsplash.com/photo-1672015151052-d6fa87fc8aba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=85&w=1500'
 
 const TODAS = 'Todas las regiones'
+
+function normalizarRegion(value: string) {
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLocaleUpperCase('es')
+}
 
 const PASOS = [
   { emoji: '👩‍🌾', titulo: 'La finca registra', texto: 'Labores, cosechas y fotos desde la app, incluso sin señal en el lote.' },
@@ -67,13 +72,19 @@ export function PortalPublico() {
   const lista = publicaciones ?? []
   const listaOrigenes = origenes ?? []
   const regiones = [...new Set(listaOrigenes.map((p) => p.region).filter((r): r is string => Boolean(r)))].sort()
-  const filtradas = listaOrigenes.filter((p) => region === TODAS || p.region === region)
+  const filtradas = listaOrigenes.filter((p) => region === TODAS || normalizarRegion(p.region ?? '') === normalizarRegion(region))
+  const conteoRegiones = listaOrigenes.reduce<Record<string, number>>((conteos, publicacion) => {
+    if (publicacion.region) {
+      const clave = normalizarRegion(publicacion.region)
+      conteos[clave] = (conteos[clave] ?? 0) + 1
+    }
+    return conteos
+  }, {})
   const activa = filtradas.find((p) => p.id === seleccion) ?? filtradas[0] ?? null
   const contacto = env.contactEmail
   // Kilos de café documentados en las publicaciones (solo las que están en kg).
   const kilos = lista.filter((p) => (p.unit ?? 'kg') === 'kg').reduce((s, p) => s + (toNumber(p.quantity) ?? 0), 0)
   const destacada = listaOrigenes[0] ?? null
-  const mapaActivo = urlMapaPublico(activa?.publicLocation)
 
   return (
     <div className="public-site">
@@ -221,7 +232,7 @@ export function PortalPublico() {
             </span>
             <div>
               <strong>Mapa de orígenes</strong>
-              <small>Selecciona una finca para ver su origen y trazabilidad</small>
+              <small>Selecciona un departamento para filtrar sus fincas</small>
             </div>
           </div>
           <div className="map-filters">
@@ -238,7 +249,11 @@ export function PortalPublico() {
         </div>
         <div className="map-body">
           <div className="map-canvas">
-            {mapaActivo ? <iframe title={`Mapa aproximado de ${activa?.title ?? 'origen cafetero'}`} src={mapaActivo} loading="lazy" /> : <img src={FOTO_PAISAJE} alt="Paisaje montañoso de una región cafetera colombiana" />}
+            <ColombiaDepartmentsMap
+              region={region === TODAS ? TODAS : region}
+              counts={conteoRegiones}
+              onSelect={(departamento) => setRegion(departamento || TODAS)}
+            />
             {activa && (activa.municipality || activa.region) && (
               <div className="map-location-note">
                 <Icon name="location" size={15} />
@@ -246,30 +261,6 @@ export function PortalPublico() {
                 <strong>{[activa.municipality, activa.region].filter(Boolean).join(', ')}</strong>
               </div>
             )}
-            <div className="map-shade" />
-            <svg className="contour-lines" viewBox="0 0 1000 620" preserveAspectRatio="none" aria-hidden="true">
-              <path d="M-80 440C110 300 202 515 390 352s302-76 470-226 278 30 278 30" />
-              <path d="M-85 486C98 344 220 558 413 399s309-76 475-223 268 21 268 21" />
-              <path d="M-92 530C107 388 236 604 430 446s323-72 481-214 260 6 260 6" />
-              <path d="M90 90c145 45 170-66 302-20s189 19 280-39" />
-            </svg>
-            {regiones.slice(0, 5).map((r, i) => (
-              <button
-                type="button"
-                key={r}
-                className={`region-label region-slot-${i + 1}`}
-                style={{ pointerEvents: 'auto', background: 'none', border: 0, cursor: 'pointer', opacity: region === TODAS || region === r ? 1 : 0.4 }}
-                onClick={() => setRegion(region === r ? TODAS : r)}
-              >
-                {r.toUpperCase()}
-                <span>
-              {listaOrigenes.filter((p) => p.region === r).length} {listaOrigenes.filter((p) => p.region === r).length === 1 ? 'finca' : 'fincas'}
-                </span>
-              </button>
-            ))}
-            <div className="map-compass">
-              N<span>◆</span>
-            </div>
           </div>
           <aside className={`farm-drawer ${listaAbierta ? '' : 'closed'}`}>
             <div className="drawer-head">
@@ -294,7 +285,7 @@ export function PortalPublico() {
                       key={p.id}
                       onClick={() => {
                         setSeleccion(p.id)
-                        setDetalle(p.isPublished !== false)
+                        setDetalle(true)
                       }}
                     >
                       <div className="farm-thumb">
@@ -338,11 +329,9 @@ export function PortalPublico() {
                           <strong>{activa.isPublished === false ? 'Aún no publicada' : formatLongDate(activa.publishedAt)}</strong>
                         </span>
                       </div>
-                      {activa.isPublished !== false ? (
-                        <Button onClick={() => setDetalle(true)}>
-                          Conocer este origen <Icon name="arrow" size={16} />
-                        </Button>
-                      ) : <p className="muted">La ubicación está registrada; la finca todavía no publicó su trazabilidad.</p>}
+                      <Button onClick={() => setDetalle(true)}>
+                        {activa.isPublished !== false ? 'Conocer este origen' : 'Ver información del origen'} <Icon name="arrow" size={16} />
+                      </Button>
                     </div>
                   </div>
                 )}
@@ -463,60 +452,128 @@ export function PortalPublico() {
   )
 }
 
-type Paso = [string, string, string, IconName]
+type Paso = { etapa: string; detalle: string; fecha: string; icon: IconName; hecha: boolean }
 
-function pasosBasicos(p: Publication): Paso[] {
-  return [
-    ['Origen', p.region ?? 'Colombia', 'Ubicación regional, sin coordenadas exactas', 'farm'],
-    ['Cosecha', p.quantity !== null ? `${formatNumber(p.quantity)} ${p.unit ?? ''}` : 'Cantidad no publicada', 'Registrada en la finca', 'coffee'],
-    ['Producto', p.title, `Publicado el ${formatLongDate(p.publishedAt)}`, 'report'],
-  ]
-}
-
-/** Pasos del read model público (región, cultivo, prácticas, cosecha, beneficio, producto). */
-function pasosPublicos(t: PublicTraceability): Paso[] {
-  const practicas = Object.values(t.practices.laborsByType).reduce((s, n) => s + (n ?? 0), 0)
-  const ultimo = t.processes.at(-1)
-  const producto = t.processes.flatMap((p) => p.products).at(-1)
-  const certificaciones = t.processes.flatMap((p) => p.products.flatMap((x) => x.certifications))
+/** Timeline público alineado con la secuencia Finca → Producto final de la app móvil. */
+function pasosPublicos(t: PublicTraceability, p: Publication): Paso[] {
+  const labores = Object.entries(t.practices.laborsByType).filter(([tipo]) => tipo !== 'COSECHA')
+  const totalLabores = labores.reduce((s, [, n]) => s + (n ?? 0), 0)
+  const detalleLabores = labores
+    .filter(([, cantidad]) => cantidad > 0)
+    .map(([tipo, cantidad]) => `${LABOR_TYPE_LABEL[tipo as keyof typeof LABOR_TYPE_LABEL] ?? tipo}: ${cantidad}`)
+    .join(' · ')
+  const productos = t.processes.flatMap((p) => p.products)
+  const certificaciones = productos.flatMap((x) => x.certifications)
   const pasos: Paso[] = [
-    ['Origen', t.origin.region ?? 'Colombia', t.origin.farmType ? `Finca ${FARM_TYPE_LABEL[t.origin.farmType].toLowerCase()}` : 'Ubicación regional', 'farm'],
+    {
+      etapa: 'Finca',
+      detalle: [p.farmName ?? p.title, p.municipality, t.origin.region ?? 'Colombia', t.origin.farmType && `Finca ${FARM_TYPE_LABEL[t.origin.farmType as keyof typeof FARM_TYPE_LABEL]?.toLowerCase() ?? ''}`].filter(Boolean).join(' · '),
+      fecha: 'En curso',
+      icon: 'farm',
+      hecha: true,
+    },
+    {
+      etapa: 'Lote',
+      detalle: t.crop || t.harvest ? 'Lote asociado a los datos publicados' : 'Sin lote vinculado a esta publicación',
+      fecha: t.crop || t.harvest ? 'Registrado' : 'Pendiente',
+      icon: 'location',
+      hecha: Boolean(t.crop || t.harvest),
+    },
+    {
+      etapa: 'Cultivo',
+      detalle: t.crop ? [t.crop.species, t.crop.variety].filter(Boolean).join(' · ') : 'Sin cultivos registrados',
+      fecha: t.crop ? 'En curso' : 'Pendiente',
+      icon: 'leaf',
+      hecha: Boolean(t.crop),
+    },
+    {
+      etapa: 'Labores',
+      detalle: detalleLabores || 'Sin labores documentadas',
+      fecha: totalLabores ? `${totalLabores} ${totalLabores === 1 ? 'labor' : 'labores'}` : 'Pendiente',
+      icon: 'tool',
+      hecha: totalLabores > 0,
+    },
+    {
+      etapa: 'Análisis de suelo',
+      detalle: t.practices.soilAnalyses ? `${t.practices.soilAnalyses} ${t.practices.soilAnalyses === 1 ? 'análisis registrado' : 'análisis registrados'}` : 'Sin análisis todavía',
+      fecha: t.practices.soilAnalyses ? 'Registrado' : 'Pendiente',
+      icon: 'leaf',
+      hecha: t.practices.soilAnalyses > 0,
+    },
+    {
+      etapa: 'Cosecha',
+      detalle: t.harvest ? `${formatNumber(t.harvest.quantity)} ${t.harvest.unit}${t.harvest.quality ? ` · ${t.harvest.quality}` : ''}` : 'Sin cosechas registradas',
+      fecha: t.harvest ? formatLongDate(t.harvest.date) : 'Pendiente',
+      icon: 'coffee',
+      hecha: Boolean(t.harvest),
+    },
   ]
-  if (t.crop) pasos.push(['Cultivo', [t.crop.species, t.crop.variety].filter(Boolean).join(' '), 'Variedad sembrada en el lote', 'leaf'])
-  pasos.push([
-    'Prácticas',
-    `${practicas} labores documentadas`,
-    [t.practices.soilAnalyses && `${t.practices.soilAnalyses} análisis de suelo`, t.practices.bioinputApplications && `${t.practices.bioinputApplications} aplicaciones de bioinsumos`]
-      .filter(Boolean)
-      .join(' · ') || 'Manejo registrado en RIZOMAS',
-    'tool',
-  ])
-  if (t.harvest) pasos.push(['Cosecha', `${formatNumber(t.harvest.quantity)} ${t.harvest.unit}`, [formatLongDate(t.harvest.date), t.harvest.quality].filter(Boolean).join(' · '), 'coffee'])
-  if (ultimo) pasos.push(['Beneficio', ultimo.finishedAt ? 'Proceso finalizado' : ultimo.stage, `Desde el ${formatLongDate(ultimo.startedAt)}`, 'drop'])
-  pasos.push([
-    'Producto',
-    producto?.destination ?? t.publication.title,
-    certificaciones.length ? certificaciones.map((c) => c.certifier).join(' · ') : `Publicado el ${formatLongDate(t.publication.publishedAt)}`,
-    'report',
-  ])
+  if (t.processes.length) {
+    t.processes.forEach((process) => {
+      const events = process.events ?? []
+      const detalle = events.length
+        ? events.map((event) => [
+            `${event.stage} (${formatLongDate(event.recordedAt)})`,
+            event.inputKg !== null && `Entrada ${formatNumber(event.inputKg)} kg`,
+            event.outputKg !== null && `Salida ${formatNumber(event.outputKg)} kg`,
+          ].filter(Boolean).join(' · ')).join('  |  ')
+        : `Etapa actual: ${process.stage}`
+      pasos.push({
+        etapa: 'Procesamiento',
+        detalle,
+        fecha: process.finishedAt ? `Finalizado ${formatLongDate(process.finishedAt)}` : `Inició ${formatLongDate(process.startedAt)}`,
+        icon: 'drop',
+        hecha: true,
+      })
+    })
+  } else {
+    pasos.push({ etapa: 'Procesamiento', detalle: 'Beneficio, fermentación, lavado y secado', fecha: 'Pendiente', icon: 'drop', hecha: false })
+  }
+  const producto = productos.at(-1)
+  pasos.push({
+    etapa: 'Producto final',
+    detalle: producto
+      ? [producto.destination ?? t.publication.title, certificaciones.length && `Certificaciones: ${certificaciones.map((c) => c.certifier).join(', ')}`].filter(Boolean).join(' · ')
+      : 'Sin producto final todavía',
+    fecha: producto?.finalizedAt ? formatLongDate(producto.finalizedAt) : producto ? 'Registrado' : 'Pendiente',
+    icon: 'report',
+    hecha: Boolean(producto),
+  })
   return pasos
 }
 
 function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Publication; contacto: string; onClose: () => void }) {
   const fotos = fotosDe(p)
   const [traza, setTraza] = useState<PublicTraceability | null>(null)
+  const [estadoTraza, setEstadoTraza] = useState<'loading' | 'loaded' | 'unavailable' | 'registered'>('loading')
+  const [intentoTraza, setIntentoTraza] = useState(0)
 
   useEffect(() => {
+    if (p.isPublished === false) {
+      setTraza(null)
+      setEstadoTraza('registered')
+      return
+    }
     let vigente = true
+    setTraza(null)
+    setEstadoTraza('loading')
     api<PublicTraceability>(`/publications/${p.id}/traceability`)
-      .then((t) => vigente && setTraza(t))
-      .catch(() => vigente && setTraza(null))
+      .then((t) => {
+        if (!vigente) return
+        setTraza(t)
+        setEstadoTraza('loaded')
+      })
+      .catch(() => {
+        if (!vigente) return
+        setTraza(null)
+        setEstadoTraza('unavailable')
+      })
     return () => {
       vigente = false
     }
-  }, [p.id])
+  }, [p.id, p.isPublished, intentoTraza])
 
-  const pasos = traza ? pasosPublicos(traza) : pasosBasicos(p)
+  const pasos = traza ? pasosPublicos(traza, p) : []
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
@@ -534,12 +591,12 @@ function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Pub
             <Icon name="close" />
           </button>
           <div>
-            <Chip tone="green">
-              <Icon name="check" size={13} /> Origen verificado
+            <Chip tone={p.isPublished === false ? 'gray' : 'green'}>
+              {p.isPublished === false ? 'Ubicación registrada' : <><Icon name="check" size={13} /> Origen verificado</>}
             </Chip>
-            <span>CAFÉ DE ORIGEN · {(p.region ?? 'Colombia').toUpperCase()}</span>
+            <span>{p.isPublished === false ? 'FINCA REGISTRADA' : 'CAFÉ DE ORIGEN'} · {(p.region ?? 'Colombia').toUpperCase()}</span>
             <h1>{p.title}</h1>
-            <p>{p.quantity !== null ? `${formatNumber(p.quantity)} ${p.unit ?? ''} producidos` : 'Producción documentada en RIZOMAS'}</p>
+            <p>{p.isPublished === false ? 'Finca con ubicación registrada en RIZOMAS' : p.quantity !== null ? `${formatNumber(p.quantity)} ${p.unit ?? ''} producidos` : 'Producción documentada en RIZOMAS'}</p>
           </div>
         </header>
         <div className="origin-detail-body">
@@ -563,31 +620,36 @@ function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Pub
               </div>
             </section>
           )}
-          <section className="public-trace">
+          {p.isPublished !== false && <section className="public-trace">
             <div className="origin-section-title">
               <span>{fotos.length > 0 ? '02' : '01'}</span>
               <div>
                 <h2>Trazabilidad de {p.title}</h2>
                 <p>Cada paso fue documentado en RIZOMAS</p>
               </div>
-              <Chip tone="green">
-                <Icon name="check" size={13} /> Información verificada
-              </Chip>
+              {estadoTraza === 'loaded' && <Chip tone="green"><Icon name="check" size={13} /> Información verificada</Chip>}
             </div>
-            <div className="public-trace-line" style={{ gridTemplateColumns: `repeat(${pasos.length},1fr)` }}>
-              {pasos.map(([paso, titulo, texto, icon], i) => (
-                <div key={paso}>
-                  <span>{i + 1}</span>
-                  <i>
-                    <Icon name={icon} />
-                  </i>
-                  <small>{paso}</small>
-                  <strong>{titulo}</strong>
-                  <p>{texto}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+            {estadoTraza === 'loading' && <p className="trace-feedback" role="status">Cargando la trazabilidad y los procesos…</p>}
+            {estadoTraza === 'unavailable' && <div className="trace-feedback" role="alert"><p>No se pudo cargar la trazabilidad de esta finca.</p><Button variant="secondary" onClick={() => setIntentoTraza((intento) => intento + 1)}>Intentar de nuevo</Button></div>}
+            {estadoTraza === 'loaded' && traza && <>
+              {traza.processes.length === 0 && <p className="trace-feedback">No hay procesos de beneficio publicados para este origen.</p>}
+              <div className="public-trace-timeline">
+                {pasos.map((paso, i) => (
+                  <article className={`public-trace-step ${paso.hecha ? 'done' : 'pending'}`} key={`${paso.etapa}-${i}`}>
+                    <span className="public-trace-step-icon"><Icon name={paso.icon} /></span>
+                    <div className="public-trace-step-card">
+                      <div className="public-trace-step-heading">
+                        <strong>{paso.etapa}</strong>
+                        <span>{paso.fecha}</span>
+                      </div>
+                      <p>{paso.detalle}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </>}
+          </section>}
+          {p.isPublished === false && <section className="origin-impact"><div><Icon name="location" size={26} /><span><small>Información disponible</small><strong>La finca registró su ubicación regional. Su trazabilidad y sus fotos todavía no están publicadas.</strong></span></div></section>}
           <section className="origin-impact">
             <div>
               <Icon name="leaf" size={26} />
@@ -611,7 +673,7 @@ function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Pub
               </span>
             </div>
           </section>
-          {contacto && (
+          {contacto && p.isPublished !== false && (
             <section className="farm-contact-cta">
               <div>
                 <span>

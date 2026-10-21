@@ -319,6 +319,7 @@ export type PublicTraceability = {
     stage: string
     startedAt: string
     finishedAt: string | null
+    events: { stage: string; recordedAt: string; inputKg: Decimal | null; outputKg: Decimal | null }[]
     products: { finalizedAt: string | null; destination: string | null; certifications: { certifier: string; status: string }[] }[]
   }[]
 }
