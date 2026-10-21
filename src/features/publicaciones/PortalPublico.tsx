@@ -321,7 +321,7 @@ export function PortalPublico() {
                   <div className="active-farm-card">
                     <div className="active-farm-photo">
                       <img src={fotosDe(activa)[0] ?? FOTO_FINCA} alt={`Origen ${activa.title}`} />
-                      <Chip tone={activa.isPublished === false ? 'neutral' : 'green'}>{activa.isPublished === false ? 'Ubicación registrada' : 'Verificado'}</Chip>
+                      <Chip tone={activa.isPublished === false ? 'gray' : 'green'}>{activa.isPublished === false ? 'Ubicación registrada' : 'Verificado'}</Chip>
                     </div>
                     <div>
                       <span>{activa.isPublished === false ? 'FINCA REGISTRADA' : 'ORIGEN DESTACADO'}</span>
