@@ -71,7 +71,7 @@ export function PortalPublico() {
 
   const lista = publicaciones ?? []
   const listaOrigenes = origenes ?? []
-  const regiones = [...new Set(listaOrigenes.map((p) => p.region).filter((r): r is string => Boolean(r)))].sort()
+  const regiones = [...new Map(listaOrigenes.flatMap((p) => p.region ? [[normalizarRegion(p.region), p.region] as const] : [])).values()].sort()
   const filtradas = listaOrigenes.filter((p) => region === TODAS || normalizarRegion(p.region ?? '') === normalizarRegion(region))
   const conteoRegiones = listaOrigenes.reduce<Record<string, number>>((conteos, publicacion) => {
     if (publicacion.region) {
@@ -84,7 +84,7 @@ export function PortalPublico() {
   const contacto = env.contactEmail
   // Kilos de café documentados en las publicaciones (solo las que están en kg).
   const kilos = lista.filter((p) => (p.unit ?? 'kg') === 'kg').reduce((s, p) => s + (toNumber(p.quantity) ?? 0), 0)
-  const destacada = listaOrigenes[0] ?? null
+  const destacada = listaOrigenes.find((origin) => origin.isPublished !== false) ?? null
 
   return (
     <div className="public-site">
@@ -179,7 +179,7 @@ export function PortalPublico() {
             <i aria-hidden="true">☕</i>
             <span>
               <strong>{origenes ? listaOrigenes.length : '—'}</strong>
-              <small>Fincas con origen publicado</small>
+              <small>Fincas con ubicación registrada</small>
             </span>
           </span>
           <span className="stat-emoji">
@@ -285,7 +285,7 @@ export function PortalPublico() {
                       key={p.id}
                       onClick={() => {
                         setSeleccion(p.id)
-                        setDetalle(true)
+                        setDetalle(p.isPublished !== false)
                       }}
                     >
                       <div className="farm-thumb">
@@ -329,9 +329,9 @@ export function PortalPublico() {
                           <strong>{activa.isPublished === false ? 'Aún no publicada' : formatLongDate(activa.publishedAt)}</strong>
                         </span>
                       </div>
-                      <Button onClick={() => setDetalle(true)}>
-                        {activa.isPublished !== false ? 'Conocer este origen' : 'Ver información del origen'} <Icon name="arrow" size={16} />
-                      </Button>
+                      {activa.isPublished !== false && <Button onClick={() => setDetalle(true)}>
+                        Conocer este origen <Icon name="arrow" size={16} />
+                      </Button>}
                     </div>
                   </div>
                 )}
@@ -426,7 +426,7 @@ export function PortalPublico() {
             <Icon name="farm" />
             <span>
               <small>Comunidad Rizomas</small>
-              <strong>{origenes ? `${listaOrigenes.length} ${listaOrigenes.length === 1 ? 'finca tiene' : 'fincas tienen'} su ubicación registrada` : 'Fincas mostrando su origen'}</strong>
+            <strong>{origenes ? `${listaOrigenes.length} ${listaOrigenes.length === 1 ? 'finca tiene' : 'fincas tienen'} su ubicación registrada` : 'Fincas mostrando su origen'}</strong>
             </span>
             <Chip tone="green">Únete</Chip>
           </div>

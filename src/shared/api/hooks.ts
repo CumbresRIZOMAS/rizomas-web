@@ -13,7 +13,8 @@ type CacheEntry = { data: unknown; updatedAt: number }
 const queryCache = new Map<string, CacheEntry>()
 const CACHE_TTL_MS = 15 * 60_000
 const MAX_CACHE_ENTRIES = 200
-const STORAGE_PREFIX = 'rizomas:api-query:v2:'
+// El prefijo también invalida respuestas guardadas cuando cambia el contrato de un endpoint.
+const STORAGE_PREFIX = 'rizomas:api-query:v3:'
 
 function subjectFromToken(token: string): string {
   try {

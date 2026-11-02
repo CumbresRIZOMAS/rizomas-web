@@ -1,11 +1,13 @@
 import { renderHook, waitFor } from '@testing-library/react'
 import type { ReactNode } from 'react'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { fakeAuth, mockApi } from '../../test/utils'
 import { AuthContext } from '../auth/context'
-import { useApiQuery } from './hooks'
+import { clearApiQueryCache, useApiQuery } from './hooks'
 
 describe('useApiQuery', () => {
+  beforeEach(() => clearApiQueryCache())
+
   it('manda el token y devuelve los datos', async () => {
     mockApi({ 'GET /farms': [{ id: 'f1' }] })
     const auth = fakeAuth()
@@ -34,5 +36,18 @@ describe('useApiQuery', () => {
     const wrapper = ({ children }: { children: ReactNode }) => <AuthContext.Provider value={fakeAuth()}>{children}</AuthContext.Provider>
     const { result } = renderHook(() => useApiQuery('/farms'), { wrapper })
     await waitFor(() => expect(result.current.error).toBe('No tienes permisos para esta operación.'))
+  })
+
+  it('conserva la respuesta entre remontajes en la misma pestaña', async () => {
+    const calls = mockApi({ 'GET /farms': [{ id: 'f1' }] })
+    const auth = fakeAuth()
+    const wrapper = ({ children }: { children: ReactNode }) => <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
+    const first = renderHook(() => useApiQuery<{ id: string }[]>('/farms'), { wrapper })
+    await waitFor(() => expect(first.result.current.data).toEqual([{ id: 'f1' }]))
+    first.unmount()
+
+    const second = renderHook(() => useApiQuery<{ id: string }[]>('/farms'), { wrapper })
+    expect(second.result.current.data).toEqual([{ id: 'f1' }])
+    expect(calls).toHaveLength(1)
   })
 })
