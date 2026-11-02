@@ -210,7 +210,7 @@ export type CoffeeProcess = {
   products: ProductFinal[]
 }
 
-export type CoffeeProcessEvent = { id: string; stage: string; recordedAt: string; inputKg: Decimal | null; outputKg: Decimal | null; waterLiters: Decimal | null; wastewaterLiters: Decimal | null; compostReuse: boolean; durationHours: Decimal | null; method: string | null; brix: Decimal | null; ph: Decimal | null; moisturePercent: Decimal | null; scaScore: Decimal | null; notes: string | null }
+export type CoffeeProcessEvent = { id: string; stage: string; recordedAt: string; inputKg: Decimal | null; outputKg: Decimal | null; waterLiters: Decimal | null; wastewaterLiters: Decimal | null; compostReuse: boolean; wastewaterDestination: string | null; durationHours: Decimal | null; method: string | null; brix: Decimal | null; ph: Decimal | null; moisturePercent: Decimal | null; scaScore: Decimal | null; notes: string | null }
 
 export type Supplier = { id: string; name: string; inputType: string | null }
 
