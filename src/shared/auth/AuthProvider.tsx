@@ -98,7 +98,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const { data, error } = await supabase().auth.signInWithPassword(credentials)
           if (error) {
             const authMessage = error.message.toLowerCase()
-            if (error.code === 'phone_provider_disabled' || authMessage.includes('phone_provider_disabled') || (authMessage.includes('phone') && authMessage.includes('provider') && authMessage.includes('disabled'))) {
+            if (
+              error.code === 'phone_provider_disabled' ||
+              authMessage.includes('phone_provider_disabled') ||
+              (authMessage.includes('phone') && authMessage.includes('disabled') && (authMessage.includes('provider') || authMessage.includes('login')))
+            ) {
               throw new Error('Supabase (phone_provider_disabled): el acceso con celular está desactivado. Habilita Authentication > Sign In / Providers > Phone en Supabase.')
             }
             if (error.code === 'phone_not_confirmed' || authMessage.includes('phone_not_confirmed')) {
