@@ -7,7 +7,7 @@ import { canDo, ROLES, useAuth } from '../../shared/auth/context'
 import { RequireFarm } from '../../shared/farm/RequireFarm'
 import { formatHa, MANAGEMENT_TYPE_LABEL, optionalText, parseOptionalNumber } from '../../shared/format'
 import { Button, Card, Chip, ErrorNotice, Icon, Loading, PageHeader, SelectField, TextAreaField, TextField, type IconName } from '../../shared/ui'
-import { GUIA_ETAPAS, siguienteEtapa, tipoDeProceso } from '../cafe/guiaBeneficio'
+import { ETAPAS_OPCIONALES, GUIA_ETAPAS, siguienteEtapa, tipoDeProceso } from '../cafe/guiaBeneficio'
 import { MovimientoForm } from '../comercial/ComercialPanel'
 import './laborWizard.css'
 
@@ -49,7 +49,8 @@ function Wizard({ farm }: { farm: Farm }) {
   const { role, token } = useAuth()
   const detalle = useApiQuery<FarmDetail>(`/farms/${farm.id}`)
   const procesos = useApiQuery<CoffeeProcess[]>(`/coffee-processes/farms/${farm.id}`)
-  const sugeridos = (procesos.data ?? []).filter((p) => !p.finishedAt && siguienteEtapa(p)).slice(0, 2)
+  // Solo etapas de la ruta: tostión y catación son opcionales y no se sugieren.
+  const sugeridos = (procesos.data ?? []).filter((p) => { const sig = siguienteEtapa(p); return !p.finishedAt && sig && !ETAPAS_OPCIONALES.includes(sig) }).slice(0, 2)
   const { mutate, saving, error } = useApiMutation()
   const verComercial = canDo(role, ROLES.verComercial)
   const inicial = TIPOS.find((t) => t.id === params.get('tipo'))?.id ?? 'manejo'

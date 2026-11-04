@@ -49,7 +49,7 @@ const ESTILO_SATELITE: StyleSpecification = {
   layers: [{ id: 'satelite', type: 'raster', source: 'satelite' }],
 }
 const DEM_TILES = ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png']
-const DEPARTAMENTOS_URL = 'https://raw.githubusercontent.com/ytolosa/mapas-colombia/main/output/geojson/col_departamentos_real_nacional.geojson'
+const DEPARTAMENTOS_URL = '/mapa/departamentos.geojson'
 // Por debajo de este zoom se ven burbujas por municipio; por encima, cada finca.
 const ZOOM_FINCAS = 10
 const ZOOM_DETALLE = 13.6

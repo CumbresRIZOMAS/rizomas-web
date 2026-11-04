@@ -451,6 +451,8 @@ function NuevoProceso({
 }) {
   const crear = useApiMutation()
   const evento = useApiMutation()
+  // Si el proceso se creó pero falló su primera etapa, el reintento solo guarda la etapa.
+  const [creadoId, setCreadoId] = useState<string | null>(null)
   const [paso, setPaso] = useState(1)
   const [harvestId, setHarvestId] = useState('')
   const [lotId, setLotId] = useState(lotes.length === 1 ? lotes[0].id : '')
@@ -462,17 +464,20 @@ function NuevoProceso({
   const listoTipo = tipo && (!tipo.variantes?.length || variante)
 
   async function guardar(payload: EventoPayload) {
-    const proceso = await crear.mutate<CoffeeProcess>('/coffee-processes', 'POST', {
-      farmId,
-      harvestId: harvestId || undefined,
-      lotId: lote || undefined,
-      currentStage: payload.stage,
-      startedAt: payload.recordedAt,
-    })
-    if (!proceso) return
-    await evento.mutate(`/coffee-processes/${proceso.id}/events`, 'POST', payload)
-    // El proceso ya existe aunque falle la etapa: se muestra para reintentarla.
-    onSaved(proceso.id)
+    let id = creadoId
+    if (!id) {
+      const proceso = await crear.mutate<CoffeeProcess>('/coffee-processes', 'POST', {
+        farmId,
+        harvestId: harvestId || undefined,
+        lotId: lote || undefined,
+        currentStage: payload.stage,
+        startedAt: payload.recordedAt,
+      })
+      if (!proceso) return
+      id = proceso.id
+      setCreadoId(id)
+    }
+    if (await evento.mutate(`/coffee-processes/${id}/events`, 'POST', payload)) onSaved(id)
   }
 
   return (
@@ -567,7 +572,7 @@ function NuevoProceso({
           error={crear.error ?? evento.error}
           textoGuardar={(e) => `Crear proceso y guardar ${e.toLowerCase()}`}
           onSubmit={(p) => void guardar(p)}
-          onCancel={() => setPaso(2)}
+          onCancel={() => (creadoId ? onSaved(creadoId) : setPaso(2))}
         />
       )}
 

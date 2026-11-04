@@ -34,8 +34,10 @@ export type EventoPayload = {
   notes?: string
 }
 
+/** Fecha local (YYYY-MM-DD); toISOString daría la de mañana después de las 7 p. m. en Colombia. */
 function hoy(): string {
-  return new Date().toISOString().slice(0, 10)
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
 function redondear(n: number) {
@@ -74,7 +76,11 @@ export function EtapaForm({
   const [etapa, setEtapa] = useState<EtapaCafe>(etapaInicial)
   const [tecnica, setTecnica] = useState<string | null>(null)
   const [fecha, setFecha] = useState(hoy())
-  const [v, setV] = useState<Partial<Record<Campo, string>>>(() => ({ entrada: entradaSugerida != null ? redondear(entradaSugerida) : '' }))
+  const [v, setV] = useState<Partial<Record<Campo, string>>>(() => {
+    if (entradaSugerida == null) return {}
+    // En la cosecha no hay entrada: lo sugerido (la cosecha asociada) es lo recolectado.
+    return GUIA_ETAPAS[etapaInicial].campos.includes('entrada') ? { entrada: redondear(entradaSugerida) } : etapaInicial === 'Cosecha' ? { salida: redondear(entradaSugerida) } : {}
+  })
   const [destino, setDestino] = useState<string | null>(null)
   const [destinoOtro, setDestinoOtro] = useState('')
   const [sca, setSca] = useState<number | null>(null)
@@ -122,7 +128,8 @@ export function EtapaForm({
     const notas = [sabores.length ? `Notas de sabor: ${sabores.join(', ')}.` : '', nota.trim()].filter(Boolean).join(' ')
     onSubmit({
       stage: etapa,
-      recordedAt: fecha === hoy() ? new Date().toISOString() : fecha,
+      // Un día pasado se guarda al mediodía local para que no cambie de fecha al pasar a UTC.
+      recordedAt: fecha === hoy() ? new Date().toISOString() : new Date(`${fecha}T12:00:00`).toISOString(),
       inputKg: pide('entrada') ? num('entrada') : undefined,
       outputKg: pide('salida') ? num('salida') : undefined,
       waterLiters: pide('agua') ? num('agua') : undefined,

@@ -37,6 +37,7 @@ SALIDA = RAIZ / 'public' / 'mapa'
 MAPSHAPER = ['npx', '--yes', 'mapshaper@0.7.101']
 ANIO_EVA = '2025'
 
+URL_DEPARTAMENTOS = 'https://raw.githubusercontent.com/ytolosa/mapas-colombia/main/output/geojson/col_departamentos_real_nacional.geojson'
 URL_MUNICIPIOS = 'https://raw.githubusercontent.com/ytolosa/mapas-colombia/main/output/geojson/col_municipios_real_nacional.geojson'
 URL_EVA = 'https://www.datos.gov.co/resource/uejq-wxrr.json'
 URL_RUNAP = 'https://storage.googleapis.com/pnn_geodatabase/runap/latest.zip'
@@ -174,6 +175,14 @@ def _anillos(geom: dict):
     return geom['coordinates'] if geom['type'] == 'Polygon' else [a for poly in geom['coordinates'] for a in poly]
 
 
+def capa_departamentos(tmp: Path) -> int:
+    """Límites de departamentos para el mapa base (se sirven desde el sitio, sin depender de GitHub)."""
+    crudo = descargar(URL_DEPARTAMENTOS, tmp / 'departamentos.geojson')
+    destino = SALIDA / 'departamentos.geojson'
+    mapshaper(str(crudo), '-filter-fields', 'dpto_nombre', '-simplify', '15%', 'keep-shapes', '-o', 'precision=0.001', 'format=geojson', str(destino))
+    return len(json.loads(destino.read_text(encoding='utf-8'))['features'])
+
+
 def capa_runap(tmp: Path) -> int:
     zip_ruta = descargar(URL_RUNAP, tmp / 'runap.zip', timeout=1200)
     carpeta = tmp / 'runap'
@@ -288,6 +297,8 @@ def main() -> None:
         print('Producción de café (EVA)…')
         produccion = eva(tmp)
         resumen = capa_municipios(tmp, produccion)
+        print('Departamentos…')
+        capa_departamentos(tmp)
         print('Áreas protegidas (RUNAP)…')
         n_runap = capa_runap(tmp)
         print('Páramos…')

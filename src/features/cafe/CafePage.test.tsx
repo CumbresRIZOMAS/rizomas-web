@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { fireEvent, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { fakeAuth, mockApi, renderWithAuth } from '../../test/utils'
@@ -111,5 +111,44 @@ describe('CafePage', () => {
     renderWithAuth(<CafePage />, { route: '/?proceso=cp-1&etapa=Secado' })
     expect(await screen.findByRole('button', { name: /Guardar secado/ })).toBeInTheDocument()
     expect(screen.getByText(/10–12 % de humedad/)).toBeInTheDocument()
+  })
+
+  it('si falla la primera etapa, no pierde el proceso creado y al reintentar solo guarda la etapa', async () => {
+    const rutas = {
+      'GET /farms': [finca],
+      'GET /coffee-processes/farms/finca-1': [],
+      'GET /farms/finca-1/labors': [],
+      'GET /farms/finca-1/lots': [{ id: 'lote-1', name: 'El Mirador' }],
+      'POST /coffee-processes': { ...proceso, id: 'cp-9', events: [] },
+      'POST /coffee-processes/cp-9/events': 500,
+    }
+    const calls = mockApi(rutas)
+    renderWithAuth(<CafePage />)
+    const user = userEvent.setup()
+
+    await user.click(await screen.findByRole('button', { name: /Iniciar proceso/ }))
+    await user.click(await screen.findByRole('button', { name: /El Mirador/ }))
+    await user.click(screen.getByRole('button', { name: /Continuar/ }))
+    await user.click(screen.getAllByRole('button', { name: /^💧 Lavado/ })[0])
+    await user.click(screen.getByRole('button', { name: /Continuar/ }))
+    await user.click(screen.getByRole('button', { name: /Crear proceso y guardar cosecha/ }))
+    expect(await screen.findByText('Error simulado')).toBeInTheDocument()
+
+    const reintento = mockApi({ ...rutas, 'POST /coffee-processes/cp-9/events': {} })
+    await user.click(screen.getByRole('button', { name: /Crear proceso y guardar cosecha/ }))
+    expect(calls.filter((c) => c.url === '/coffee-processes' && c.method === 'POST')).toHaveLength(1)
+    expect(reintento.filter((c) => c.method === 'POST').map((c) => c.url)).toEqual(['/coffee-processes/cp-9/events'])
+  })
+
+  it('una etapa de un día pasado se guarda al mediodía local para no cambiar de fecha', async () => {
+    const calls = api({ 'POST /coffee-processes/cp-1/events': {} })
+    renderWithAuth(<CafePage />, { route: '/?proceso=cp-1&etapa=Secado' })
+    const user = userEvent.setup()
+    const fecha = await screen.findByLabelText('Fecha')
+    fireEvent.change(fecha, { target: { value: '2026-10-02' } })
+    await user.click(within(screen.getByRole('group', { name: /Qué tipo de proceso/ })).getByRole('button', { name: '💧 Lavado' }))
+    await user.click(screen.getByRole('button', { name: /Guardar secado/ }))
+    const body = calls.find((c) => c.method === 'POST')?.body as { recordedAt: string }
+    expect(new Date(body.recordedAt).getDate()).toBe(2)
   })
 })
