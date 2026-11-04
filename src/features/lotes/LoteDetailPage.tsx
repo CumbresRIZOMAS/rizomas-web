@@ -14,6 +14,7 @@ export function LoteDetailPage() {
   const labores = useApiQuery<Labor[]>(lote.data ? `/farms/${lote.data.farmId}/labors` : null)
   const procesos = useApiQuery<CoffeeProcess[]>(lote.data ? `/coffee-processes/farms/${lote.data.farmId}` : null)
   const [agregandoCultivo, setAgregandoCultivo] = useState(false)
+  const [editando, setEditando] = useState(false)
 
   if (lote.loading && !lote.data) return <Loading />
   if (lote.error) return <ErrorNotice message={lote.error} onRetry={lote.reload} />
@@ -31,9 +32,11 @@ export function LoteDetailPage() {
         eyebrow="Lote"
         title={`Lote ${l.name}`}
         subtitle={[formatHa(l.areaHa), l.identifier].filter(Boolean).join(' · ')}
+        actions={canDo(role, ROLES.editarFinca) && !editando ? <Button variant="secondary" onClick={() => setEditando(true)}>Editar lote</Button> : undefined}
       />
 
       <div className="stack">
+        {editando && <CultivoLoteForm farmId={l.farmId} lote={l} onCancel={() => setEditando(false)} onSaved={() => { setEditando(false); lote.reload() }} />}
         <Card className="card-pad">
           <CardTitle title="Cultivos" subtitle="Especies y variedades sembradas en el lote">
             {canDo(role, ROLES.registrarEnFinca) && !agregandoCultivo && (
@@ -105,6 +108,51 @@ export function LoteDetailPage() {
       </div>
     </>
   )
+}
+
+function CultivoLoteForm({ farmId, lote, onSaved, onCancel }: { farmId: string; lote: LotDetail; onSaved: (lote: LotDetail) => void; onCancel: () => void }) {
+  const { mutate, saving, error } = useApiMutation()
+  const [name, setName] = useState(lote.name)
+  const [identifier, setIdentifier] = useState(lote.identifier ?? '')
+  const [area, setArea] = useState(lote.areaHa?.toString() ?? '')
+  const [latitude, setLatitude] = useState(lote.latitude?.toString() ?? '')
+  const [longitude, setLongitude] = useState(lote.longitude?.toString() ?? '')
+  const [locationJson, setLocationJson] = useState(lote.location ? JSON.stringify(lote.location, null, 2) : '')
+  const [locationError, setLocationError] = useState<string | null>(null)
+  async function onSubmit(e: FormEvent) {
+    e.preventDefault()
+    let location: Record<string, unknown> | null = null
+    if (locationJson.trim()) {
+      try {
+        const parsed: unknown = JSON.parse(locationJson)
+        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error()
+        location = parsed as Record<string, unknown>
+        setLocationError(null)
+      } catch {
+        setLocationError('La ubicación del lote debe ser un objeto GeoJSON válido.')
+        return
+      }
+    }
+    const saved = await mutate<LotDetail>(`/lots/${lote.id}`, 'PATCH', {
+      farmId, name: name.trim(), identifier: optionalText(identifier) ?? null,
+      areaHa: area.trim() ? Number(area) : null, latitude: latitude.trim() ? Number(latitude) : null,
+      longitude: longitude.trim() ? Number(longitude) : null, location,
+    })
+    if (saved) onSaved(saved)
+  }
+  return <FormCard title="Editar lote"><form onSubmit={onSubmit}>
+    <div className="form-grid">
+      <TextField label="Nombre" required value={name} onChange={(e) => setName(e.target.value)} />
+      <TextField label="Identificador" optional value={identifier} onChange={(e) => setIdentifier(e.target.value)} />
+      <TextField label="Área (ha)" type="number" min="0" step="any" optional value={area} onChange={(e) => setArea(e.target.value)} />
+      <TextField label="Latitud" type="number" min="-90" max="90" step="any" optional value={latitude} onChange={(e) => setLatitude(e.target.value)} />
+      <TextField label="Longitud" type="number" min="-180" max="180" step="any" optional value={longitude} onChange={(e) => setLongitude(e.target.value)} />
+      <label className="field"><span>Geometría del lote (GeoJSON, opcional)</span><textarea rows={3} value={locationJson} onChange={(e) => setLocationJson(e.target.value)} /><small>Se guarda junto con las coordenadas del lote.</small></label>
+    </div>
+    {locationError && <p className="notice notice-error" role="alert">{locationError}</p>}
+    {error && <ErrorNotice message={error} />}
+    <div className="form-actions"><button type="button" className="btn btn-secondary" onClick={onCancel}>Cancelar</button><button type="submit" className="btn btn-primary" disabled={saving || !name.trim()}>{saving ? 'Guardando…' : 'Guardar cambios'}</button></div>
+  </form></FormCard>
 }
 
 function CultivoForm({ lotId, onSaved, onCancel }: { lotId: string; onSaved: (c: Crop) => void; onCancel: () => void }) {

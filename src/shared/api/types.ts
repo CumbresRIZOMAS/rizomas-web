@@ -23,6 +23,7 @@ export type Lot = {
   areaHa: Decimal | null
   latitude?: Decimal | null
   longitude?: Decimal | null
+  location?: Record<string, unknown> | null
   createdAt: string
   crops?: Crop[]
 }
@@ -76,6 +77,9 @@ export type Farm = {
   areaHa: Decimal | null
   climate: string | null
   farmType: FarmType
+  exactLocation?: Record<string, unknown> | null
+  publicLocation?: Record<string, unknown> | null
+  locationVisibility?: 'PRIVADA' | 'FINCA' | 'ORGANIZACION' | 'PUBLICA'
   createdAt: string
   lots?: Lot[]
   owner?: { id: string; name: string } | null
@@ -296,6 +300,8 @@ export type Publication = {
   title: string
   farmName?: string
   isPublished?: boolean
+  farmType?: FarmType | null
+  coffeeTypes?: string[]
   description?: string | null
   municipality?: string | null
   region: string | null

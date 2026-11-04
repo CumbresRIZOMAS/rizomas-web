@@ -60,7 +60,7 @@ export function LoginPage() {
           </Link>
           <span className="eyebrow">Bienvenido de nuevo</span>
           <h1>Ingresa a tu cuenta</h1>
-          <p>Consulta y gestiona la información de tus fincas.</p>
+          <p>Consulta y gestiona la información de tus fincas. En las cuentas migradas, la clave inicial es el número de cédula sin puntos; al ingresar se solicita cambiarla.</p>
           {faltantes.length > 0 ? (
             <div className="notice notice-warn" role="alert">
               El panel no está configurado. Faltan las variables: {faltantes.join(', ')}.

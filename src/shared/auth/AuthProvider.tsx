@@ -96,7 +96,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             ? { email: identifier.trim().toLowerCase(), password }
             : { phone: normalizePhone(identifier), password }
           const { data, error } = await supabase().auth.signInWithPassword(credentials)
-          if (error) throw new Error(error.message === 'Invalid login credentials' ? 'Correo/celular o contraseña incorrectos' : error.message)
+          if (error) {
+            if (error.code === 'phone_provider_disabled' || error.message.includes('phone_provider_disabled')) {
+              throw new Error('El acceso con celular está desactivado en Supabase. El administrador debe habilitar Auth > Sign In / Providers > Phone.')
+            }
+            throw new Error(error.message === 'Invalid login credentials' ? 'Correo/celular o contraseña incorrectos' : error.message)
+          }
           if (!data.session) throw new Error('Supabase no devolvió una sesión válida')
           const security = await api<{ required: boolean }>('/auth/password-status', { token: data.session.access_token })
           setSession(data.session)
