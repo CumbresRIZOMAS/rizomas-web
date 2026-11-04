@@ -7,16 +7,15 @@ import { useAuth } from '../../shared/auth/context'
 import { env } from '../../shared/config/env'
 import { FARM_TYPE_LABEL, LABOR_TYPE_LABEL, formatLongDate, formatNumber, toNumber } from '../../shared/format'
 import { Button, Chip, Icon, type IconName } from '../../shared/ui'
-import { ColombiaDepartmentsMap } from './ColombiaDepartmentsMap'
+import { Bibliografia } from './Bibliografia'
+import { OriginExplorer } from './OriginExplorer'
+import { nombreVisible } from './origenesMapa'
 
 // Fotos de paisaje del diseño (decorativas, no son de una finca concreta).
 const FOTO_PAISAJE = 'https://images.unsplash.com/photo-1568489711036-9c94a7d5aea6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=85&w=1600'
 const FOTO_CEREZAS = 'https://images.unsplash.com/photo-1672851612794-6687bf0bf1a3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=85&w=600'
-const FOTO_FINCA = 'https://images.unsplash.com/photo-1532443603613-61fa154742cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=700'
 const FOTO_PROMO = 'https://images.unsplash.com/photo-1532185922611-3410b1898a1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=900'
 const FOTO_ORIGEN = 'https://images.unsplash.com/photo-1672015151052-d6fa87fc8aba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=85&w=1500'
-
-const TODAS = 'Todas las regiones'
 
 function normalizarRegion(value: string) {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLocaleUpperCase('es')
@@ -64,23 +63,13 @@ export function PortalPublico() {
   const publicaciones = publicacionesQuery.data
   const origenes = origenesQuery.data ?? publicaciones
   const fallo = !publicaciones && !origenesQuery.data
-  const [region, setRegion] = useState(TODAS)
   const [seleccion, setSeleccion] = useState<string | null>(null)
-  const [listaAbierta, setListaAbierta] = useState(true)
   const [detalle, setDetalle] = useState(false)
 
   const lista = publicaciones ?? []
   const listaOrigenes = origenes ?? []
   const regiones = [...new Map(listaOrigenes.flatMap((p) => p.region ? [[normalizarRegion(p.region), p.region] as const] : [])).values()].sort()
-  const filtradas = listaOrigenes.filter((p) => region === TODAS || normalizarRegion(p.region ?? '') === normalizarRegion(region))
-  const conteoRegiones = listaOrigenes.reduce<Record<string, number>>((conteos, publicacion) => {
-    if (publicacion.region) {
-      const clave = normalizarRegion(publicacion.region)
-      conteos[clave] = (conteos[clave] ?? 0) + 1
-    }
-    return conteos
-  }, {})
-  const activa = filtradas.find((p) => p.id === seleccion) ?? filtradas[0] ?? null
+  const activa = listaOrigenes.find((p) => p.id === seleccion) ?? null
   const contacto = env.contactEmail
   // Kilos de café documentados en las publicaciones (solo las que están en kg).
   const kilos = lista.filter((p) => (p.unit ?? 'kg') === 'kg').reduce((s, p) => s + (toNumber(p.quantity) ?? 0), 0)
@@ -224,122 +213,14 @@ export function PortalPublico() {
         </div>
       </section>
 
-      <section className="map-explorer" id="explorar">
-        <div className="map-toolbar">
-          <div className="map-toolbar-title">
-            <span>
-              <Icon name="location" />
-            </span>
-            <div>
-              <strong>Mapa de orígenes</strong>
-              <small>Selecciona un departamento para filtrar sus fincas</small>
-            </div>
-          </div>
-          <div className="map-filters">
-            <label>
-              <span>Departamento</span>
-              <select value={region} onChange={(e) => setRegion(e.target.value)}>
-                <option>{TODAS}</option>
-                {regiones.map((r) => (
-                  <option key={r}>{r}</option>
-                ))}
-              </select>
-            </label>
-          </div>
-        </div>
-        <div className="map-body">
-          <div className="map-canvas">
-            <ColombiaDepartmentsMap
-              region={region === TODAS ? TODAS : region}
-              counts={conteoRegiones}
-              onSelect={(departamento) => setRegion(departamento || TODAS)}
-            />
-            {activa && (activa.municipality || activa.region) && (
-              <div className="map-location-note">
-                <Icon name="location" size={15} />
-                <span>Origen registrado</span>
-                <strong>{[activa.municipality, activa.region].filter(Boolean).join(', ')}</strong>
-              </div>
-            )}
-          </div>
-          <aside className={`farm-drawer ${listaAbierta ? '' : 'closed'}`}>
-            <div className="drawer-head">
-              <div>
-                <span>{filtradas.length} resultados</span>
-                <strong>Fincas con origen registrado</strong>
-              </div>
-              <button type="button" onClick={() => setListaAbierta(!listaAbierta)} aria-label={listaAbierta ? 'Cerrar lista' : 'Abrir lista'}>
-                <Icon name={listaAbierta ? 'close' : 'menu'} />
-              </button>
-            </div>
-            {listaAbierta && (
-              <>
-                {!origenes && !fallo && <p className="loading">Cargando fincas…</p>}
-                {fallo && <p className="loading">No se pudieron cargar los orígenes. Intenta más tarde.</p>}
-                {origenes && filtradas.length === 0 && <p className="loading">Todavía no hay fincas con municipio o departamento registrado{region !== TODAS ? ' en esta región' : ''}.</p>}
-                <div className="drawer-list">
-                  {filtradas.map((p) => (
-                    <button
-                      type="button"
-                      className={activa?.id === p.id ? 'selected' : ''}
-                      key={p.id}
-                      onClick={() => {
-                        setSeleccion(p.id)
-                        setDetalle(p.isPublished !== false)
-                      }}
-                    >
-                      <div className="farm-thumb">
-                        <Icon name="leaf" />
-                      </div>
-                      <div>
-                        <span>{p.isPublished === false ? 'Ubicación registrada' : 'Origen publicado'}</span>
-                        <strong>{p.farmName ?? p.title}</strong>
-                        <small>
-                          <Icon name="location" size={12} />
-                          {[p.municipality, p.region].filter(Boolean).join(', ') || 'Colombia'}
-                        </small>
-                        {p.quantity !== null && (
-                          <em>
-                            {formatNumber(p.quantity)} {p.unit ?? ''} producidos
-                          </em>
-                        )}
-                      </div>
-                      <Icon name="arrow" size={17} />
-                    </button>
-                  ))}
-                </div>
-                {activa && (
-                  <div className="active-farm-card">
-                    <div className="active-farm-photo">
-                      <img src={fotosDe(activa)[0] ?? FOTO_FINCA} alt={`Origen ${activa.title}`} />
-                      <Chip tone={activa.isPublished === false ? 'gray' : 'green'}>{activa.isPublished === false ? 'Ubicación registrada' : 'Verificado'}</Chip>
-                    </div>
-                    <div>
-                      <span>{activa.isPublished === false ? 'FINCA REGISTRADA' : 'ORIGEN DESTACADO'}</span>
-                      <h2>{activa.farmName ?? activa.title}</h2>
-                      <p>{[activa.municipality, activa.region].filter(Boolean).join(', ') || 'Colombia'}</p>
-                      {activa.isPublished !== false && activa.description && <p>{activa.description}</p>}
-                      <div className="farm-flavors">
-                        <span>
-                          <small>Producción</small>
-                          <strong>{activa.quantity !== null ? `${formatNumber(activa.quantity)} ${activa.unit ?? ''}` : '—'}</strong>
-                        </span>
-                        <span>
-                          <small>{activa.isPublished === false ? 'Trazabilidad' : 'Publicado'}</small>
-                          <strong>{activa.isPublished === false ? 'Aún no publicada' : formatLongDate(activa.publishedAt)}</strong>
-                        </span>
-                      </div>
-                      {activa.isPublished !== false && <Button onClick={() => setDetalle(true)}>
-                        Conocer este origen <Icon name="arrow" size={16} />
-                      </Button>}
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-          </aside>
-        </div>
-      </section>
+      <OriginExplorer
+        origenes={origenes ?? undefined}
+        fallo={fallo}
+        onAbrir={(origen) => {
+          setSeleccion(origen.id)
+          setDetalle(true)
+        }}
+      />
 
       <section className="territorio-taza">
         <div>
@@ -434,6 +315,8 @@ export function PortalPublico() {
       </section>
 
       {detalle && activa && <DetalleOrigen publicacion={activa} contacto={contacto} onClose={() => setDetalle(false)} />}
+
+      <Bibliografia />
 
       <footer className="public-footer" id="sobre">
         <div className="public-brand">
@@ -618,14 +501,14 @@ function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Pub
             <Chip tone={p.isPublished === false ? 'gray' : 'green'}>
               {p.isPublished === false ? 'Ubicación registrada' : <><Icon name="check" size={13} /> Origen verificado</>}
             </Chip>
-            <span>{p.isPublished === false ? 'FINCA REGISTRADA' : 'CAFÉ DE ORIGEN'} · {(p.region ?? 'Colombia').toUpperCase()}</span>
-            <h1>{p.title}</h1>
+            <span>{p.isPublished === false ? 'FINCA REGISTRADA' : 'CAFÉ DE ORIGEN'} · {(nombreVisible(p.region) || 'Colombia').toUpperCase()}</span>
+            <h1>{nombreVisible(p.title)}</h1>
             <p>{p.isPublished === false ? 'Finca con origen y etapas registradas en RIZOMAS' : p.quantity !== null ? `${formatNumber(p.quantity)} ${p.unit ?? ''} producidos` : 'Producción documentada en RIZOMAS'}</p>
           </div>
         </header>
         <div className="origin-detail-body">
           {p.description && <section className="origin-impact"><div><Icon name="leaf" size={26} /><span><small>Historia del origen</small><strong>{p.description}</strong></span></div></section>}
-          {(p.municipality || p.region || urlMapaPublico(p.publicLocation)) && <section className="public-map-detail"><h2>Ubicación compartida</h2><p>{[p.municipality, p.region].filter(Boolean).join(', ') || 'Ubicación aproximada de la finca'}</p>{urlMapaPublico(p.publicLocation) && <><iframe title={`Mapa aproximado de ${p.title}`} src={urlMapaPublico(p.publicLocation)!} loading="lazy" /><a href={`https://www.openstreetmap.org/?mlat=${p.publicLocation!.latitude}&mlon=${p.publicLocation!.longitude}#map=11/${p.publicLocation!.latitude}/${p.publicLocation!.longitude}`} target="_blank" rel="noreferrer">Abrir mapa</a></>}</section>}
+          {(p.municipality || p.region || urlMapaPublico(p.publicLocation)) && <section className="public-map-detail"><h2>Ubicación compartida</h2><p>{[p.municipality, p.region].filter(Boolean).map(nombreVisible).join(', ') || 'Ubicación aproximada de la finca'}</p>{urlMapaPublico(p.publicLocation) && <><iframe title={`Mapa aproximado de ${p.title}`} src={urlMapaPublico(p.publicLocation)!} loading="lazy" /><a href={`https://www.openstreetmap.org/?mlat=${p.publicLocation!.latitude}&mlon=${p.publicLocation!.longitude}#map=11/${p.publicLocation!.latitude}/${p.publicLocation!.longitude}`} target="_blank" rel="noreferrer">Abrir mapa</a></>}</section>}
           {fotos.length > 0 && (
             <section className="process-gallery">
               <div className="origin-section-title">
@@ -648,7 +531,7 @@ function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Pub
             <div className="origin-section-title">
               <span>{fotos.length > 0 ? '02' : '01'}</span>
               <div>
-                <h2>Trazabilidad de {p.title}</h2>
+                <h2>Trazabilidad de {nombreVisible(p.title)}</h2>
                 <p>Se muestran las etapas registradas hasta ahora; los procesos en curso también son visibles.</p>
               </div>
               {estadoTraza === 'loaded' && p.isPublished !== false && <Chip tone="green"><Icon name="check" size={13} /> Información verificada</Chip>}

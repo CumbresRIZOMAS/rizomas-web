@@ -1,0 +1,29 @@
+/* Bibliografía del portal público: tarjeta compacta que se despliega. */
+.public-bibliografia { padding: 28px clamp(18px, 6vw, 86px); scroll-margin-top: 90px; }
+.bibliografia-card { max-width: 1100px; margin: 0 auto; background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 6px 18px rgba(42, 56, 38, 0.06); overflow: hidden; }
+.bibliografia-cabeza { width: 100%; display: flex; align-items: center; gap: 14px; padding: 14px 18px; border: 0; background: transparent; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.bibliografia-cabeza:hover { background: #f7f6f0; }
+.bibliografia-cabeza:focus-visible { outline: 2px solid var(--forest); outline-offset: -2px; }
+.bibliografia-icono { width: 38px; height: 38px; flex: none; display: grid; place-items: center; border-radius: 10px; background: #e7eee0; font-size: 18px; }
+.bibliografia-resumen { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.bibliografia-resumen strong { font-family: Georgia, serif; font-weight: 500; font-size: 18px; color: #244827; }
+.bibliografia-resumen small { font-size: 12px; color: var(--muted); }
+.bibliografia-accion { flex: none; font-size: 13px; font-weight: 600; color: var(--forest); }
+.bibliografia-flecha { flex: none; width: 9px; height: 9px; border-right: 2px solid var(--forest); border-bottom: 2px solid var(--forest); transform: rotate(45deg) translateY(-3px); transition: transform 0.2s; }
+.abierta .bibliografia-flecha { transform: rotate(-135deg) translateY(-3px); }
+.bibliografia-contenido { padding: 4px 18px 22px 70px; border-top: 1px solid var(--line); animation: bibliografia-abrir 0.25s ease; }
+.bibliografia-intro { margin: 14px 0 0; max-width: 760px; font-size: 13px; line-height: 1.55; color: var(--muted); }
+.bibliografia-grupos { margin-top: 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px 32px; }
+.bibliografia-grupos h3 { margin: 0 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--moss); font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--forest); }
+.bibliografia-grupos ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+.bibliografia-grupos li p { margin: 0; font-size: 12.5px; line-height: 1.5; color: #2f3a2c; overflow-wrap: anywhere; }
+.bibliografia-grupos cite { font-style: italic; }
+.bibliografia-grupos a { color: var(--forest); font-weight: 500; }
+.bibliografia-grupos small { display: block; margin-top: 2px; font-size: 11.5px; line-height: 1.45; color: var(--muted); }
+
+@keyframes bibliografia-abrir { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .bibliografia-contenido { animation: none; } .bibliografia-flecha { transition: none; } }
+@media (max-width: 600px) {
+  .bibliografia-accion { display: none; }
+  .bibliografia-contenido { padding-left: 18px; }
+}
