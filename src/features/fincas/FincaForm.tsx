@@ -35,6 +35,9 @@ export function FincaForm({
   const [municipality, setMunicipality] = useState(municipioCatalogo ?? (municipioGuardado ? OTRO : ''))
   const [otroMunicipio, setOtroMunicipio] = useState(municipioCatalogo ? '' : municipioGuardado)
   const [area, setArea] = useState(toNumber(finca?.areaHa)?.toString() ?? '')
+  const [vereda, setVereda] = useState(finca?.village ?? '')
+  const [latitude, setLatitude] = useState(toNumber(finca?.latitude)?.toString() ?? '')
+  const [longitude, setLongitude] = useState(toNumber(finca?.longitude)?.toString() ?? '')
   const [climate, setClimate] = useState(finca?.climate ?? '')
   const [farmType, setFarmType] = useState<FarmType>(finca?.farmType ?? 'EN_TRANSICION')
 
@@ -45,6 +48,9 @@ export function FincaForm({
       identifier: optionalText(identifier),
       municipality: optionalText(region === OTRO || municipality === OTRO ? otroMunicipio : municipality),
       region: optionalText(region === OTRO ? otraRegion : region),
+      village: optionalText(vereda),
+      latitude: parseOptionalNumber(latitude),
+      longitude: parseOptionalNumber(longitude),
       areaHa: parseOptionalNumber(area),
       climate: optionalText(climate),
       farmType,
@@ -59,6 +65,11 @@ export function FincaForm({
         <div className="form-grid">
           <TextField label="Nombre" required value={name} onChange={(e) => setName(e.target.value)} placeholder="Ej: El Porvenir" />
           <TextField label="Identificador" optional value={identifier} onChange={(e) => setIdentifier(e.target.value)} />
+        </div>
+        <div className="form-grid">
+          <TextField label="Vereda" optional value={vereda} onChange={(e) => setVereda(e.target.value)} />
+          <TextField label="Latitud" type="number" min="-90" max="90" step="any" optional inputMode="decimal" value={latitude} onChange={(e) => setLatitude(e.target.value)} hint="Ej: 1.8892" />
+          <TextField label="Longitud" type="number" min="-180" max="180" step="any" optional inputMode="decimal" value={longitude} onChange={(e) => setLongitude(e.target.value)} hint="Ej: -76.0534" />
         </div>
         <div className="form-grid">
           <SelectField label="Departamento" optional value={region} onChange={(e) => { setRegion(e.target.value); setMunicipality(''); setOtroMunicipio('') }}>

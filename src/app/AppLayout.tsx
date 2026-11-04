@@ -26,7 +26,7 @@ const NAV: NavItem[] = [
 ]
 
 export function AppLayout() {
-  const { email, role, signOut } = useAuth()
+  const { identity, role, signOut } = useAuth()
   const { farms, farm, setFarmId } = useActiveFarm()
   const navigate = useNavigate()
   const { pathname } = useLocation()
@@ -110,16 +110,16 @@ export function AppLayout() {
           )}
           <div className="profile-wrap" style={puedeModerar ? undefined : { marginLeft: 'auto' }}>
             <button type="button" className="profile" onClick={() => setProfileOpen((v) => !v)} aria-expanded={profileOpen}>
-              <span>{initials(email ?? '?')}</span>
+              <span>{initials(identity ?? '?')}</span>
               <div>
-                <strong>{email}</strong>
+                <strong>{identity ?? 'Usuario'}</strong>
                 <small>{role ? (ROLE_LABEL[role] ?? role) : 'Sin rol asignado'}</small>
               </div>
               <Icon name="chevron" size={14} />
             </button>
             {profileOpen && (
               <div className="profile-menu" onMouseLeave={() => setProfileOpen(false)}>
-                <span>{email}</span>
+                <span>{identity ?? 'Usuario'}</span>
                 <Link to="/" onClick={() => setProfileOpen(false)}>
                   Ver portal público
                 </Link>

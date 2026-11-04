@@ -6,9 +6,12 @@ export type { Role }
 export type Auth = {
   token: string | null
   email: string | null
+  identity: string | null
+  userId: string | null
+  passwordChangeRequired: boolean
   role: Role | null
   loading: boolean
-  signIn: (email: string, password: string) => Promise<void>
+  signIn: (identifier: string, password: string) => Promise<void>
   setPassword: (password: string) => Promise<void>
   signOut: () => Promise<void>
 }

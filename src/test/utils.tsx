@@ -33,6 +33,9 @@ export function fakeAuth(role: Role | null = 'TECNICO', overrides: Partial<Auth>
   return {
     token: 'token-de-prueba',
     email: 'tecnico@cumbres.co',
+    identity: 'tecnico@cumbres.co',
+    userId: 'auth-tecnico',
+    passwordChangeRequired: false,
     role,
     loading: false,
     signIn: vi.fn(),

@@ -6,7 +6,7 @@ import { Icon } from '../../shared/ui'
 
 export function LoginPage() {
   const { signIn } = useAuth()
-  const [email, setEmail] = useState('')
+  const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
   const [verClave, setVerClave] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -18,7 +18,7 @@ export function LoginPage() {
     setEnviando(true)
     setError(null)
     try {
-      await signIn(email.trim(), password)
+      await signIn(identifier.trim(), password)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No se pudo iniciar sesión')
     } finally {
@@ -68,8 +68,8 @@ export function LoginPage() {
           ) : (
             <>
               <label className="field">
-                <span>Correo electrónico</span>
-                <input type="email" autoComplete="email" required placeholder="nombre@correo.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <span>Correo electrónico o celular</span>
+                <input type="text" autoComplete="username" required placeholder="correo@ejemplo.com o 3001234567" value={identifier} onChange={(e) => setIdentifier(e.target.value)} />
               </label>
               <label className="field">
                 <span>Contraseña</span>

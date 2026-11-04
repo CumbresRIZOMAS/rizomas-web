@@ -5,6 +5,7 @@ import { api, ApiError } from '../api/client'
 import { clearApiQueryCache } from '../api/hooks'
 import { env, missingEnv } from '../config/env'
 import { AuthContext, roleFromToken, type Auth } from './context'
+import { normalizePhone } from './phone'
 
 let client: SupabaseClient | null = null
 function supabase(): SupabaseClient {
@@ -16,6 +17,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const configurado = missingEnv().length === 0
   const [session, setSession] = useState<Session | null>(null)
   const [backendRole, setBackendRole] = useState<Role | null>(null)
+  const [passwordChangeRequired, setPasswordChangeRequired] = useState(false)
   const [initializing, setInitializing] = useState(configurado)
   const [validatingLogin, setValidatingLogin] = useState(false)
   const signOut = useCallback(async () => {
@@ -23,6 +25,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     clearApiQueryCache()
     setSession(null)
     setBackendRole(null)
+    setPasswordChangeRequired(false)
   }, [])
 
   useEffect(() => {
@@ -46,14 +49,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       let sessionValid = true
       if (restored) {
         try {
-          const bootstrap = await api<{ user?: { role?: Role } | null }>('/sync/pull', { token: restored.access_token })
-          if (mounted) setBackendRole(bootstrap.user?.role ?? null)
+          const security = await api<{ required: boolean }>('/auth/password-status', { token: restored.access_token })
+          if (mounted) setPasswordChangeRequired(security.required)
+          if (!security.required) {
+            const bootstrap = await api<{ user?: { role?: Role } | null }>('/sync/pull', { token: restored.access_token })
+            if (mounted) setBackendRole(bootstrap.user?.role ?? null)
+          }
         } catch (error) {
           // Igual que en móvil, un fallo de red no borra la sesión local.
           // Las peticiones de datos mostrarán el estado del backend al entrar.
           if (error instanceof ApiError && error.status === 401) {
             sessionValid = false
             await auth.signOut()
+          }
+          if (error instanceof ApiError && error.status === 403 && error.message === 'PASSWORD_CHANGE_REQUIRED' && mounted) {
+            setPasswordChangeRequired(true)
           }
         }
       }
@@ -74,39 +84,48 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return {
       token,
       email: session?.user.email ?? null,
+      identity: session?.user.email ?? session?.user.phone ?? null,
+      userId: session?.user.id ?? null,
+      passwordChangeRequired,
       role: backendRole ?? (token ? roleFromToken(token) : null),
       loading: initializing || validatingLogin,
-      signIn: async (email, password) => {
+      signIn: async (identifier, password) => {
         setValidatingLogin(true)
         try {
-          const { data, error } = await supabase().auth.signInWithPassword({ email, password })
-          if (error) throw new Error(error.message === 'Invalid login credentials' ? 'Correo o contraseña incorrectos' : error.message)
+          const credentials = identifier.includes('@')
+            ? { email: identifier.trim().toLowerCase(), password }
+            : { phone: normalizePhone(identifier), password }
+          const { data, error } = await supabase().auth.signInWithPassword(credentials)
+          if (error) throw new Error(error.message === 'Invalid login credentials' ? 'Correo/celular o contraseña incorrectos' : error.message)
           if (!data.session) throw new Error('Supabase no devolvió una sesión válida')
+          const security = await api<{ required: boolean }>('/auth/password-status', { token: data.session.access_token })
           setSession(data.session)
+          setPasswordChangeRequired(security.required)
           setBackendRole(roleFromToken(data.session.access_token))
-          // Carga el rol del backend en segundo plano; un fallo temporal de datos
-          // no debe bloquear ni borrar la sesión que Supabase acaba de validar.
-          void api<{ user?: { role?: Role } | null }>('/sync/pull', { token: data.session.access_token })
-            .then((bootstrap) => setBackendRole(bootstrap.user?.role ?? roleFromToken(data.session.access_token)))
-            .catch((bootstrapError) => {
-              if (bootstrapError instanceof ApiError && bootstrapError.status === 401) {
-                void supabase().auth.signOut().then(() => {
-                  setSession(null)
-                  setBackendRole(null)
-                }).catch(() => undefined)
-              }
-            })
+          if (!security.required) {
+            void api<{ user?: { role?: Role } | null }>('/sync/pull', { token: data.session.access_token })
+              .then((bootstrap) => setBackendRole(bootstrap.user?.role ?? roleFromToken(data.session.access_token)))
+              .catch((bootstrapError) => {
+                if (bootstrapError instanceof ApiError && bootstrapError.status === 401) {
+                  void supabase().auth.signOut().then(() => {
+                    setSession(null)
+                    setBackendRole(null)
+                  }).catch(() => undefined)
+                }
+              })
+          }
         } finally {
           setValidatingLogin(false)
         }
       },
       setPassword: async (password) => {
-        const { error } = await supabase().auth.updateUser({ password })
-        if (error) throw new Error(error.message)
+        if (!token) throw new Error('Inicia sesión para cambiar la contraseña')
+        await api('/auth/change-password', { method: 'POST', token, body: { password } })
+        setPasswordChangeRequired(false)
       },
       signOut,
     }
-  }, [session, backendRole, initializing, validatingLogin, signOut])
+  }, [session, backendRole, passwordChangeRequired, initializing, validatingLogin, signOut])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

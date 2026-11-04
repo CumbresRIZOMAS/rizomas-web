@@ -21,6 +21,8 @@ export type Lot = {
   name: string
   identifier: string | null
   areaHa: Decimal | null
+  latitude?: Decimal | null
+  longitude?: Decimal | null
   createdAt: string
   crops?: Crop[]
 }
@@ -68,6 +70,9 @@ export type Farm = {
   identifier: string | null
   municipality: string | null
   region: string | null
+  village?: string | null
+  latitude?: Decimal | null
+  longitude?: Decimal | null
   areaHa: Decimal | null
   climate: string | null
   farmType: FarmType
@@ -114,8 +119,19 @@ export type Role =
 
 export type AppUser = {
   id: string
+  authUserId?: string | null
   name: string
-  email: string
+  email: string | null
+  phone: string | null
+  documentNumber?: string | null
+  associationCode?: string | null
+  associationName?: string | null
+  secondLevelGroup?: string | null
+  sex?: string | null
+  age?: number | null
+  specialGroup?: string | null
+  educationLevel?: string | null
+  lotMembers?: { lot: Pick<Lot, 'id' | 'name' | 'farmId'> }[]
   role: Role
   active: boolean
   createdAt: string

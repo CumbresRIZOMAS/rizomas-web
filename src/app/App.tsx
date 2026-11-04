@@ -34,8 +34,9 @@ function Panel() {
 }
 
 export function AppRoutes() {
-  const { token, loading } = useAuth()
+  const { token, loading, passwordChangeRequired } = useAuth()
   if (loading) return <Loading label="Verificando sesión…" />
+  if (token && passwordChangeRequired) return <RestablecerContrasenaPage forced />
   return (
     <Routes>
       <Route index element={<PortalPublico />} />
