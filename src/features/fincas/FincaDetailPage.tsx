@@ -62,7 +62,7 @@ export function FincaDetailPage() {
           <>
             {canDo(role, ROLES.editarFinca) && !editando && (
               <Button variant="secondary" onClick={() => setEditando(true)}>
-                Editar datos
+                Editar finca y perfil público
               </Button>
             )}
             {canDo(role, ROLES.registrarEnFinca) && (
