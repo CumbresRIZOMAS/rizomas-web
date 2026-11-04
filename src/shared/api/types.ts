@@ -350,6 +350,21 @@ export type PhotoCandidate = { id: string; objectKey: string; capturedAt: string
 export type FarmProfileImageCandidate = { id: string; url: string; capturedAt: string | null; expiresIn: number }
 
 /** GET /publications/:id/traceability: read model público, sin datos privados. */
+/** Etapa pública: los campos nuevos son opcionales para tolerar un backend anterior. */
+export type PublicProcessEvent = {
+  stage: string
+  recordedAt: string
+  inputKg: Decimal | null
+  outputKg: Decimal | null
+  method?: string | null
+  durationHours?: Decimal | null
+  moisturePercent?: Decimal | null
+  brix?: Decimal | null
+  ph?: Decimal | null
+  scaScore?: Decimal | null
+  flavorNotes?: string[]
+}
+
 export type PublicTraceability = {
   publication: { id: string; title: string; region: string | null; quantity: string | null; unit: string | null; publishedAt: string | null }
   origin: { region: string | null; farmType: FarmType | null }
@@ -360,7 +375,7 @@ export type PublicTraceability = {
     stage: string
     startedAt: string
     finishedAt: string | null
-    events: { stage: string; recordedAt: string; inputKg: Decimal | null; outputKg: Decimal | null }[]
+    events: PublicProcessEvent[]
     products: { finalizedAt: string | null; destination: string | null; certifications: { certifier: string; status: string }[] }[]
   }[]
 }

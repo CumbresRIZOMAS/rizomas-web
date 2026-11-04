@@ -736,6 +736,9 @@ function FichaFinca({
   const hechos = pasos.filter((p) => p.hecho).length
   const procesos = datos?.processes ?? []
   const procesoActual = procesos.at(-1)
+  const puntajes = procesos.flatMap((p) => p.events.map((e) => Number(e.scaScore ?? NaN))).filter((n) => Number.isFinite(n))
+  const mejorPuntaje = puntajes.length ? Math.max(...puntajes) : null
+  const sabores = [...new Set(procesos.flatMap((p) => p.events.flatMap((e) => e.flavorNotes ?? [])))]
   const certificaciones = [...new Set(procesos.flatMap((p) => p.products.flatMap((x) => x.certifications.map((c) => c.certifier))))]
   const labores = datos ? Object.entries(datos.practices.laborsByType).reduce((s, [tipo, n]) => (tipo === 'COSECHA' ? s : s + (n ?? 0)), 0) : 0
   const practicas = datos
@@ -753,6 +756,15 @@ function FichaFinca({
       </div>
       <div className="rz-ficha-cuerpo">
         <h3>{punto.nombre}</h3>
+        {mejorPuntaje !== null && (
+          <p className={`rz-ficha-sca${mejorPuntaje >= 90 ? ' top' : ''}`}>
+            <b>{formatNumber(mejorPuntaje)}</b>
+            <span>
+              {idioma === 'en' ? 'SCA points' : 'puntos SCA'} · {mejorPuntaje >= 90 ? (idioma === 'en' ? 'Exceptional' : 'Excepcional') : mejorPuntaje >= 85 ? (idioma === 'en' ? 'Excellent' : 'Excelente') : mejorPuntaje >= 80 ? (idioma === 'en' ? 'Specialty' : 'Especialidad') : (idioma === 'en' ? 'Cupped' : 'Catado')}
+              {sabores.length > 0 && <small>{sabores.join(' · ')}</small>}
+            </span>
+          </p>
+        )}
         <p className="rz-ficha-lugar">
           <Icon name="location" size={13} /> {[punto.municipio, punto.departamento].filter(Boolean).join(', ') || 'Colombia'}
         </p>

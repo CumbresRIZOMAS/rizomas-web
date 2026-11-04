@@ -304,3 +304,10 @@
 @media (prefers-reduced-motion: reduce) {
   .rz-explorer *, .rz-explorer *::before, .rz-explorer *::after { animation: none !important; transition: none !important; }
 }
+
+/* Puntaje de taza en la tarjeta de la finca */
+.rz-ficha-sca { display: flex; align-items: center; gap: 10px; margin: 8px 0 4px; padding: 8px 12px; border-radius: 12px; background: linear-gradient(135deg, #3b2a1e, #1c130c); color: #fbf4e2; }
+.rz-ficha-sca b { font-size: 24px; line-height: 1; color: #e2b65c; font-variant-numeric: tabular-nums; }
+.rz-ficha-sca.top b { color: #f0c75e; text-shadow: 0 0 12px rgba(240, 199, 94, 0.5); }
+.rz-ficha-sca span { display: flex; flex-direction: column; font-size: 12px; font-weight: 600; }
+.rz-ficha-sca small { font-weight: 400; opacity: 0.75; }

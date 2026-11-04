@@ -10,6 +10,7 @@ import { Button, Chip, Icon, type IconName } from '../../shared/ui'
 import { Bibliografia } from './Bibliografia'
 import { OriginExplorer } from './OriginExplorer'
 import { TiposDeCafe } from './TiposDeCafe'
+import { VitrinaFinca } from './VitrinaFinca'
 import { nombreVisible } from './origenesMapa'
 import './portal.css'
 
@@ -482,16 +483,19 @@ function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Pub
             <div className="origin-section-title">
               <span>{fotos.length > 0 ? '02' : '01'}</span>
               <div>
-                <h2>Trazabilidad de {nombreVisible(p.title)}</h2>
-                <p>Se muestran las etapas registradas hasta ahora; los procesos en curso también son visibles.</p>
+                <h2>El café de {nombreVisible(p.title)}</h2>
+                <p>Calidad en taza, proceso y cifras registradas por la finca y verificadas en RIZOMAS.</p>
               </div>
               {estadoTraza === 'loaded' && p.isPublished !== false && <Chip tone="green"><Icon name="check" size={13} /> Información verificada</Chip>}
             </div>
             {estadoTraza === 'loading' && <p className="trace-feedback" role="status">Cargando la trazabilidad y los procesos…</p>}
             {estadoTraza === 'unavailable' && <div className="trace-feedback" role="alert"><p>No se pudo cargar la trazabilidad de esta finca.</p>{errorTraza && <small>Detalle: {errorTraza}</small>}<Button variant="secondary" onClick={() => setIntentoTraza((intento) => intento + 1)}>Intentar de nuevo</Button></div>}
             {estadoTraza === 'loaded' && traza && <>
-              {traza.processes.length === 0 && <p className="trace-feedback">Aún no hay procesos de beneficio; los pasos pendientes se muestran en gris.</p>}
-              <div className="public-trace-timeline">
+              <VitrinaFinca traza={traza} nombre={nombreVisible(p.title)} />
+              <details className="vt-registro">
+                <summary>Ver registro completo de la finca</summary>
+                {traza.processes.length === 0 && <p className="trace-feedback">Aún no hay procesos de beneficio; los pasos pendientes se muestran en gris.</p>}
+                <div className="public-trace-timeline">
                 {pasos.map((paso, i) => (
                   <article className={`public-trace-step ${paso.hecha ? 'done' : 'pending'}`} key={`${paso.etapa}-${i}`}>
                     <span className="public-trace-step-icon"><Icon name={paso.icon} /></span>
@@ -504,7 +508,8 @@ function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Pub
                     </div>
                   </article>
                 ))}
-              </div>
+                </div>
+              </details>
             </>}
           </section>
           <section className="origin-impact">
