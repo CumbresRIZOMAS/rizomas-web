@@ -2,21 +2,30 @@ import { useRef, useState, type FormEvent } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 import { uploadEvidence } from '../../shared/api/evidence'
 import { useApiMutation, useApiQuery } from '../../shared/api/hooks'
-import type { AgronomicManagementType, Farm, FarmDetail, Labor } from '../../shared/api/types'
+import type { AgronomicManagementType, CoffeeProcess, Farm, FarmDetail, Labor } from '../../shared/api/types'
 import { canDo, ROLES, useAuth } from '../../shared/auth/context'
 import { RequireFarm } from '../../shared/farm/RequireFarm'
 import { formatHa, MANAGEMENT_TYPE_LABEL, optionalText, parseOptionalNumber } from '../../shared/format'
 import { Button, Card, Chip, ErrorNotice, Icon, Loading, PageHeader, SelectField, TextAreaField, TextField, type IconName } from '../../shared/ui'
+import { GUIA_ETAPAS, siguienteEtapa, tipoDeProceso } from '../cafe/guiaBeneficio'
 import { MovimientoForm } from '../comercial/ComercialPanel'
+import './laborWizard.css'
 
 type Tipo = 'siembra' | 'cosecha' | 'manejo' | 'compra' | 'venta'
 
 const TIPOS: { id: Tipo; nombre: string; descripcion: string; icon: IconName }[] = [
-  { id: 'siembra', nombre: 'Siembra', descripcion: 'Establecimiento de un cultivo', icon: 'leaf' },
-  { id: 'cosecha', nombre: 'Cosecha', descripcion: 'Recolección de café u otro producto', icon: 'coffee' },
-  { id: 'manejo', nombre: 'Manejo agronómico', descripcion: 'Limpieza, poda, abono o revisión', icon: 'tool' },
-  { id: 'compra', nombre: 'Compra', descripcion: 'Insumos, materiales o servicios', icon: 'wallet' },
-  { id: 'venta', nombre: 'Venta', descripcion: 'Productos cosechados o procesados', icon: 'report' },
+  { id: 'siembra', nombre: 'Siembra', descripcion: 'Nuevos árboles, resiembra o un cultivo nuevo', icon: 'leaf' },
+  { id: 'cosecha', nombre: 'Cosecha', descripcion: 'Cereza recolectada u otro producto', icon: 'coffee' },
+  { id: 'manejo', nombre: 'Manejo agronómico', descripcion: 'Poda, fertilización, control de plagas, limpieza, riego…', icon: 'tool' },
+  { id: 'compra', nombre: 'Compra', descripcion: 'Insumos, herramientas, materiales o servicios', icon: 'wallet' },
+  { id: 'venta', nombre: 'Venta', descripcion: 'Café o productos vendidos', icon: 'report' },
+]
+
+/** Grupos del primer paso, en el mismo orden que la app móvil. */
+const GRUPOS: { titulo: string; tipos: Tipo[]; proceso?: boolean }[] = [
+  { titulo: '☕ Café: de la cosecha a la taza', tipos: ['cosecha', 'venta'], proceso: true },
+  { titulo: '🌱 Cuidado del cultivo', tipos: ['siembra', 'manejo'] },
+  { titulo: '💸 Compras', tipos: ['compra'] },
 ]
 
 const PASOS = ['Tipo de labor', 'Ubicación', 'Detalles']
@@ -39,6 +48,8 @@ function Wizard({ farm }: { farm: Farm }) {
   const [params] = useSearchParams()
   const { role, token } = useAuth()
   const detalle = useApiQuery<FarmDetail>(`/farms/${farm.id}`)
+  const procesos = useApiQuery<CoffeeProcess[]>(`/coffee-processes/farms/${farm.id}`)
+  const sugeridos = (procesos.data ?? []).filter((p) => !p.finishedAt && siguienteEtapa(p)).slice(0, 2)
   const { mutate, saving, error } = useApiMutation()
   const verComercial = canDo(role, ROLES.verComercial)
   const inicial = TIPOS.find((t) => t.id === params.get('tipo'))?.id ?? 'manejo'
@@ -169,34 +180,71 @@ function Wizard({ farm }: { farm: Farm }) {
                   <h2>¿Qué labor vas a registrar?</h2>
                   <p>Selecciona la opción que mejor describa la actividad.</p>
                 </div>
-                <div className="type-grid" role="radiogroup" aria-label="Tipo de labor">
-                  {TIPOS.map((t) => {
-                    const bloqueada = (t.id === 'compra' || t.id === 'venta') && !verComercial
-                    return (
-                      <button
-                        type="button"
-                        role="radio"
-                        aria-checked={tipo === t.id}
-                        className={`type-card ${tipo === t.id ? 'selected' : ''}`}
-                        onClick={() => setTipo(t.id)}
-                        disabled={bloqueada}
-                        title={bloqueada ? 'Solo administradores registran compras y ventas' : undefined}
-                        key={t.id}
-                      >
-                        <span>
-                          <Icon name={t.icon} size={27} />
-                        </span>
-                        <strong>{t.nombre}</strong>
-                        <small>{t.descripcion}</small>
-                        {tipo === t.id && (
-                          <i>
-                            <Icon name="check" size={14} />
+                {sugeridos.length > 0 && (
+                  <div className="labor-sugerencias">
+                    <small>✨ Sugerido ahora</small>
+                    {sugeridos.map((p) => {
+                      const sig = siguienteEtapa(p)!
+                      const tipoProceso = tipoDeProceso(p).tipo
+                      return (
+                        <button type="button" key={p.id} className="labor-sugerencia" onClick={() => navigate(`/cafe?proceso=${p.id}&etapa=${encodeURIComponent(sig)}`)}>
+                          <span>{GUIA_ETAPAS[sig].emoji}</span>
+                          <span>
+                            <em>Continúa tu proceso</em>
+                            <strong>Registrar {sig.toLowerCase()}</strong>
+                            <small>{[tipoProceso?.nombre, p.lot?.name].filter(Boolean).join(' · ')}</small>
+                          </span>
+                          <Icon name="arrow" size={18} />
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+                {GRUPOS.map((grupo) => (
+                  <div className="labor-grupo" key={grupo.titulo}>
+                    <h3>{grupo.titulo}</h3>
+                    <div className="type-grid" role="radiogroup" aria-label={grupo.titulo}>
+                      {TIPOS.filter((t) => grupo.tipos.includes(t.id)).map((t) => {
+                        const bloqueada = (t.id === 'compra' || t.id === 'venta') && !verComercial
+                        return (
+                          <button
+                            type="button"
+                            role="radio"
+                            aria-checked={tipo === t.id}
+                            className={`type-card ${tipo === t.id ? 'selected' : ''}`}
+                            onClick={() => setTipo(t.id)}
+                            disabled={bloqueada}
+                            title={bloqueada ? 'Solo administradores registran compras y ventas' : undefined}
+                            key={t.id}
+                          >
+                            <span>
+                              <Icon name={t.icon} size={27} />
+                            </span>
+                            <strong>{t.nombre}</strong>
+                            <small>{t.descripcion}</small>
+                            {tipo === t.id && (
+                              <i>
+                                <Icon name="check" size={14} />
+                              </i>
+                            )}
+                          </button>
+                        )
+                      })}
+                      {grupo.proceso && (
+                        <button type="button" className="type-card type-card-enlace" onClick={() => navigate('/cafe')}>
+                          <span>
+                            <Icon name="process" size={27} />
+                          </span>
+                          <strong>Proceso de café</strong>
+                          <small>Despulpado, fermentación, lavado, secado, trilla… con guía paso a paso</small>
+                          <i aria-hidden="true">
+                            <Icon name="arrow" size={14} />
                           </i>
-                        )}
-                      </button>
-                    )
-                  })}
-                </div>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </>
             )}
 

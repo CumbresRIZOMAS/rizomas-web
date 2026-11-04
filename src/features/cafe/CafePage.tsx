@@ -1,90 +1,225 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
+import { useSearchParams } from 'react-router'
 import { useApiMutation, useApiQuery } from '../../shared/api/hooks'
-import type { CoffeeProcess, Farm, Labor, Lot, ProductFinal } from '../../shared/api/types'
+import type { CoffeeProcess, CoffeeProcessEvent, Farm, Labor, Lot, ProductFinal } from '../../shared/api/types'
 import { canDo, ROLES, useAuth } from '../../shared/auth/context'
 import { RequireFarm } from '../../shared/farm/RequireFarm'
 import { formatDate, formatNumber, formatShortDate, optionalText } from '../../shared/format'
-import { Button, Card, CardTitle, Chip, EmptyState, ErrorNotice, FormCard, Icon, Loading, PageHeader, SelectField, TextAreaField, TextField } from '../../shared/ui'
-import { codigoProceso, ETAPAS, etapaIndex } from './etapas'
+import { Button, Card, CardTitle, Chip, EmptyState, ErrorNotice, Icon, Loading, PageHeader, SelectField, TextAreaField, TextField } from '../../shared/ui'
+import './cafe.css'
+import { EtapaForm, type EventoPayload } from './EtapaForm'
+import { codigoProceso } from './etapas'
+import {
+  ETAPAS_CAFE,
+  EXPLICACION_VARIANTES,
+  GUIA_ETAPAS,
+  TIPOS_PROCESO,
+  avanceDe,
+  consejoDe,
+  esEtapa,
+  etapasHechas,
+  leerMetodo,
+  rutaDe,
+  siguienteEtapa,
+  tipoDeProceso,
+  ultimaSalida,
+  type EtapaCafe,
+  type TipoProceso,
+} from './guiaBeneficio'
 
 export function CafePage() {
   return <RequireFarm>{(farm) => <Procesos key={farm.id} farm={farm} />}</RequireFarm>
 }
 
+function tituloProceso(p: CoffeeProcess) {
+  const { tipo, variante } = tipoDeProceso(p)
+  return tipo ? [tipo.nombre, variante?.toLowerCase()].filter(Boolean).join(' ') : 'Proceso sin tipo'
+}
+
 function Procesos({ farm }: { farm: Farm }) {
   const { role } = useAuth()
+  const puedeRegistrar = canDo(role, ROLES.registrarEnFinca)
   const procesos = useApiQuery<CoffeeProcess[]>(`/coffee-processes/farms/${farm.id}`)
   const labores = useApiQuery<Labor[]>(`/farms/${farm.id}/labors`)
   const lotes = useApiQuery<Lot[]>(`/farms/${farm.id}/lots`)
-  const [seleccion, setSeleccion] = useState<string | null>(null)
+  // Desde "Registrar labor" se llega con ?proceso=<id>&etapa=<etapa> para seguir un proceso.
+  const [params] = useSearchParams()
+  const [seleccion, setSeleccion] = useState<string | null>(params.get('proceso'))
+  const etapaPedida = params.get('etapa')
   const [creando, setCreando] = useState(false)
+  const [guia, setGuia] = useState<TipoProceso | null>(null)
   const lista = procesos.data ?? []
-  const actual = lista.find((p) => p.id === seleccion) ?? lista[0] ?? null
+  const activos = lista.filter((p) => !p.finishedAt)
+  const terminados = lista.filter((p) => p.finishedAt)
+  const actual = lista.find((p) => p.id === seleccion) ?? activos[0] ?? lista[0] ?? null
   const cosechas = (labores.data ?? []).filter((l) => l.type === 'COSECHA' && l.harvest?.id)
   const laborDeCosecha = (harvestId: string | null) => cosechas.find((l) => l.harvest?.id === harvestId)
 
   return (
-    <div>
+    <div className="cf-pagina">
       <PageHeader
-        eyebrow={actual ? `Lote de proceso ${codigoProceso(actual)}` : `Finca ${farm.name}`}
+        eyebrow={`Finca ${farm.name}`}
         title="Proceso de café"
-        subtitle="Del despulpado y la fermentación hasta el café tostado y catado, con trazabilidad por lote."
+        subtitle="De la cereza al grano: registra cada etapa y sigue las recomendaciones de cada tipo de proceso."
         actions={
-          canDo(role, ROLES.registrarEnFinca) &&
+          puedeRegistrar &&
           !creando && (
             <Button icon="plus" onClick={() => setCreando(true)}>
-              Nuevo proceso
+              Iniciar proceso
             </Button>
           )
         }
       />
-      <div className="stack">
-        {creando && (
-          <ProcesoForm
-            farmId={farm.id}
-            cosechas={cosechas}
-            lotes={lotes.data ?? []}
-            onCancel={() => setCreando(false)}
-            onSaved={(p) => {
-              setCreando(false)
-              setSeleccion(p.id)
-              procesos.reload()
-            }}
-          />
-        )}
-        {procesos.loading && !procesos.data && <Loading />}
-        {procesos.error && <ErrorNotice message={procesos.error} onRetry={procesos.reload} />}
-        {procesos.data && lista.length === 0 && !creando && (
-          <EmptyState icon="process" title="Sin procesos de café">
-            Registra el beneficio de una cosecha para seguir su transformación hasta el producto final.
-          </EmptyState>
-        )}
-        {lista.length > 1 && (
-          <div className="filter-tabs" role="tablist" aria-label="Procesos">
-            {lista.map((p) => (
-              <button key={p.id} type="button" role="tab" aria-selected={p.id === actual?.id} className={p.id === actual?.id ? 'active' : ''} onClick={() => setSeleccion(p.id)}>
-                {codigoProceso(p)} · {formatShortDate(p.startedAt)}
-              </button>
+      {creando && (
+        <NuevoProceso
+          farmId={farm.id}
+          cosechas={cosechas}
+          lotes={lotes.data ?? []}
+          onVerGuia={setGuia}
+          onCancel={() => setCreando(false)}
+          onSaved={(id) => {
+            setCreando(false)
+            setSeleccion(id)
+            procesos.reload()
+          }}
+        />
+      )}
+      {procesos.loading && !procesos.data && <Loading />}
+      {procesos.error && <ErrorNotice message={procesos.error} onRetry={procesos.reload} />}
+      {procesos.data && lista.length === 0 && !creando && (
+        <EmptyState
+          icon="process"
+          title="Aún no hay procesos de café"
+          action={puedeRegistrar && <Button icon="plus" onClick={() => setCreando(true)}>Iniciar el primero</Button>}
+        >
+          Cuando coseches, inicia un proceso: te iremos diciendo qué etapa sigue y qué conviene medir.
+        </EmptyState>
+      )}
+
+      {lista.length > 0 && (
+        <section className="cf-procesos" aria-label="Procesos">
+          {activos.length > 0 && <h2 className="cf-seccion">En curso · {activos.length}</h2>}
+          <div className="cf-tarjetas">
+            {activos.map((p) => (
+              <TarjetaProceso key={p.id} proceso={p} activa={p.id === actual?.id} onClick={() => setSeleccion(p.id)} />
             ))}
           </div>
-        )}
-      </div>
-      {actual && <Detalle key={actual.id} proceso={actual} origen={laborDeCosecha(actual.harvestId)} onChanged={procesos.reload} />}
+          {terminados.length > 0 && (
+            <>
+              <h2 className="cf-seccion">Terminados · {terminados.length}</h2>
+              <div className="cf-tarjetas compactas">
+                {terminados.map((p) => (
+                  <TarjetaProceso key={p.id} proceso={p} activa={p.id === actual?.id} onClick={() => setSeleccion(p.id)} />
+                ))}
+              </div>
+            </>
+          )}
+        </section>
+      )}
+
+      {actual && (
+        <Detalle
+          key={actual.id}
+          proceso={actual}
+          origen={laborDeCosecha(actual.harvestId)}
+          etapaInicial={actual.id === params.get('proceso') && etapaPedida && esEtapa(etapaPedida) ? etapaPedida : null}
+          onChanged={procesos.reload}
+        />
+      )}
+
+      <section className="cf-guia" aria-label="Guía de procesos">
+        <h2 className="cf-seccion">Guía de procesos</h2>
+        <p>Cada proceso da un sabor distinto. Abre uno para ver sus pasos y lo que recomendamos en cada etapa.</p>
+        <div className="cf-guia-tipos">
+          {TIPOS_PROCESO.map((t) => (
+            <button type="button" key={t.id} onClick={() => setGuia(t)}>
+              <span className="cf-guia-emoji">{t.emoji}</span>
+              <strong>{t.nombre}</strong>
+              <small>{t.taza}</small>
+              <em>{t.etapas.map((e) => GUIA_ETAPAS[e].emoji).join(' ')}</em>
+              <i>{t.nivel}</i>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {guia && <GuiaModal tipo={guia} onClose={() => setGuia(null)} />}
     </div>
   )
 }
 
-function Detalle({ proceso, origen, onChanged }: { proceso: CoffeeProcess; origen?: Labor; onChanged: () => void }) {
+function Ruta({ ruta, hechas, siguiente, eventos = [] }: { ruta: EtapaCafe[]; hechas: Set<string>; siguiente: EtapaCafe | null; eventos?: CoffeeProcessEvent[] }) {
+  return (
+    <ol className="cf-ruta">
+      {ruta.map((e) => {
+        const estado = hechas.has(e) ? 'hecha' : e === siguiente ? 'siguiente' : ''
+        const evento = [...eventos].reverse().find((x) => x.stage === e)
+        return (
+          <li key={e} className={estado}>
+            <span className="cf-ruta-punto" aria-hidden="true">
+              {GUIA_ETAPAS[e].emoji}
+            </span>
+            <strong>{e}</strong>
+            <small>{estado === 'hecha' ? (evento ? datoClave(evento) : 'Hecha') : estado === 'siguiente' ? 'Siguiente' : 'Pendiente'}</small>
+          </li>
+        )
+      })}
+    </ol>
+  )
+}
+
+/** Dato más representativo de una etapa para mostrarlo bajo su ícono. */
+function datoClave(e: CoffeeProcessEvent): string {
+  if (e.moisturePercent != null) return `${formatNumber(e.moisturePercent)} % hum.`
+  if (e.scaScore != null) return `SCA ${formatNumber(e.scaScore)}`
+  if (e.outputKg != null) return `${formatNumber(e.outputKg)} kg`
+  if (e.durationHours != null) return `${formatNumber(e.durationHours)} h`
+  if (e.waterLiters != null) return `${formatNumber(e.waterLiters)} L`
+  return formatShortDate(e.recordedAt)
+}
+
+function TarjetaProceso({ proceso, activa, onClick }: { proceso: CoffeeProcess; activa: boolean; onClick: () => void }) {
+  const { tipo } = tipoDeProceso(proceso)
+  const siguiente = siguienteEtapa(proceso)
+  return (
+    <button type="button" className={`cf-tarjeta${activa ? ' activa' : ''}`} aria-pressed={activa} onClick={onClick}>
+      <div className="cf-tarjeta-cabeza">
+        <span className="cf-tarjeta-emoji">{tipo?.emoji ?? '☕'}</span>
+        <span>
+          <strong>{tituloProceso(proceso)}</strong>
+          <small>
+            {proceso.lot?.name ?? 'Sin lote'} · {codigoProceso(proceso)} · desde {formatShortDate(proceso.startedAt)}
+          </small>
+        </span>
+        <em className={proceso.finishedAt ? 'listo' : ''}>{proceso.finishedAt ? 'Terminado' : `${Math.round(avanceDe(proceso) * 100)} %`}</em>
+      </div>
+      <Ruta ruta={rutaDe(proceso)} hechas={etapasHechas(proceso)} siguiente={siguiente} />
+      {siguiente && (
+        <span className="cf-tarjeta-siguiente">
+          Siguiente: {GUIA_ETAPAS[siguiente].emoji} {siguiente} <Icon name="arrow" size={14} />
+        </span>
+      )}
+    </button>
+  )
+}
+
+function Detalle({ proceso, origen, etapaInicial, onChanged }: { proceso: CoffeeProcess; origen?: Labor; etapaInicial: EtapaCafe | null; onChanged: () => void }) {
   const { role } = useAuth()
   const puedeEditar = canDo(role, ROLES.registrarEnFinca)
   const puedeCertificar = canDo(role, ROLES.certificar)
   const { mutate, saving, error } = useApiMutation()
+  const evento = useApiMutation()
   const [editandoNotas, setEditandoNotas] = useState(false)
   const [notas, setNotas] = useState(proceso.notes ?? '')
   const [agregandoProducto, setAgregandoProducto] = useState(false)
-  const [agregandoEtapa, setAgregandoEtapa] = useState(false)
-  const indice = proceso.finishedAt ? ETAPAS.length : etapaIndex(proceso)
-  const siguiente = !proceso.finishedAt && indice >= 0 ? ETAPAS[indice + 1] : undefined
+  const [registrando, setRegistrando] = useState<EtapaCafe | null>(etapaInicial)
+  const { tipo, variante } = tipoDeProceso(proceso)
+  const ruta = rutaDe(proceso)
+  const hechas = etapasHechas(proceso)
+  const siguiente = siguienteEtapa(proceso)
+  const orden = (e: CoffeeProcessEvent) => (esEtapa(e.stage) ? ETAPAS_CAFE.indexOf(e.stage) : -1)
+  const eventos = [...(proceso.events ?? [])].sort((a, b) => b.recordedAt.localeCompare(a.recordedAt) || orden(b) - orden(a))
+  const etapaActual = esEtapa(proceso.currentStage) ? proceso.currentStage : null
 
   async function actualizar(cambio: { currentStage?: string; finishedAt?: string | null; notes?: string }) {
     if (await mutate(`/coffee-processes/${proceso.id}`, 'PATCH', cambio)) {
@@ -93,141 +228,413 @@ function Detalle({ proceso, origen, onChanged }: { proceso: CoffeeProcess; orige
     }
   }
 
+  async function guardarEtapa(payload: EventoPayload) {
+    if (await evento.mutate(`/coffee-processes/${proceso.id}/events`, 'POST', payload)) {
+      setRegistrando(null)
+      onChanged()
+    }
+  }
+
   return (
-    <>
-      <div className="process-summary">
-        <div>
-          <Icon name="coffee" size={30} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <span>Origen</span>
-            <strong>{origen ? (origen.lot?.name ?? origen.name) : 'Sin cosecha asociada'}</strong>
+    <section className="cf-detalle" aria-label={`Proceso ${codigoProceso(proceso)}`}>
+      <div className="cf-hero">
+        <div className="cf-hero-titulo">
+          <span>{tipo?.emoji ?? '☕'}</span>
+          <div>
+            <small>Proceso {codigoProceso(proceso)}</small>
+            <h2>{tituloProceso(proceso)}</h2>
+            <p>{[proceso.lot?.name ?? origen?.lot?.name, tipo?.taza].filter(Boolean).join(' · ') || 'Sin lote asociado'}</p>
           </div>
         </div>
-        <div>
-          <span>Cosecha inicial</span>
-          <strong>{proceso.harvest ? `${formatNumber(proceso.harvest.quantity)} ${proceso.harvest.unit}` : '—'}</strong>
-        </div>
-        <div>
-          <span>Estado actual</span>
-          <Chip tone={proceso.finishedAt ? 'green' : 'amber'}>{proceso.finishedAt ? 'Finalizado' : proceso.currentStage}</Chip>
-        </div>
-        <div>
-          <span>{proceso.finishedAt ? 'Finalizado' : 'Inicio'}</span>
-          <strong>{formatDate(proceso.finishedAt ?? proceso.startedAt)}</strong>
-        </div>
-      </div>
-      <div className="pipeline">
-        {ETAPAS.map((etapa, i) => {
-          const estado = i < indice ? 'complete' : i === indice ? 'current' : ''
-          return (
-            <div className={`stage ${estado}`} key={etapa.nombre}>
-              <div className="stage-number">{i < indice ? <Icon name="check" size={16} /> : i + 1}</div>
-              <div className="stage-card">
-                <div className="stage-icon">
-                  <Icon name={etapa.icon} />
-                </div>
-                <h3>{etapa.nombre}</h3>
-                <span>{estado === 'complete' ? 'Completada' : estado === 'current' ? 'En proceso' : 'Pendiente'}</span>
-                {i === 0 && proceso.harvest && (
-                  <strong>
-                    {formatNumber(proceso.harvest.quantity)} {proceso.harvest.unit}
-                  </strong>
-                )}
-              </div>
-              {i < ETAPAS.length - 1 && <Icon name="arrow" />}
-            </div>
-          )
-        })}
-      </div>
-      {indice === -1 && <div className="notice notice-warn">La etapa registrada (“{proceso.currentStage}”) no coincide con las etapas estándar del proceso.</div>}
-      <div className="stack">
-        <Card className="card-pad">
-          <CardTitle title="Cadena de poscosecha" subtitle="Mediciones por etapa, incluido el destino del agua del lavado">
-            {puedeEditar && !agregandoEtapa && <Button variant="secondary" icon="plus" onClick={() => setAgregandoEtapa(true)}>Registrar etapa</Button>}
-          </CardTitle>
-          {agregandoEtapa && <EtapaForm processId={proceso.id} onCancel={() => setAgregandoEtapa(false)} onSaved={() => { setAgregandoEtapa(false); onChanged() }} />}
-          {(proceso.events ?? []).map((e) => <div className="application-row" key={e.id}><div className="date-box">{formatShortDate(e.recordedAt)}</div><div><strong>{e.stage}</strong><div>{e.inputKg ?? '—'} kg entran → {e.outputKg ?? '—'} kg salen</div>{e.stage === 'Lavado' && <div>Agua limpia {e.waterLiters ?? '—'} L · Agua residual con mucílago {e.wastewaterLiters ?? '—'} L · {e.compostReuse ? `Reutilizada: ${e.wastewaterDestination ?? 'destino no indicado'}` : 'Destino no indicado'}</div>}{e.durationHours != null && <div>{e.durationHours} h</div>}{e.method && <div>{e.method}</div>}{e.brix != null && <div>{e.brix} °Brix</div>}{e.ph != null && <div>pH {e.ph}</div>}{e.moisturePercent != null && <div>Humedad {e.moisturePercent}%</div>}{e.scaScore != null && <div>Puntaje SCA {e.scaScore}</div>}{e.notes && <small>{e.notes}</small>}</div></div>)}
-          {!proceso.events?.length && !agregandoEtapa && <p className="muted">Aún no se han registrado etapas con mediciones.</p>}
-        </Card>
-        {error && <ErrorNotice message={error} />}
-        <Card className="process-note">
-          <Icon name="sync" />
+        <dl>
           <div>
-            <strong>{proceso.finishedAt ? 'Proceso finalizado' : `${proceso.currentStage} en curso`}</strong>
-            {editandoNotas ? (
-              <form
-                className="rec-form"
-                onSubmit={(e) => {
-                  e.preventDefault()
-                  void actualizar({ notes: notas.trim() })
+            <dt>Cosecha inicial</dt>
+            <dd>{proceso.harvest ? `${formatNumber(proceso.harvest.quantity)} ${proceso.harvest.unit}` : '—'}</dd>
+          </div>
+          <div>
+            <dt>{proceso.finishedAt ? 'Terminado' : 'Inicio'}</dt>
+            <dd>{formatDate(proceso.finishedAt ?? proceso.startedAt)}</dd>
+          </div>
+          <div>
+            <dt>Avance</dt>
+            <dd>{Math.round(avanceDe(proceso) * 100)} %</dd>
+          </div>
+          <div>
+            <dt>Estado</dt>
+            <dd>{proceso.finishedAt ? 'Finalizado' : (etapaActual ?? proceso.currentStage)}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <Card className="card-pad">
+        <CardTitle title="Ruta recomendada" subtitle={tipo ? `Pasos del proceso ${tipo.nombre.toLowerCase()}${variante ? ` ${variante.toLowerCase()}` : ''}` : 'Elige el tipo al registrar la siguiente etapa para recibir recomendaciones'} />
+        <Ruta ruta={ruta} hechas={hechas} siguiente={siguiente} eventos={proceso.events} />
+        {siguiente && puedeEditar && !registrando && (
+          <div className="cf-siguiente">
+            <span className="cf-siguiente-emoji">{GUIA_ETAPAS[siguiente].emoji}</span>
+            <div>
+              <small>Siguiente recomendado</small>
+              <strong>{siguiente}</strong>
+              <p>{consejoDe(tipo, siguiente)}</p>
+            </div>
+            <div className="cf-siguiente-acciones">
+              <Button onClick={() => setRegistrando(siguiente)}>
+                Registrar {siguiente.toLowerCase()} <Icon name="arrow" size={16} />
+              </Button>
+              <Button variant="ghost" disabled={saving} onClick={() => void actualizar({ currentStage: siguiente })}>
+                Pasar a {siguiente.toLowerCase()} sin datos
+              </Button>
+            </div>
+          </div>
+        )}
+        {registrando && (
+          <EtapaForm
+            key={registrando}
+            tipoInicial={tipo}
+            variante={variante}
+            etapaInicial={registrando}
+            hechas={hechas}
+            entradaSugerida={ultimaSalida(proceso)}
+            guardando={evento.saving}
+            error={evento.error}
+            onSubmit={(p) => void guardarEtapa(p)}
+            onCancel={() => setRegistrando(null)}
+          />
+        )}
+      </Card>
+
+      <Card className="card-pad">
+        <CardTitle title="Etapas registradas" subtitle="Mediciones de cada etapa, incluido el manejo del agua del lavado">
+          {puedeEditar && !registrando && !proceso.finishedAt && (
+            <Button variant="secondary" icon="plus" onClick={() => setRegistrando(siguiente ?? 'Secado')}>
+              Registrar etapa
+            </Button>
+          )}
+        </CardTitle>
+        {eventos.length === 0 && <p className="muted">Aún no se han registrado etapas con mediciones.</p>}
+        <div className="cf-historial">
+          {eventos.map((e) => (
+            <FilaEvento key={e.id} evento={e} />
+          ))}
+        </div>
+      </Card>
+
+      {error && <ErrorNotice message={error} />}
+      <Card className="process-note">
+        <Icon name="sync" />
+        <div>
+          <strong>{proceso.finishedAt ? 'Proceso finalizado' : `${proceso.currentStage} en curso`}</strong>
+          {editandoNotas ? (
+            <form
+              className="rec-form"
+              onSubmit={(e) => {
+                e.preventDefault()
+                void actualizar({ notes: notas.trim() })
+              }}
+            >
+              <TextAreaField label="Notas del proceso" value={notas} onChange={(e) => setNotas(e.target.value)} placeholder="Ej. Humedad actual 18,2 %, objetivo 10–12 %" />
+              <div className="form-actions">
+                <Button variant="ghost" onClick={() => setEditandoNotas(false)}>
+                  Cancelar
+                </Button>
+                <Button type="submit" disabled={saving}>
+                  Guardar notas
+                </Button>
+              </div>
+            </form>
+          ) : (
+            <span>{proceso.notes ?? 'Sin notas registradas.'}</span>
+          )}
+        </div>
+        {puedeEditar && !editandoNotas && (
+          <div className="note-actions">
+            <Button variant="secondary" onClick={() => setEditandoNotas(true)}>
+              Actualizar notas
+            </Button>
+            {!proceso.finishedAt && (
+              <Button icon="check" variant={siguiente && !ETAPAS_FINALES.includes(siguiente) ? 'secondary' : 'primary'} disabled={saving} onClick={() => void actualizar({ finishedAt: new Date().toISOString() })}>
+                Finalizar proceso
+              </Button>
+            )}
+            {proceso.finishedAt && (
+              <Button variant="ghost" disabled={saving} onClick={() => void actualizar({ finishedAt: null })}>
+                Reabrir
+              </Button>
+            )}
+          </div>
+        )}
+      </Card>
+
+      <Card className="card-pad">
+        <CardTitle title="Producto final" subtitle="Resultado del proceso y sus certificaciones">
+          {puedeEditar && !agregandoProducto && (
+            <Button variant="secondary" icon="plus" onClick={() => setAgregandoProducto(true)}>
+              Registrar producto
+            </Button>
+          )}
+        </CardTitle>
+        {agregandoProducto && (
+          <ProductoForm
+            processId={proceso.id}
+            onCancel={() => setAgregandoProducto(false)}
+            onSaved={() => {
+              setAgregandoProducto(false)
+              onChanged()
+            }}
+          />
+        )}
+        {proceso.products.length === 0 && !agregandoProducto && <p className="muted">Este proceso todavía no tiene producto final registrado.</p>}
+        {proceso.products.map((p) => (
+          <Producto key={p.id} producto={p} puedeCertificar={puedeCertificar} onChanged={onChanged} />
+        ))}
+      </Card>
+    </section>
+  )
+}
+
+/** Cuando lo que sigue es opcional, finalizar pasa a ser la acción principal. */
+const ETAPAS_FINALES: EtapaCafe[] = ['Tostión', 'Catación']
+
+function FilaEvento({ evento: e }: { evento: CoffeeProcessEvent }) {
+  const metodo = leerMetodo(e.method)
+  const etapa = esEtapa(e.stage) ? GUIA_ETAPAS[e.stage] : null
+  const horas = e.durationHours != null ? Number(e.durationHours) : null
+  const datos = [
+    e.inputKg != null && e.outputKg != null ? `${formatNumber(e.inputKg)} → ${formatNumber(e.outputKg)} kg` : e.outputKg != null ? `${formatNumber(e.outputKg)} kg` : e.inputKg != null ? `${formatNumber(e.inputKg)} kg` : null,
+    horas != null ? (e.stage === 'Secado' ? `${formatNumber(horas / 24)} días` : e.stage === 'Tostión' ? `${formatNumber(horas * 60)} min` : `${formatNumber(horas)} h`) : null,
+    e.moisturePercent != null ? `Humedad ${formatNumber(e.moisturePercent)} %` : null,
+    e.brix != null ? `${formatNumber(e.brix)} °Brix` : null,
+    e.ph != null ? `pH ${formatNumber(e.ph)}` : null,
+    e.waterLiters != null ? `Agua limpia ${formatNumber(e.waterLiters)} L` : null,
+    e.wastewaterLiters != null ? `Aguas mieles ${formatNumber(e.wastewaterLiters)} L` : null,
+    e.wastewaterDestination ? `Destino: ${e.wastewaterDestination}` : e.stage === 'Lavado' && e.compostReuse ? 'Reutilizada en compostaje' : null,
+    e.scaScore != null ? `SCA ${formatNumber(e.scaScore)}` : null,
+    metodo.tecnica,
+  ].filter(Boolean)
+  return (
+    <article className="cf-evento">
+      <span className="cf-evento-emoji" aria-hidden="true">
+        {etapa?.emoji ?? '•'}
+      </span>
+      <div>
+        <header>
+          <strong>{e.stage}</strong>
+          <time dateTime={e.recordedAt}>{formatShortDate(e.recordedAt)}</time>
+        </header>
+        {datos.length > 0 && (
+          <div className="cf-evento-datos">
+            {datos.map((d) => (
+              <span key={d}>{d}</span>
+            ))}
+          </div>
+        )}
+        {e.notes && <p>{e.notes}</p>}
+      </div>
+    </article>
+  )
+}
+
+function NuevoProceso({
+  farmId,
+  cosechas,
+  lotes,
+  onVerGuia,
+  onSaved,
+  onCancel,
+}: {
+  farmId: string
+  cosechas: Labor[]
+  lotes: Lot[]
+  onVerGuia: (t: TipoProceso) => void
+  onSaved: (id: string) => void
+  onCancel: () => void
+}) {
+  const crear = useApiMutation()
+  const evento = useApiMutation()
+  const [paso, setPaso] = useState(1)
+  const [harvestId, setHarvestId] = useState('')
+  const [lotId, setLotId] = useState(lotes.length === 1 ? lotes[0].id : '')
+  const [tipo, setTipo] = useState<TipoProceso | null>(null)
+  const [variante, setVariante] = useState<string | null>(null)
+  const cosecha = cosechas.find((c) => c.harvest?.id === harvestId)
+  const loteDeCosecha = cosecha ? (cosecha.lotId ?? cosecha.crop?.lotId ?? '') : ''
+  const lote = loteDeCosecha || lotId
+  const listoTipo = tipo && (!tipo.variantes?.length || variante)
+
+  async function guardar(payload: EventoPayload) {
+    const proceso = await crear.mutate<CoffeeProcess>('/coffee-processes', 'POST', {
+      farmId,
+      harvestId: harvestId || undefined,
+      lotId: lote || undefined,
+      currentStage: payload.stage,
+      startedAt: payload.recordedAt,
+    })
+    if (!proceso) return
+    await evento.mutate(`/coffee-processes/${proceso.id}/events`, 'POST', payload)
+    // El proceso ya existe aunque falle la etapa: se muestra para reintentarla.
+    onSaved(proceso.id)
+  }
+
+  return (
+    <Card className="cf-nuevo">
+      <div className="cf-nuevo-cabeza">
+        <div>
+          <small>Nuevo proceso · paso {paso} de 3</small>
+          <h2>{paso === 1 ? '¿De dónde viene el café?' : paso === 2 ? '¿Qué proceso vas a hacer?' : `Empecemos: ${tipo!.etapas[0].toLowerCase()}`}</h2>
+        </div>
+        <ol className="cf-pasos" aria-hidden="true">
+          {[1, 2, 3].map((n) => (
+            <li key={n} className={n <= paso ? 'hecho' : ''} />
+          ))}
+        </ol>
+      </div>
+
+      {paso === 1 && (
+        <>
+          <div className="cf-opciones">
+            {lotes.map((l) => (
+              <button type="button" key={l.id} className={lote === l.id ? 'activo' : ''} aria-pressed={lote === l.id} disabled={Boolean(loteDeCosecha) && loteDeCosecha !== l.id} onClick={() => setLotId(l.id)}>
+                <span>🌳</span>
+                <strong>{l.name}</strong>
+              </button>
+            ))}
+            {lotes.length === 0 && <p className="muted">Primero registra un lote en la finca.</p>}
+          </div>
+          <SelectField label="Cosecha de origen (opcional)" value={harvestId} onChange={(e) => setHarvestId(e.target.value)}>
+            <option value="">Sin cosecha asociada</option>
+            {cosechas.map((l) => (
+              <option key={l.id} value={l.harvest!.id}>
+                {formatShortDate(l.startDate)} · {l.name} · {formatNumber(l.harvest!.quantity)} {l.harvest!.unit}
+              </option>
+            ))}
+          </SelectField>
+        </>
+      )}
+
+      {paso === 2 && (
+        <div className="cf-tipos">
+          {TIPOS_PROCESO.map((t) => (
+            <div key={t.id} className={`cf-tipo${tipo?.id === t.id ? ' activo' : ''}`}>
+              <button
+                type="button"
+                className="cf-tipo-principal"
+                aria-pressed={tipo?.id === t.id}
+                onClick={() => {
+                  if (tipo?.id !== t.id) setVariante(null)
+                  setTipo(t)
                 }}
               >
-                <TextAreaField label="Notas del proceso" value={notas} onChange={(e) => setNotas(e.target.value)} placeholder="Ej. Humedad actual 18,2 %, objetivo 10–12 %" />
-                <div className="form-actions">
-                  <Button variant="ghost" onClick={() => setEditandoNotas(false)}>
-                    Cancelar
-                  </Button>
-                  <Button type="submit" disabled={saving}>
-                    Guardar notas
-                  </Button>
+                <span className="cf-tipo-emoji">{t.emoji}</span>
+                <span className="cf-tipo-texto">
+                  <strong>
+                    {t.nombre} {t.recomendado && <em>⭐ Recomendado</em>}
+                  </strong>
+                  <small>{t.resumen}</small>
+                  <span className="cf-tipo-tags">
+                    <i>☕ {t.taza}</i>
+                    <i>⏱ {t.duracion}</i>
+                    <i>{t.nivel}</i>
+                  </span>
+                  <span className="cf-tipo-pasos">{t.etapas.map((e) => `${GUIA_ETAPAS[e].emoji} ${e}`).join('  →  ')}</span>
+                </span>
+              </button>
+              <button type="button" className="cf-tipo-guia" onClick={() => onVerGuia(t)}>
+                Ver guía
+              </button>
+              {tipo?.id === t.id && t.variantes && (
+                <div className="cf-variantes" role="group" aria-label="Tipo de honey">
+                  {t.variantes.map((v) => (
+                    <button type="button" key={v} className={variante === v ? 'activo' : ''} aria-pressed={variante === v} onClick={() => setVariante(v)}>
+                      <strong>Honey {v.toLowerCase()}</strong>
+                      <small>{EXPLICACION_VARIANTES[v]}</small>
+                    </button>
+                  ))}
                 </div>
-              </form>
-            ) : (
-              <span>{proceso.notes ?? 'Sin notas registradas.'}</span>
-            )}
-          </div>
-          {puedeEditar && !editandoNotas && (
-            <div className="note-actions">
-              <Button variant="secondary" onClick={() => setEditandoNotas(true)}>
-                Actualizar notas
-              </Button>
-              {siguiente && (
-                <Button disabled={saving} onClick={() => void actualizar({ currentStage: siguiente.nombre })}>
-                  Pasar a {siguiente.nombre.toLowerCase()} <Icon name="arrow" size={16} />
-                </Button>
-              )}
-              {!proceso.finishedAt && !siguiente && indice >= 0 && (
-                <Button icon="check" disabled={saving} onClick={() => void actualizar({ finishedAt: new Date().toISOString() })}>
-                  Finalizar proceso
-                </Button>
-              )}
-              {proceso.finishedAt && (
-                <Button variant="ghost" disabled={saving} onClick={() => void actualizar({ finishedAt: null })}>
-                  Reabrir
-                </Button>
               )}
             </div>
-          )}
-        </Card>
-        <Card className="card-pad">
-          <CardTitle title="Producto final" subtitle="Resultado del proceso y sus certificaciones">
-            {puedeEditar && !agregandoProducto && (
-              <Button variant="secondary" icon="plus" onClick={() => setAgregandoProducto(true)}>
-                Registrar producto
-              </Button>
-            )}
-          </CardTitle>
-          {agregandoProducto && (
-            <ProductoForm
-              processId={proceso.id}
-              onCancel={() => setAgregandoProducto(false)}
-              onSaved={() => {
-                setAgregandoProducto(false)
-                onChanged()
-              }}
-            />
-          )}
-          {proceso.products.length === 0 && !agregandoProducto && (
-            <p className="muted" style={{ fontSize: 9 }}>
-              Este proceso todavía no tiene producto final registrado.
-            </p>
-          )}
-          {proceso.products.map((p) => (
-            <Producto key={p.id} producto={p} puedeCertificar={puedeCertificar} onChanged={onChanged} />
           ))}
-        </Card>
+        </div>
+      )}
+
+      {paso === 3 && tipo && (
+        <EtapaForm
+          tipoInicial={tipo}
+          variante={variante}
+          etapaInicial={tipo.etapas[0]}
+          hechas={new Set()}
+          entradaSugerida={cosecha?.harvest && cosecha.harvest.unit === 'kg' ? Number(cosecha.harvest.quantity) : null}
+          guardando={crear.saving || evento.saving}
+          error={crear.error ?? evento.error}
+          textoGuardar={(e) => `Crear proceso y guardar ${e.toLowerCase()}`}
+          onSubmit={(p) => void guardar(p)}
+          onCancel={() => setPaso(2)}
+        />
+      )}
+
+      {paso < 3 && (
+        <div className="form-actions">
+          <Button variant="ghost" onClick={() => (paso === 1 ? onCancel() : setPaso(paso - 1))}>
+            {paso === 1 ? 'Cancelar' : 'Atrás'}
+          </Button>
+          <Button disabled={paso === 1 ? !lote : !listoTipo} onClick={() => setPaso(paso + 1)}>
+            Continuar <Icon name="arrow" size={16} />
+          </Button>
+        </div>
+      )}
+    </Card>
+  )
+}
+
+function GuiaModal({ tipo, onClose }: { tipo: TipoProceso; onClose: () => void }) {
+  useEffect(() => {
+    const alTeclear = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    window.addEventListener('keydown', alTeclear)
+    return () => window.removeEventListener('keydown', alTeclear)
+  }, [onClose])
+  return (
+    <div className="cf-modal-fondo" onMouseDown={onClose}>
+      <div className="cf-modal" role="dialog" aria-modal="true" aria-label={`Guía del proceso ${tipo.nombre}`} onMouseDown={(e) => e.stopPropagation()}>
+        <button type="button" className="cf-modal-cerrar" onClick={onClose} aria-label="Cerrar guía">
+          <Icon name="close" />
+        </button>
+        <div className="cf-modal-cabeza">
+          <span>{tipo.emoji}</span>
+          <div>
+            <h2>Proceso {tipo.nombre.toLowerCase()}</h2>
+            <p>{tipo.resumen}</p>
+          </div>
+        </div>
+        <div className="cf-tipo-tags">
+          <i>☕ {tipo.taza}</i>
+          <i>⏱ {tipo.duracion}</i>
+          <i>{tipo.nivel}</i>
+        </div>
+        <ol className="cf-modal-pasos">
+          {tipo.etapas.map((e, i) => (
+            <li key={e}>
+              <span>{GUIA_ETAPAS[e].emoji}</span>
+              <div>
+                <strong>
+                  {i + 1}. {e}
+                </strong>
+                <small>{GUIA_ETAPAS[e].queEs}</small>
+                <p>💡 {consejoDe(tipo, e)}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        {tipo.variantes && (
+          <div className="cf-modal-variantes">
+            {tipo.variantes.map((v) => (
+              <p key={v}>
+                <strong>Honey {v.toLowerCase()}:</strong> {EXPLICACION_VARIANTES[v]}
+              </p>
+            ))}
+          </div>
+        )}
+        <p className="muted">Después puedes registrar tostión y catación si las haces.</p>
       </div>
-    </>
+    </div>
   )
 }
 
@@ -236,21 +643,6 @@ const ESTADO_CERTIFICACION_LABEL: Record<string, { label: string; tone: 'amber' 
   EN_TRAMITE: { label: 'En trámite', tone: 'amber' },
   VIGENTE: { label: 'Vigente', tone: 'green' },
   VENCIDA: { label: 'Vencida', tone: 'gray' },
-}
-
-function EtapaForm({ processId, onSaved, onCancel }: { processId: string; onSaved: () => void; onCancel: () => void }) {
-  const { mutate, saving, error } = useApiMutation()
-  const [stage, setStage] = useState('Despulpado')
-  const [date, setDate] = useState(hoy())
-  const [input, setInput] = useState(''); const [output, setOutput] = useState(''); const [water, setWater] = useState(''); const [waste, setWaste] = useState('')
-  const [compost, setCompost] = useState(false); const [wastewaterDestination, setWastewaterDestination] = useState(''); const [hours, setHours] = useState(''); const [method, setMethod] = useState(''); const [notes, setNotes] = useState('')
-  const [brix, setBrix] = useState(''); const [ph, setPh] = useState(''); const [moisture, setMoisture] = useState(''); const [sca, setSca] = useState('')
-  const numeric = (v: string) => v.trim() ? Number(v) : undefined
-  async function submit(e: FormEvent) { e.preventDefault(); if (await mutate(`/coffee-processes/${processId}/events`, 'POST', { stage, recordedAt: date, inputKg: numeric(input), outputKg: numeric(output), waterLiters: numeric(water), wastewaterLiters: numeric(waste), compostReuse: compost, wastewaterDestination: optionalText(wastewaterDestination), durationHours: numeric(hours), method: optionalText(method), brix: numeric(brix), ph: numeric(ph), moisturePercent: numeric(moisture), scaScore: numeric(sca), notes: optionalText(notes) })) onSaved() }
-  return <form className="rec-form" onSubmit={submit}><div className="form-grid three"><SelectField label="Etapa" value={stage} onChange={(e) => setStage(e.target.value)}>{['Cosecha','Despulpado','Fermentación','Lavado','Secado','Trilla','Tostión','Catación'].map((x) => <option key={x}>{x}</option>)}</SelectField><TextField label="Fecha" type="date" required value={date} onChange={(e) => setDate(e.target.value)} /><TextField label="Duración (horas)" type="number" min="0" step="any" value={hours} onChange={(e) => setHours(e.target.value)} /></div>
-    <div className="form-grid three"><TextField label="Cantidad que entra (kg)" type="number" min="0" step="any" value={input} onChange={(e) => setInput(e.target.value)} /><TextField label="Cantidad que sale (kg)" type="number" min="0" step="any" value={output} onChange={(e) => setOutput(e.target.value)} /><TextField label="Método" value={method} onChange={(e) => setMethod(e.target.value)} placeholder="Ej. fermentación láctica" /></div>
-    {stage === 'Lavado' && <><div className="form-grid three"><TextField label="Agua limpia utilizada (L)" type="number" min="0" step="any" value={water} onChange={(e) => setWater(e.target.value)} /><TextField label="Agua residual con mucílago (L)" type="number" min="0" step="any" value={waste} onChange={(e) => setWaste(e.target.value)} /><TextField label="Destino del agua residual" value={wastewaterDestination} onChange={(e) => setWastewaterDestination(e.target.value)} placeholder="Ej. Compostaje" /></div><label><input type="checkbox" checked={compost} onChange={(e) => setCompost(e.target.checked)} /> Reutilizar agua residual para compostaje</label></>}
-    <div className="form-grid three"><TextField label="°Brix" type="number" min="0" step="any" value={brix} onChange={(e) => setBrix(e.target.value)} /><TextField label="pH" type="number" min="0" step="any" value={ph} onChange={(e) => setPh(e.target.value)} /><TextField label="Humedad final (%)" type="number" min="0" step="any" value={moisture} onChange={(e) => setMoisture(e.target.value)} /><TextField label="Puntaje SCA" type="number" min="0" step="any" value={sca} onChange={(e) => setSca(e.target.value)} /></div><TextAreaField label="Notas" value={notes} onChange={(e) => setNotes(e.target.value)} />{error && <ErrorNotice message={error} />}<div className="form-actions"><Button variant="ghost" onClick={onCancel}>Cancelar</Button><Button type="submit" disabled={saving}>Guardar etapa</Button></div></form>
 }
 
 function Producto({ producto, puedeCertificar, onChanged }: { producto: ProductFinal; puedeCertificar: boolean; onChanged: () => void }) {
@@ -320,7 +712,7 @@ function Producto({ producto, puedeCertificar, onChanged }: { producto: ProductF
 function ProductoForm({ processId, onSaved, onCancel }: { processId: string; onSaved: () => void; onCancel: () => void }) {
   const { mutate, saving, error } = useApiMutation()
   const [destination, setDestination] = useState('')
-  const [finalizedAt, setFinalizedAt] = useState(hoy())
+  const [finalizedAt, setFinalizedAt] = useState(() => new Date().toISOString().slice(0, 10))
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
@@ -343,67 +735,5 @@ function ProductoForm({ processId, onSaved, onCancel }: { processId: string; onS
         </Button>
       </div>
     </form>
-  )
-}
-
-function hoy(): string {
-  return new Date().toISOString().slice(0, 10)
-}
-
-function ProcesoForm({ farmId, cosechas, lotes, onSaved, onCancel }: { farmId: string; cosechas: Labor[]; lotes: Lot[]; onSaved: (p: CoffeeProcess) => void; onCancel: () => void }) {
-  const { mutate, saving, error } = useApiMutation()
-  const [harvestId, setHarvestId] = useState(cosechas[0]?.harvest?.id ?? '')
-  const [lotId, setLotId] = useState(cosechas[0] ? (cosechas[0].lotId ?? cosechas[0].crop?.lotId ?? '') : lotes[0]?.id ?? '')
-  const [currentStage, setCurrentStage] = useState('Cosecha')
-  const [startedAt, setStartedAt] = useState(hoy())
-  const [notes, setNotes] = useState('')
-
-  async function onSubmit(e: FormEvent) {
-    e.preventDefault()
-    const creado = await mutate<CoffeeProcess>('/coffee-processes', 'POST', {
-      farmId,
-      harvestId: harvestId || undefined,
-      lotId: harvestId ? (cosechas.find((c) => c.harvest?.id === harvestId)?.lotId ?? cosechas.find((c) => c.harvest?.id === harvestId)?.crop?.lotId) : lotId || undefined,
-      currentStage,
-      startedAt,
-      notes: optionalText(notes),
-    })
-    if (creado) onSaved(creado)
-  }
-
-  return (
-    <FormCard title="Nuevo proceso de café">
-      <form onSubmit={onSubmit}>
-        <div className="form-grid three">
-          <SelectField label="Cosecha de origen" value={harvestId} onChange={(e) => { const id = e.target.value; setHarvestId(id); const labor = cosechas.find((c) => c.harvest?.id === id); if (labor) setLotId(labor.lotId ?? labor.crop?.lotId ?? '') }}>
-            <option value="">Sin cosecha asociada</option>
-            {cosechas.map((l) => (
-              <option key={l.id} value={l.harvest!.id}>
-                {formatShortDate(l.startDate)} · {l.name} · {formatNumber(l.harvest!.quantity)} {l.harvest!.unit}
-              </option>
-            ))}
-          </SelectField>
-          <SelectField label="Lote asociado *" value={lotId} onChange={(e) => setLotId(e.target.value)}>
-            {lotes.map((lot) => <option key={lot.id} value={lot.id}>{lot.name}</option>)}
-          </SelectField>
-          <SelectField label="Etapa actual *" value={currentStage} onChange={(e) => setCurrentStage(e.target.value)}>
-            {ETAPAS.map((e) => (
-              <option key={e.nombre}>{e.nombre}</option>
-            ))}
-          </SelectField>
-          <TextField label="Fecha de inicio *" type="date" required value={startedAt} onChange={(e) => setStartedAt(e.target.value)} />
-        </div>
-        <TextAreaField label="Notas" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Ej. Humedad actual 18,2 %, objetivo 10–12 %" />
-        {error && <ErrorNotice message={error} />}
-        <div className="form-actions">
-          <Button variant="ghost" onClick={onCancel}>
-            Cancelar
-          </Button>
-          <Button type="submit" icon="check" disabled={saving || !lotId}>
-            {saving ? 'Guardando…' : 'Guardar proceso'}
-          </Button>
-        </div>
-      </form>
-    </FormCard>
   )
 }

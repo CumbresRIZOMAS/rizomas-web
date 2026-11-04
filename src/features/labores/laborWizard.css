@@ -1,0 +1,15 @@
+/* Primer paso de "Registrar labor": grupos y sugerencias. */
+.labor-grupo { margin-top: 18px; }
+.labor-grupo h3 { margin: 0 0 10px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #8a9183; }
+.labor-grupo .type-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.type-card-enlace { cursor: pointer; border-style: dashed; border-color: #c9ab90; background: #fffbf6; }
+.type-card-enlace > span { background: #f5ede6; color: #8a5a3b; }
+.type-card-enlace i { background: #8a5a3b !important; }
+.labor-sugerencias { display: grid; gap: 8px; margin-top: 4px; }
+.labor-sugerencias > small { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #8a9183; }
+.labor-sugerencia { display: grid; grid-template-columns: 44px 1fr auto; gap: 14px; align-items: center; padding: 14px 16px; border: 0; border-radius: 14px; background: linear-gradient(135deg, #3b2a1e, #6b4a33); color: white; font: inherit; text-align: left; cursor: pointer; }
+.labor-sugerencia > span:first-child { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; background: rgba(255, 255, 255, .14); }
+.labor-sugerencia span { display: flex; flex-direction: column; gap: 1px; }
+.labor-sugerencia em { font-style: normal; font-size: 11px; font-weight: 600; color: #f5c07a; }
+.labor-sugerencia strong { font-size: 15px; }
+.labor-sugerencia small { font-size: 11px; opacity: .75; }
