@@ -98,7 +98,8 @@ export function OriginExplorer({ origenes, fallo, onAbrir }: { origenes: Publica
   const [trazas, setTrazas] = useState<Record<string, EstadoTraza>>({})
   const [activas, setActivas] = useState<Set<CapaId>>(() => new Set(CAPAS_INICIALES))
   const [contexto, setContexto] = useState<Contexto | null>(null)
-  const [panelCapas, setPanelCapas] = useState(false)
+  // Abierto por defecto en pantallas grandes; en el celular taparía el mapa.
+  const [panelCapas, setPanelCapas] = useState(() => typeof window === 'undefined' || !window.matchMedia || window.matchMedia('(min-width: 761px)').matches)
   const [datosCafe, setDatosCafe] = useState<CafeDatos | null>(null)
   const [municipiosCafe, setMunicipiosCafe] = useState<ColeccionMunicipios | null>(null)
   const tc = TEXTOS_CAPAS[idioma]

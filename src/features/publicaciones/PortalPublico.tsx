@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import { Link } from 'react-router'
 import { ApiError, api } from '../../shared/api/client'
 import { useApiQuery } from '../../shared/api/hooks'
@@ -9,23 +9,51 @@ import { FARM_TYPE_LABEL, LABOR_TYPE_LABEL, formatLongDate, formatNumber, toNumb
 import { Button, Chip, Icon, type IconName } from '../../shared/ui'
 import { Bibliografia } from './Bibliografia'
 import { OriginExplorer } from './OriginExplorer'
+import { TiposDeCafe } from './TiposDeCafe'
 import { nombreVisible } from './origenesMapa'
+import './portal.css'
 
 // Fotos de paisaje del diseño (decorativas, no son de una finca concreta).
-const FOTO_PAISAJE = 'https://images.unsplash.com/photo-1568489711036-9c94a7d5aea6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=85&w=1600'
-const FOTO_CEREZAS = 'https://images.unsplash.com/photo-1672851612794-6687bf0bf1a3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=85&w=600'
-const FOTO_PROMO = 'https://images.unsplash.com/photo-1532185922611-3410b1898a1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=900'
+const FOTO_PROMO = 'https://images.unsplash.com/photo-1532185922611-3410b1898a1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=1600'
 const FOTO_ORIGEN = 'https://images.unsplash.com/photo-1672015151052-d6fa87fc8aba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=85&w=1500'
+
+/** Logo: grano de café que brota, sobre un fondo verde degradado. */
+function MarcaRizomas() {
+  const id = useId()
+  return (
+    <svg className="pp-brand-mark" viewBox="0 0 40 40" aria-hidden="true">
+      <defs>
+        <linearGradient id={`${id}f`} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#3f7d3b" />
+          <stop offset="1" stopColor="#173a22" />
+        </linearGradient>
+        <linearGradient id={`${id}g`} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#fbf4e2" />
+          <stop offset="1" stopColor="#e8d6b0" />
+        </linearGradient>
+      </defs>
+      <rect width="40" height="40" rx="12" fill={`url(#${id}f)`} />
+      <rect x=".5" y=".5" width="39" height="39" rx="11.5" fill="none" stroke="#fff" strokeOpacity=".14" />
+      <path d="M21.6 15.6c.6-1 1.2-1.8 1.9-2.4" fill="none" stroke="#a9cc74" strokeWidth="1.3" strokeLinecap="round" />
+      <g transform="rotate(-28 18 24)">
+        <ellipse cx="18" cy="24" rx="7.6" ry="10" fill={`url(#${id}g)`} />
+        <path d="M18 14.4c-3 3.2 3 6.4 0 9.6s3 6.4 0 9.6" fill="none" stroke="#2c5f2d" strokeWidth="1.6" strokeLinecap="round" />
+      </g>
+      <path d="M23.5 13.2c.4-4 3.2-6.6 8-7 .2 4.6-2.6 7.4-8 7z" fill="#a9cc74" />
+      <path d="M23.5 13.2c1.6-2 3.4-3.6 5.6-4.8" fill="none" stroke="#2c5f2d" strokeWidth=".9" strokeLinecap="round" />
+    </svg>
+  )
+}
 
 function normalizarRegion(value: string) {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLocaleUpperCase('es')
 }
 
-const PASOS = [
-  { emoji: '👩‍🌾', titulo: 'La finca registra', texto: 'Labores, cosechas y fotos desde la app, incluso sin señal en el lote.' },
-  { emoji: '🧪', titulo: 'El técnico acompaña', texto: 'Analiza el suelo y recomienda prácticas y bioinsumos para regenerarlo.' },
-  { emoji: '☕', titulo: 'Cosecha y beneficio', texto: 'Cada etapa, del despulpado al tostado, queda documentada y verificada.' },
-  { emoji: '🔍', titulo: 'Tú conoces su historia', texto: 'Ves el origen y las prácticas, sin coordenadas exactas ni datos privados.' },
+const PASOS: { icon: IconName; titulo: string; texto: string }[] = [
+  { icon: 'farm', titulo: 'La finca registra', texto: 'Labores, cosechas y fotos desde la app, incluso sin señal en el lote.' },
+  { icon: 'soil', titulo: 'El técnico acompaña', texto: 'Analiza el suelo y recomienda prácticas y bioinsumos para regenerarlo.' },
+  { icon: 'coffee', titulo: 'Cosecha y beneficio', texto: 'Cada etapa, del despulpado al tostado, queda documentada y verificada.' },
+  { icon: 'trace', titulo: 'Tú conoces su historia', texto: 'Ves el origen y las prácticas, sin coordenadas exactas ni datos privados.' },
 ]
 
 /**
@@ -77,139 +105,55 @@ export function PortalPublico() {
 
   return (
     <div className="public-site">
-      <header className="public-header">
-        <button type="button" className="public-brand" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          <span>
-            <Icon name="leaf" size={24} />
-          </span>
-          <div>
+      <header className="pp-header">
+        <button type="button" className="pp-brand" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+          <MarcaRizomas />
+          <span className="pp-brand-text">
             <strong>RIZOMAS</strong>
-            <small>CAFÉ CON ORIGEN</small>
-          </div>
+            <small>Café con origen</small>
+          </span>
         </button>
-        <nav>
-          <button type="button" className="active" onClick={() => scrollTo('explorar')}>
-            Explorar orígenes
-          </button>
-          <button type="button" onClick={() => scrollTo('vincular')}>
-            Vincular mi finca
-          </button>
-          <button type="button" onClick={() => scrollTo('sobre')}>
-            Sobre Rizomas
-          </button>
+        <nav aria-label="Secciones">
+          <button type="button" onClick={() => scrollTo('explorar')}>Mapa</button>
+          <button type="button" onClick={() => scrollTo('como-funciona')}>Cómo funciona</button>
+          <button type="button" onClick={() => scrollTo('tipos-de-cafe')}>Tipos de café</button>
+          <button type="button" onClick={() => scrollTo('vincular')}>Para fincas</button>
+          <button type="button" onClick={() => scrollTo('fuentes')}>Fuentes</button>
         </nav>
-        <div className="public-actions">
-          <Link className="btn btn-secondary" to={token ? '/inicio' : '/ingresar'}>
-            <Icon name="users" size={17} />
-            {token ? 'Ir al panel' : 'Ingresar'}
-          </Link>
-        </div>
+        <Link className="pp-login" to={token ? '/inicio' : '/ingresar'}>
+          <Icon name="users" size={16} />
+          {token ? 'Ir al panel' : 'Ingresar'}
+        </Link>
       </header>
 
-      <section className="public-intro">
-        <div className="hero-copy">
-          <span className="public-kicker">
-            <Icon name="location" size={14} /> Territorios cafeteros de Colombia
+      <section className="pp-intro">
+        <div className="pp-intro-copy">
+          <span className="pp-kicker">
+            <span className="pp-dot" aria-hidden="true" /> Territorios cafeteros de Colombia
           </span>
           <h1>
-            Cada taza guarda
-            <br />
-            un <em>territorio.</em>
+            Cada taza guarda un <em>territorio</em>.
           </h1>
+        </div>
+        <div className="pp-intro-side">
           <p>
-            Recorre las montañas donde nace el café colombiano. Conoce sus regiones, sus procesos y la historia verificable detrás de cada cosecha, sin
-            exponer los datos privados de quienes lo cultivan.
+            Explora en el mapa las fincas donde nace el café colombiano: sus regiones, sus procesos y la historia verificable detrás de cada cosecha, sin
+            exponer datos privados.
           </p>
-          <div className="hero-actions">
-            <Button onClick={() => scrollTo('explorar')}>
-              Explorar orígenes <Icon name="arrow" size={16} />
-            </Button>
-            <button type="button" onClick={() => scrollTo('vincular')}>
-              <span>
-                <Icon name="coffee" size={17} />
-              </span>
-              Vincular mi finca
-            </button>
-          </div>
-        </div>
-        <div className="hero-visual">
-          <div className="hero-photo-main">
-            <img src={FOTO_PAISAJE} alt="Montañas verdes de una región cafetera colombiana" />
-            <span className="hero-place">
-              <Icon name="location" size={17} />
-              <span>
-                <small>Explorando</small>
-                <strong>Territorios cafeteros de Colombia</strong>
-              </span>
-            </span>
-          </div>
-          <div className="hero-photo-coffee">
-            <img src={FOTO_CEREZAS} alt="Cerezas maduras de café en la planta" />
-          </div>
-          <div className="hero-verified">
-            <span>
-              <Icon name="check" size={17} />
-            </span>
+          <dl className="pp-stats">
             <div>
-              <strong>Origen verificado</strong>
-              <small>Información desde la finca</small>
+              <dt>Fincas en el mapa</dt>
+              <dd>{origenes ? listaOrigenes.length : '—'}</dd>
             </div>
-          </div>
-          <span className="hero-chip chip-1">🌱 Prácticas documentadas</span>
-          <span className="hero-chip chip-2">☕ Del cafetal a tu taza</span>
-          <svg className="hero-route" viewBox="0 0 180 90" aria-hidden="true">
-            <path d="M5 80C50 5 105 100 175 12" />
-            <circle cx="5" cy="80" r="4" />
-            <circle cx="175" cy="12" r="4" />
-          </svg>
-        </div>
-        <div className="public-stats">
-          <span className="stat-emoji">
-            <i aria-hidden="true">☕</i>
-            <span>
-              <strong>{origenes ? listaOrigenes.length : '—'}</strong>
-              <small>Fincas con ubicación registrada</small>
-            </span>
-          </span>
-          <span className="stat-emoji">
-            <i aria-hidden="true">🗺️</i>
-            <span>
-              <strong>{publicaciones ? regiones.length : '—'}</strong>
-              <small>Regiones cafeteras</small>
-            </span>
-          </span>
-          <span className="stat-emoji">
-            <i aria-hidden="true">⚖️</i>
-            <span>
-              <strong>{publicaciones ? formatNumber(kilos) : '—'}</strong>
-              <small>Kilos de café documentados</small>
-            </span>
-          </span>
-          <span className="trace-stat">
-            <Icon name="trace" size={20} />
-            <small>
-              Trazabilidad
-              <br />
-              <b>abierta y confiable</b>
-            </small>
-          </span>
-        </div>
-      </section>
-
-      <section className="como-funciona" aria-labelledby="como-funciona-titulo">
-        <span className="public-kicker">Cómo funciona</span>
-        <h2 id="como-funciona-titulo">Así llega la historia de tu café 🌄</h2>
-        <div className="pasos">
-          {PASOS.map((paso, i) => (
-            <article key={paso.titulo}>
-              <span className="paso-emoji" aria-hidden="true">
-                {paso.emoji}
-              </span>
-              <small>Paso {i + 1}</small>
-              <strong>{paso.titulo}</strong>
-              <p>{paso.texto}</p>
-            </article>
-          ))}
+            <div>
+              <dt>Regiones</dt>
+              <dd>{publicaciones ? regiones.length : '—'}</dd>
+            </div>
+            <div>
+              <dt>Kg documentados</dt>
+              <dd>{publicaciones ? formatNumber(kilos) : '—'}</dd>
+            </div>
+          </dl>
         </div>
       </section>
 
@@ -222,111 +166,104 @@ export function PortalPublico() {
         }}
       />
 
-      <section className="territorio-taza">
-        <div>
-          <span className="public-kicker">Trazabilidad abierta</span>
-          <h2>
-            Del territorio a tu taza,
-            <br />
-            sin perder la historia.
-          </h2>
+      <section className="pp-section pp-como" id="como-funciona" aria-labelledby="como-funciona-titulo">
+        <div className="pp-section-head">
+          <span className="pp-kicker">Cómo funciona</span>
+          <h2 id="como-funciona-titulo">Así llega la historia de tu café</h2>
+          <p>Del lote a la taza, cada paso queda registrado por quien lo vive.</p>
+        </div>
+        <ol className="pp-pasos">
+          {PASOS.map((paso, i) => (
+            <li key={paso.titulo}>
+              <span className="pp-paso-num">{String(i + 1).padStart(2, '0')}</span>
+              <span className="pp-paso-icon" aria-hidden="true">
+                <Icon name={paso.icon} size={22} />
+              </span>
+              <strong>{paso.titulo}</strong>
+              <p>{paso.texto}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <TiposDeCafe />
+
+      <section className="pp-section pp-territorio">
+        <div className="pp-territorio-foto">
+          <img src={FOTO_ORIGEN} alt="Paisaje cafetero colombiano con palmas de cera" loading="lazy" />
+          {destacada && (
+            <button type="button" className="pp-destacada" onClick={() => { setSeleccion(destacada.id); setDetalle(true) }}>
+              <span className="pp-destacada-icon">
+                <Icon name="coffee" size={20} />
+              </span>
+              <span>
+                <small>Producto trazado</small>
+                <strong>
+                  {nombreVisible(destacada.title)}
+                  {destacada.region ? ` · ${nombreVisible(destacada.region)}` : ''}
+                </strong>
+              </span>
+              <Icon name="arrow" size={16} />
+            </button>
+          )}
+        </div>
+        <div className="pp-territorio-copy">
+          <span className="pp-kicker">Trazabilidad abierta</span>
+          <h2>Del territorio a tu taza, sin perder la historia.</h2>
           <p>
             Cada finca comparte su región, sus prácticas, variedades y procesos. Así puedes conocer a las personas y el paisaje detrás de cada café, sin
             exponer sus datos privados.
           </p>
-          <div className="territorio-checks">
-            <span>
-              <Icon name="check" size={14} /> Origen verificado
-            </span>
-            <span>
-              <Icon name="check" size={14} /> Prácticas documentadas
-            </span>
-            <span>
-              <Icon name="check" size={14} /> Información para compradores
-            </span>
-          </div>
-          <Button variant="secondary" onClick={() => scrollTo('explorar')}>
-            Ver los orígenes publicados
-          </Button>
-        </div>
-        <div className="territorio-foto">
-          <img src={FOTO_ORIGEN} alt="Paisaje cafetero colombiano con palmas de cera" />
-          {destacada && (
-            <button type="button" className="territorio-producto" onClick={() => { setSeleccion(destacada.id); setDetalle(true) }}>
-              <Icon name="coffee" size={24} />
-              <span>
-                <small>Producto trazado</small>
-                <strong>
-                  {destacada.title}
-                  {destacada.region ? ` · ${destacada.region}` : ''}
-                </strong>
-              </span>
-              <em>Verificado</em>
-            </button>
-          )}
+          <ul className="pp-checks">
+            <li><Icon name="check" size={14} /> Origen verificado</li>
+            <li><Icon name="check" size={14} /> Prácticas documentadas</li>
+            <li><Icon name="check" size={14} /> Información para compradores</li>
+          </ul>
+          <button type="button" className="pp-link" onClick={() => scrollTo('explorar')}>
+            Volver al mapa <Icon name="arrow" size={16} />
+          </button>
         </div>
       </section>
 
-      <section className="origin-section join-promo" id="vincular">
-        <div className="origin-copy">
-          <span className="public-kicker">Haz parte de Rizomas</span>
-          <h2>
-            Tu finca también puede
-            <br />
-            estar en este mapa.
-          </h2>
+      <section className="pp-vincular" id="vincular">
+        <img src={FOTO_PROMO} alt="" aria-hidden="true" loading="lazy" />
+        <div className="pp-vincular-copy">
+          <span className="pp-kicker">Haz parte de Rizomas</span>
+          <h2>Tu finca también puede estar en este mapa.</h2>
           <p>
-            Conecta tu finca con compradores, técnicos y amantes del café que valoran el origen. En RIZOMAS te ayudamos a documentar tus prácticas,
-            demostrar la calidad de tu producto y contar la historia de tu territorio.
+            Conecta tu finca con compradores, técnicos y amantes del café que valoran el origen. Te ayudamos a documentar tus prácticas, demostrar la
+            calidad de tu producto y contar la historia de tu territorio.
           </p>
-          <div className="origin-features">
-            <span>
-              <Icon name="check" />
-              Más visibilidad para tu café
-            </span>
-            <span>
-              <Icon name="check" />
-              Trazabilidad fácil y confiable
-            </span>
-            <span>
-              <Icon name="check" />
-              Nuevas oportunidades comerciales
-            </span>
-          </div>
+          <ul className="pp-checks">
+            <li><Icon name="check" size={14} /> Más visibilidad para tu café</li>
+            <li><Icon name="check" size={14} /> Trazabilidad fácil y confiable</li>
+            <li><Icon name="check" size={14} /> Nuevas oportunidades comerciales</li>
+          </ul>
           {contacto && (
-            <div className="join-actions">
-              <a className="btn btn-primary" href={`mailto:${contacto}?subject=${encodeURIComponent('Quiero vincular mi finca a RIZOMAS')}`}>
-                Quiero vincular mi finca <Icon name="arrow" size={16} />
-              </a>
-            </div>
+            <a className="pp-cta" href={`mailto:${contacto}?subject=${encodeURIComponent('Quiero vincular mi finca a RIZOMAS')}`}>
+              Quiero vincular mi finca <Icon name="arrow" size={16} />
+            </a>
           )}
         </div>
-        <div className="origin-image promo-image">
-          <img src={FOTO_PROMO} alt="Cultivo verde en paisaje cafetero de montaña" />
-          <div>
-            <Icon name="farm" />
-            <span>
-              <small>Comunidad Rizomas</small>
-            <strong>{origenes ? `${listaOrigenes.length} ${listaOrigenes.length === 1 ? 'finca tiene' : 'fincas tienen'} su ubicación registrada` : 'Fincas mostrando su origen'}</strong>
-            </span>
-            <Chip tone="green">Únete</Chip>
+        {listaOrigenes.length > 0 && (
+          <div className="pp-vincular-dato">
+            <strong>{listaOrigenes.length}</strong>
+            <span>{listaOrigenes.length === 1 ? 'finca ya muestra su origen' : 'fincas ya muestran su origen'}</span>
           </div>
-        </div>
+        )}
       </section>
 
       {detalle && activa && <DetalleOrigen publicacion={activa} contacto={contacto} onClose={() => setDetalle(false)} />}
 
       <Bibliografia />
 
-      <footer className="public-footer" id="sobre">
-        <div className="public-brand">
-          <span>
-            <Icon name="leaf" />
-          </span>
-          <div>
+      <footer className="pp-footer" id="sobre">
+        <div className="pp-brand">
+          <MarcaRizomas />
+          <span className="pp-brand-text">
             <strong>RIZOMAS</strong>
             <small>Cumbres Sacras SAS · Colombia</small>
-          </div>
+          </span>
         </div>
         <p>Conectamos el territorio, las personas y el café a través de información confiable.</p>
         <span>© {ANIO} RIZOMAS</span>
