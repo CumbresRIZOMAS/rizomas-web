@@ -60,13 +60,32 @@
 .pp-section h2, .pp-vincular h2 { margin: 12px 0 0; font-family: var(--pp-display); font-weight: 500; font-size: clamp(30px, 3.6vw, 46px); line-height: 1.08; letter-spacing: -0.02em; color: var(--pp-ink); }
 .pp-section-head p { margin: 14px 0 0; font-size: 17px; line-height: 1.6; color: var(--pp-muted); }
 
-.pp-pasos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 0; padding: 0; list-style: none; counter-reset: paso; }
-.pp-pasos li { position: relative; padding: 26px 22px 24px; border-radius: 20px; background: var(--pp-surface); border: 1px solid var(--pp-line); transition: transform 0.2s, box-shadow 0.2s; }
-.pp-pasos li:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -18px rgba(18, 36, 26, 0.25); }
-.pp-paso-num { position: absolute; top: 22px; right: 22px; font-family: var(--pp-display); font-size: 15px; color: rgba(27, 42, 29, 0.3); font-variant-numeric: tabular-nums; }
-.pp-paso-icon { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; margin-bottom: 22px; background: linear-gradient(140deg, #eef4e4, #dbe9c8); color: var(--pp-forest); }
-.pp-pasos strong { display: block; font-size: 17px; font-weight: 600; color: var(--pp-ink); }
-.pp-pasos p { margin: 8px 0 0; font-size: 14px; line-height: 1.6; color: var(--pp-muted); }
+
+/* ---- Cómo funciona: recorrido sobre banda oscura ---------------------- */
+.pp-como { position: relative; margin: clamp(64px, 9vw, 120px) clamp(8px, 1.5vw, 24px) 0; padding: clamp(48px, 7vw, 96px) clamp(24px, 5vw, 72px); border-radius: 28px; overflow: hidden; color: #f3efe4; scroll-margin-top: 80px;
+  background:
+    radial-gradient(60% 80% at 10% 0%, rgba(169, 204, 116, 0.18), transparent 60%),
+    radial-gradient(50% 70% at 95% 100%, rgba(226, 182, 92, 0.16), transparent 60%),
+    repeating-radial-gradient(circle at 80% 20%, transparent 0 26px, rgba(255, 255, 255, 0.025) 27px 28px),
+    var(--pp-deep); }
+.pp-como-head { max-width: 680px; margin: 0 auto 56px; text-align: center; }
+.pp-como .pp-kicker { color: var(--pp-moss); }
+.pp-como h2 { margin: 12px 0 0; font-family: var(--pp-display); font-weight: 500; font-size: clamp(32px, 4vw, 52px); line-height: 1.06; letter-spacing: -0.02em; color: #fff; }
+.pp-como h2 em { font-style: italic; color: var(--pp-gold); }
+.pp-como-head p { margin: 16px 0 0; font-size: 17px; line-height: 1.6; color: rgba(243, 239, 228, 0.7); }
+
+.pp-ruta { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 0; padding: 0; list-style: none; }
+.pp-ruta::before { content: ""; position: absolute; top: 44px; left: 12.5%; right: 12.5%; height: 2px; background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.35) 0 8px, transparent 8px 16px); background-size: 32px 2px; animation: pp-marcha 1.2s linear infinite; }
+.pp-ruta li { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 8px; transition: transform 0.25s; }
+.pp-ruta li:hover { transform: translateY(-4px); }
+.pp-ruta-marca { position: relative; margin-bottom: 22px; }
+.pp-ruta-icono { width: 88px; height: 88px; border-radius: 50%; display: grid; place-items: center; color: #12241a; background: radial-gradient(circle at 30% 25%, #fff 0%, var(--c) 55%); box-shadow: 0 0 0 8px color-mix(in srgb, var(--c) 18%, transparent), 0 0 0 9px color-mix(in srgb, var(--c) 30%, transparent), 0 18px 40px -10px var(--c); transition: transform 0.25s, box-shadow 0.25s; }
+.pp-ruta li:hover .pp-ruta-icono { transform: scale(1.06) rotate(-4deg); box-shadow: 0 0 0 10px color-mix(in srgb, var(--c) 24%, transparent), 0 0 0 11px color-mix(in srgb, var(--c) 40%, transparent), 0 22px 48px -8px var(--c); }
+.pp-ruta-marca b { position: absolute; right: -6px; top: -4px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--pp-deep); border: 2px solid var(--c); color: #fff; font-family: var(--pp-display); font-size: 14px; font-weight: 500; }
+.pp-ruta-quien { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; color: var(--c); background: color-mix(in srgb, var(--c) 14%, transparent); border: 1px solid color-mix(in srgb, var(--c) 35%, transparent); }
+.pp-ruta strong { display: block; margin-top: 14px; font-family: var(--pp-display); font-size: 23px; font-weight: 500; color: #fff; }
+.pp-ruta p { margin: 8px 0 0; max-width: 260px; font-size: 15px; line-height: 1.6; color: rgba(243, 239, 228, 0.7); }
+@keyframes pp-marcha { to { background-position: 32px 0; } }
 
 /* ---- Tipos de café ---------------------------------------------------- */
 .pp-tipos { scroll-margin-top: 60px; }
@@ -170,17 +189,27 @@
 
 /* ---- Responsive ------------------------------------------------------- */
 @media (max-width: 1000px) {
+  .pp-ruta { grid-template-columns: repeat(2, 1fr); row-gap: 48px; }
+  .pp-ruta::before { display: none; }
   .pp-tipos-tabs { grid-template-columns: repeat(2, 1fr); }
   .pp-tipo-panel { grid-template-columns: 1fr; }
   .pp-tipo-info { position: static; }
   .pp-intro { grid-template-columns: 1fr; align-items: start; }
-  .pp-pasos { grid-template-columns: repeat(2, 1fr); }
   .pp-territorio { grid-template-columns: 1fr; }
   .pp-vincular { grid-template-columns: 1fr; }
   .pp-vincular-dato { text-align: left; }
 }
 
 @media (max-width: 760px) {
+  .pp-como { margin-inline: 0; border-radius: 0; }
+  .pp-como-head { text-align: left; margin-bottom: 36px; }
+  .pp-ruta { grid-template-columns: 1fr; row-gap: 28px; }
+  .pp-ruta::before { display: block; top: 36px; bottom: 36px; left: 35px; right: auto; width: 2px; height: auto; background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0 8px, transparent 8px 16px); animation: none; }
+  .pp-ruta li { display: grid; grid-template-columns: 72px 1fr; column-gap: 18px; align-items: start; text-align: left; padding: 0; }
+  .pp-ruta-marca { grid-row: span 3; margin: 0; }
+  .pp-ruta-icono { width: 72px; height: 72px; }
+  .pp-ruta-quien { justify-self: start; }
+  .pp-ruta strong { margin-top: 8px; font-size: 20px; }
   .pp-header { height: 60px; gap: 12px; }
   .pp-header nav { display: none; }
   .pp-login { margin-left: auto; height: 36px; padding: 0 14px; }
@@ -193,7 +222,6 @@
   .public-site .rz-mapa-zona { height: 640px; }
   .public-site .rz-controles { left: 10px; right: 10px; overflow-x: auto; scrollbar-width: none; }
   .public-site .rz-controles > * { flex: none; }
-  .pp-pasos { grid-template-columns: 1fr; }
   .pp-tipos-tabs { display: flex; overflow-x: auto; scrollbar-width: none; margin-inline: calc(var(--pp-gutter) * -1); padding: 2px var(--pp-gutter) 6px; }
   .pp-tipos-tabs button { flex: none; }
   .pp-tipo-panel { padding: 22px 18px; }
@@ -204,6 +232,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .pp-tipo-panel { animation: none; }
+  .pp-ruta::before { animation: none; }
+  .pp-ruta li, .pp-ruta-icono, .pp-destacada, .pp-cta, .pp-link .icon { transition: none; }
   .pp-tipos-tabs button { transition: none; }
-  .pp-pasos li, .pp-destacada, .pp-cta, .pp-link .icon { transition: none; }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react'
+import { useEffect, useId, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router'
 import { ApiError, api } from '../../shared/api/client'
 import { useApiQuery } from '../../shared/api/hooks'
@@ -49,11 +49,11 @@ function normalizarRegion(value: string) {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLocaleUpperCase('es')
 }
 
-const PASOS: { icon: IconName; titulo: string; texto: string }[] = [
-  { icon: 'farm', titulo: 'La finca registra', texto: 'Labores, cosechas y fotos desde la app, incluso sin señal en el lote.' },
-  { icon: 'soil', titulo: 'El técnico acompaña', texto: 'Analiza el suelo y recomienda prácticas y bioinsumos para regenerarlo.' },
-  { icon: 'coffee', titulo: 'Cosecha y beneficio', texto: 'Cada etapa, del despulpado al tostado, queda documentada y verificada.' },
-  { icon: 'trace', titulo: 'Tú conoces su historia', texto: 'Ves el origen y las prácticas, sin coordenadas exactas ni datos privados.' },
+const PASOS: { icon: IconName; quien: string; color: string; titulo: string; texto: string }[] = [
+  { icon: 'farm', quien: 'En la finca', color: '#a9cc74', titulo: 'La finca registra', texto: 'Labores, cosechas y fotos desde la app, incluso sin señal en el lote.' },
+  { icon: 'soil', quien: 'Con el técnico', color: '#7fc4b8', titulo: 'El técnico acompaña', texto: 'Analiza el suelo y recomienda prácticas y bioinsumos para regenerarlo.' },
+  { icon: 'coffee', quien: 'En el beneficio', color: '#e2b65c', titulo: 'Cosecha y beneficio', texto: 'Cada etapa, del despulpado al tostado, queda documentada y verificada.' },
+  { icon: 'trace', quien: 'En tu taza', color: '#e59a6c', titulo: 'Tú conoces su historia', texto: 'Ves el origen y las prácticas, sin coordenadas exactas ni datos privados.' },
 ]
 
 /**
@@ -166,19 +166,24 @@ export function PortalPublico() {
         }}
       />
 
-      <section className="pp-section pp-como" id="como-funciona" aria-labelledby="como-funciona-titulo">
-        <div className="pp-section-head">
+      <section className="pp-como" id="como-funciona" aria-labelledby="como-funciona-titulo">
+        <div className="pp-como-head">
           <span className="pp-kicker">Cómo funciona</span>
-          <h2 id="como-funciona-titulo">Así llega la historia de tu café</h2>
+          <h2 id="como-funciona-titulo">
+            Así llega la historia <em>de tu café</em>
+          </h2>
           <p>Del lote a la taza, cada paso queda registrado por quien lo vive.</p>
         </div>
-        <ol className="pp-pasos">
+        <ol className="pp-ruta">
           {PASOS.map((paso, i) => (
-            <li key={paso.titulo}>
-              <span className="pp-paso-num">{String(i + 1).padStart(2, '0')}</span>
-              <span className="pp-paso-icon" aria-hidden="true">
-                <Icon name={paso.icon} size={22} />
-              </span>
+            <li key={paso.titulo} style={{ '--c': paso.color } as CSSProperties}>
+              <div className="pp-ruta-marca" aria-hidden="true">
+                <span className="pp-ruta-icono">
+                  <Icon name={paso.icon} size={28} />
+                </span>
+                <b>{i + 1}</b>
+              </div>
+              <span className="pp-ruta-quien">{paso.quien}</span>
               <strong>{paso.titulo}</strong>
               <p>{paso.texto}</p>
             </li>
