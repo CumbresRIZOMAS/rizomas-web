@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router'
 import { useAuth } from '../../shared/auth/context'
+import { ApiError } from '../../shared/api/client'
 import { missingEnv } from '../../shared/config/env'
 import { Icon } from '../../shared/ui'
 
@@ -20,7 +21,9 @@ export function LoginPage() {
     try {
       await signIn(identifier.trim(), password)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'No se pudo iniciar sesión')
+      setError(err instanceof ApiError
+        ? `Backend (HTTP ${err.status || 'sin respuesta'}): ${err.message}`
+        : err instanceof Error ? err.message : `Error de inicio de sesión: ${String(err)}`)
     } finally {
       setEnviando(false)
     }
@@ -87,8 +90,9 @@ export function LoginPage() {
                 </div>
               </label>
               {error && (
-                <div className="notice notice-error" role="alert">
-                  {error}
+                <div className="notice notice-error login-error-detail" role="alert" aria-live="assertive" aria-atomic="true">
+                  <strong>No se pudo iniciar sesión</strong>
+                  <span>{error}</span>
                 </div>
               )}
               <button className="btn btn-primary" type="submit" disabled={enviando}>

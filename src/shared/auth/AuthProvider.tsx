@@ -97,10 +97,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             : { phone: normalizePhone(identifier), password }
           const { data, error } = await supabase().auth.signInWithPassword(credentials)
           if (error) {
-            if (error.code === 'phone_provider_disabled' || error.message.includes('phone_provider_disabled')) {
-              throw new Error('El acceso con celular está desactivado en Supabase. El administrador debe habilitar Auth > Sign In / Providers > Phone.')
+            const authMessage = error.message.toLowerCase()
+            if (error.code === 'phone_provider_disabled' || authMessage.includes('phone_provider_disabled') || (authMessage.includes('phone') && authMessage.includes('provider') && authMessage.includes('disabled'))) {
+              throw new Error('Supabase (phone_provider_disabled): el acceso con celular está desactivado. Habilita Authentication > Sign In / Providers > Phone en Supabase.')
             }
-            throw new Error(error.message === 'Invalid login credentials' ? 'Correo/celular o contraseña incorrectos' : error.message)
+            if (error.code === 'phone_not_confirmed' || authMessage.includes('phone_not_confirmed')) {
+              throw new Error('Supabase (phone_not_confirmed): el celular de esta cuenta aún no está confirmado. Un administrador debe revisar la cuenta.')
+            }
+            if (error.code === 'invalid_credentials' || error.message === 'Invalid login credentials') {
+              throw new Error('Supabase (invalid_credentials): celular/correo o contraseña incorrectos. Para las cuentas migradas, prueba la cédula solo con números.')
+            }
+            throw new Error(`Supabase${error.code ? ` (${error.code})` : ''}: ${error.message}`)
           }
           if (!data.session) throw new Error('Supabase no devolvió una sesión válida')
           const security = await api<{ required: boolean }>('/auth/password-status', { token: data.session.access_token })
