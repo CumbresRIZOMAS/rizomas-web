@@ -66,6 +66,8 @@ function rutaTraza(origen: Publication) {
 }
 
 function fotoDe(origen: Publication) {
+  const profileImage = origen.farmProfile?.images[0]?.url
+  if (profileImage) return profileImage
   const evidencia = origen.evidences[0]?.evidence
   return evidencia ? `${env.apiUrl}/api/v1/publications/${origen.id}/photos/${evidencia.id}` : null
 }

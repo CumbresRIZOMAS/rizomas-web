@@ -80,6 +80,14 @@ export type Farm = {
   exactLocation?: Record<string, unknown> | null
   publicLocation?: Record<string, unknown> | null
   locationVisibility?: 'PRIVADA' | 'FINCA' | 'ORGANIZACION' | 'PUBLICA'
+  publicDescription?: string | null
+  publicContactEmail?: string | null
+  publicContactPhone?: string | null
+  publicWebsite?: string | null
+  publicInstagram?: string | null
+  publicFacebook?: string | null
+  publicWhatsapp?: string | null
+  publicImageIds?: string[]
   createdAt: string
   lots?: Lot[]
   owner?: { id: string; name: string } | null
@@ -302,6 +310,16 @@ export type Publication = {
   isPublished?: boolean
   farmType?: FarmType | null
   coffeeTypes?: string[]
+  farmProfile?: {
+    description: string | null
+    contactEmail: string | null
+    contactPhone: string | null
+    website: string | null
+    instagram: string | null
+    facebook: string | null
+    whatsapp: string | null
+    images: { id: string; url: string; capturedAt: string | null }[]
+  }
   description?: string | null
   municipality?: string | null
   region: string | null
@@ -329,6 +347,7 @@ export type FarmPublication = {
 
 /** Foto aprobada y autorizada como pública que se puede poner en una publicación. */
 export type PhotoCandidate = { id: string; objectKey: string; capturedAt: string | null; laborId: string | null; linked: boolean }
+export type FarmProfileImageCandidate = { id: string; url: string; capturedAt: string | null; expiresIn: number }
 
 /** GET /publications/:id/traceability: read model público, sin datos privados. */
 export type PublicTraceability = {

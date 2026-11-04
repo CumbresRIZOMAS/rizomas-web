@@ -907,6 +907,53 @@ nav.back-link a { color: var(--forest); font-weight: 600; }
 .process-note > .note-actions { flex: 0 0 auto; flex-direction: row; display: flex; gap: 8px; flex-wrap: wrap; }
 .process-note .rec-form { padding-top: 6px; }
 
+/* Perfil público de finca y tablas de administración. */
+.farm-profile-editor { display: flex; flex-direction: column; gap: 14px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: #fbfbf8; }
+.farm-profile-editor h3 { margin: 0 0 4px; color: var(--forest-dark); font-size: 14px; }
+.farm-profile-editor p,.farm-profile-editor small { color: var(--muted); font-size: 10px; line-height: 1.55; }
+.farm-profile-description textarea { min-height: 110px; resize: vertical; }
+.farm-profile-images { display: flex; flex-direction: column; gap: 10px; }
+.farm-profile-images > div:first-child { display: flex; flex-direction: column; gap: 4px; }
+.farm-profile-images > div:first-child strong { font-size: 11px; }
+.farm-profile-image-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 10px; }
+.farm-profile-image { overflow: hidden; border: 1px solid var(--line); border-radius: 10px; background: white; cursor: pointer; }
+.farm-profile-image.selected { border: 2px solid var(--forest); box-shadow: 0 0 0 2px rgba(44,95,45,.1); }
+.farm-profile-image img { width: 100%; height: 120px; object-fit: cover; }
+.farm-profile-image > span { display: flex; align-items: center; gap: 7px; padding: 8px; color: #454940; font-size: 9px; }
+.farm-profile-image input { accent-color: var(--forest); }
+.usuarios-table { overscroll-behavior-x: contain; }
+.usuarios-table table { min-width: 980px; }
+.user-actions { display: flex; gap: 4px; flex-wrap: wrap; min-width: 220px; }
+.user-actions .btn { min-height: 34px; padding-inline: 9px; font-size: 10px; }
+.farm-profile-story { margin: 22px 0; padding: 20px; border-left: 3px solid var(--moss); border-radius: 0 12px 12px 0; background: #f6f7ef; }
+.farm-profile-story > span { color: var(--forest); font-size: 9px; font-weight: 700; letter-spacing: 1px; }
+.farm-profile-story p { margin: 8px 0 0; color: #55594f; font-size: 13px; line-height: 1.75; white-space: pre-line; }
+.farm-public-contact { margin: 22px 0; padding: 20px; border: 1px solid var(--line); border-radius: 12px; }
+.farm-public-contact h2 { margin: 0 0 12px; color: var(--forest-dark); font-family: Georgia,serif; font-size: 20px; }
+.farm-public-contact > div { display: flex; flex-wrap: wrap; gap: 9px; }
+.farm-public-contact a { max-width: 100%; padding: 9px 12px; border-radius: 20px; background: #edf3e5; color: var(--forest-dark); font-size: 11px; overflow-wrap: anywhere; }
+.farm-public-contact a:hover { background: #dce9cf; }
+.table-wrap { overscroll-behavior-x: contain; }
+main,.main-shell,.card,.form-card { min-width: 0; }
+input,select,textarea { max-width: 100%; }
+@media (max-width: 850px) {
+  .farm-profile-image-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .user-actions { min-width: 230px; }
+  .page-heading { align-items: flex-start; }
+  .page-heading .actions { flex-wrap: wrap; }
+}
+@media (max-width: 600px) {
+  .farm-profile-editor { padding: 14px; }
+  .farm-profile-image-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .farm-profile-image img { height: 105px; }
+  .farm-profile-story,.farm-public-contact { padding: 15px; }
+  .farm-public-contact > div { align-items: stretch; flex-direction: column; }
+  .farm-public-contact a { text-align: center; }
+  .usuarios-table table { min-width: 900px; }
+  .user-actions { min-width: 210px; }
+  .page-heading .actions { width: 100%; }
+}
+
 /* ── Portal: etiquetas del hero, cifras con emoji y secciones nuevas ── */
 .hero-chip { position: absolute; z-index: 3; padding: 8px 12px; border-radius: 20px; background: rgba(255,255,255,.94); box-shadow: 0 8px 22px rgba(43,58,38,.16); font-size: 9px; font-weight: 650; color: var(--forest); white-space: nowrap; animation: flotar 5s ease-in-out infinite; }
 .hero-chip.chip-1 { left: 2%; top: 46%; }

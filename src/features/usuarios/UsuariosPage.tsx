@@ -22,6 +22,7 @@ export function UsuariosPage() {
   const [fincaId, setFincaId] = useState('')
   const [invitando, setInvitando] = useState(false)
   const [editando, setEditando] = useState<AppUser | null>(null)
+  const [cambiandoClave, setCambiandoClave] = useState<AppUser | null>(null)
   const [mensaje, setMensaje] = useState<string | null>(null)
   const roles = role === 'ADMIN_CUMBRES' ? ROLES_CUMBRES : ROLES_FINCA
   const texto = q.trim().toLowerCase()
@@ -60,6 +61,7 @@ export function UsuariosPage() {
       <div className="stack">
         {invitando && <UsuarioForm farms={farms} lots={lots} roles={roles} roleActor={role} onCancel={() => setInvitando(false)} onSaved={() => { setInvitando(false); reload(); setMensaje('Cuenta creada en Supabase. Comparte la contraseña inicial por un canal seguro; la persona ya puede ingresar desde la app móvil.') }} />}
         {editando && <EditarUsuarioForm user={editando} farms={farms} lots={lots} roles={roles} onCancel={() => setEditando(null)} onSaved={() => { setEditando(null); reload() }} />}
+        {cambiandoClave && <CambiarContrasenaForm user={cambiandoClave} onCancel={() => setCambiandoClave(null)} onSaved={(result) => { setCambiandoClave(null); reload(); setMensaje(`Contraseña guardada para ${cambiandoClave.name}.${result.accountLinked ? ' También se creó o vinculó su acceso en Supabase Auth.' : ''} Deberá cambiarla al ingresar.`) }} />}
         {mensaje && <div className="notice notice-success" role="status">{mensaje}<button type="button" onClick={() => setMensaje(null)} aria-label="Cerrar">×</button></div>}
         {actions.error && <ErrorNotice message={actions.error} />}
         <Card>
@@ -71,12 +73,13 @@ export function UsuariosPage() {
           {loading && !data && <Loading />}
           {error && <ErrorNotice message={error} onRetry={reload} />}
           {data && visibles.length === 0 && <Empty title="Ningún usuario coincide" />}
-          {visibles.length > 0 && <div className="table-wrap"><table><thead><tr><th>Usuario</th><th>Correo / celular</th><th>Finca(s)</th><th>Lote(s)</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>
+          {visibles.length > 0 && <div className="table-wrap usuarios-table"><table><thead><tr><th>Usuario</th><th>Correo / celular</th><th>Finca(s)</th><th>Lote(s)</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>
             {visibles.map((u) => <tr key={u.id}>
               <td><span className="user-cell"><i>{initials(u.name)}</i><strong>{u.name}</strong></span></td><td>{u.email || localPhoneDisplay(u.phone) || 'Sin acceso'}</td><td>{fincasDe(u).map((f) => f.name).join(', ') || '—'}</td><td>{(u.lotMembers ?? []).map((m) => m.lot.name).join(', ') || '—'}</td><td>{ROLE_LABEL[u.role] ?? u.role}</td>
               <td><Chip tone={u.active ? 'green' : 'gray'}>{!u.authUserId ? 'Pendiente de acceso' : u.active ? 'Activo' : 'Inactivo'}</Chip></td>
-              <td><div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+              <td><div className="user-actions">
                 <Button variant="ghost" onClick={() => setEditando(u)}>Editar</Button>
+                <Button variant="ghost" disabled={!u.email && !u.phone} onClick={() => setCambiandoClave(u)}>Cambiar contraseña</Button>
                 <Button variant="ghost" disabled={!u.authUserId} onClick={() => void restablecer(u)}>Restablecer contraseña</Button>
                 <Button variant="ghost" onClick={() => void cambiarEstado(u)}>{u.active ? 'Desactivar' : 'Activar'}</Button>
                 {u.authUserId !== userId && <Button variant="danger" onClick={() => void eliminar(u)}>Eliminar</Button>}
@@ -87,6 +90,30 @@ export function UsuariosPage() {
       </div>
     </div>
   )
+}
+
+function CambiarContrasenaForm({ user, onSaved, onCancel }: { user: AppUser; onSaved: (result: { accountLinked: boolean }) => void; onCancel: () => void }) {
+  const { mutate, saving, error } = useApiMutation()
+  const [password, setPassword] = useState('')
+  const [confirmation, setConfirmation] = useState('')
+  const [validation, setValidation] = useState<string | null>(null)
+  async function submit(event: FormEvent) {
+    event.preventDefault()
+    if (password.length < 8) return setValidation('Usa al menos 8 caracteres.')
+    if (password !== confirmation) return setValidation('Las contraseñas no coinciden.')
+    setValidation(null)
+    const result = await mutate<{ accountLinked: boolean }>(`/users/${user.id}/password`, 'PATCH', { password })
+    if (result) onSaved(result)
+  }
+  return <FormCard title={`Cambiar contraseña · ${user.name}`}><form onSubmit={submit}>
+    <p className="muted">El cambio se aplica a Supabase Auth para el acceso web y móvil. La persona tendrá que elegir una nueva contraseña al iniciar sesión.</p>
+    <div className="form-grid">
+      <TextField label="Nueva contraseña" type="password" required minLength={8} autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      <TextField label="Confirmar contraseña" type="password" required minLength={8} autoComplete="new-password" value={confirmation} onChange={(e) => setConfirmation(e.target.value)} />
+    </div>
+    {validation && <ErrorNotice message={validation} />}{error && <ErrorNotice message={error} />}
+    <div className="form-actions"><Button variant="ghost" onClick={onCancel}>Cancelar</Button><Button type="submit" icon="check" disabled={saving || password.length < 8 || !confirmation}>{saving ? 'Guardando…' : 'Guardar contraseña'}</Button></div>
+  </form></FormCard>
 }
 
 function UsuarioForm({ farms, lots, roles, roleActor, onSaved, onCancel }: { farms: Farm[]; lots: Lot[]; roles: Role[]; roleActor: Role | null; onSaved: () => void; onCancel: () => void }) {

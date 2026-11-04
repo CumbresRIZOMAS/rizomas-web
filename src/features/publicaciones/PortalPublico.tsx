@@ -33,7 +33,15 @@ const PASOS = [
  * cada una a una URL firmada de corta duración.
  */
 function fotosDe(p: Publication): string[] {
-  return p.evidences.map((e) => `${env.apiUrl}/api/v1/publications/${p.id}/photos/${e.evidence.id}`)
+  return [
+    ...(p.farmProfile?.images ?? []).map((image) => image.url),
+    ...p.evidences.map((e) => `${env.apiUrl}/api/v1/publications/${p.id}/photos/${e.evidence.id}`),
+  ]
+}
+
+function enlaceWeb(value: string | null | undefined): string | null {
+  const candidate = value?.trim()
+  return candidate && /^https?:\/\//i.test(candidate) ? candidate : null
 }
 
 function urlMapaPublico(location: Publication['publicLocation']): string | null {
@@ -508,6 +516,7 @@ function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Pub
         </header>
         <div className="origin-detail-body">
           {p.description && <section className="origin-impact"><div><Icon name="leaf" size={26} /><span><small>Historia del origen</small><strong>{p.description}</strong></span></div></section>}
+          {p.farmProfile?.description && <section className="farm-profile-story"><span>PERFIL DE LA FINCA</span><p>{p.farmProfile.description}</p></section>}
           {(p.municipality || p.region || urlMapaPublico(p.publicLocation)) && <section className="public-map-detail"><h2>Ubicación compartida</h2><p>{[p.municipality, p.region].filter(Boolean).map(nombreVisible).join(', ') || 'Ubicación aproximada de la finca'}</p>{urlMapaPublico(p.publicLocation) && <><iframe title={`Mapa aproximado de ${p.title}`} src={urlMapaPublico(p.publicLocation)!} loading="lazy" /><a href={`https://www.openstreetmap.org/?mlat=${p.publicLocation!.latitude}&mlon=${p.publicLocation!.longitude}#map=11/${p.publicLocation!.latitude}/${p.publicLocation!.longitude}`} target="_blank" rel="noreferrer">Abrir mapa</a></>}</section>}
           {fotos.length > 0 && (
             <section className="process-gallery">
@@ -596,6 +605,17 @@ function DetalleOrigen({ publicacion: p, contacto, onClose }: { publicacion: Pub
               </a>
             </section>
           )}
+          {p.farmProfile && (p.farmProfile.contactEmail || p.farmProfile.contactPhone || p.farmProfile.whatsapp || p.farmProfile.website || p.farmProfile.instagram || p.farmProfile.facebook) && <section className="farm-public-contact">
+            <h2>Contacto de la finca</h2>
+            <div>
+              {p.farmProfile.contactEmail && <a href={`mailto:${p.farmProfile.contactEmail}`}>Correo · {p.farmProfile.contactEmail}</a>}
+              {p.farmProfile.contactPhone && <a href={`tel:${p.farmProfile.contactPhone.replace(/[^+\d]/g, '')}`}>Celular · {p.farmProfile.contactPhone}</a>}
+              {p.farmProfile.whatsapp && <a href={`https://wa.me/${p.farmProfile.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noreferrer">WhatsApp</a>}
+              {enlaceWeb(p.farmProfile.website) && <a href={enlaceWeb(p.farmProfile.website)!} target="_blank" rel="noreferrer">Sitio web</a>}
+              {enlaceWeb(p.farmProfile.instagram) && <a href={enlaceWeb(p.farmProfile.instagram)!} target="_blank" rel="noreferrer">Instagram</a>}
+              {enlaceWeb(p.farmProfile.facebook) && <a href={enlaceWeb(p.farmProfile.facebook)!} target="_blank" rel="noreferrer">Facebook</a>}
+            </div>
+          </section>}
         </div>
       </article>
     </div>

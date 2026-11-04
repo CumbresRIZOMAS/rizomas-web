@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useApiMutation, useApiQuery } from '../../shared/api/hooks'
-import type { AppUser, Farm, FarmType } from '../../shared/api/types'
+import type { AppUser, Farm, FarmProfileImageCandidate, FarmType } from '../../shared/api/types'
 import { useAuth } from '../../shared/auth/context'
 import divipola from '../../shared/data/colombia-divipola.json'
 import { FARM_TYPE_LABEL, optionalText, parseOptionalNumber, toNumber } from '../../shared/format'
@@ -27,6 +27,7 @@ export function FincaForm({
   const { mutate, saving, error } = useApiMutation()
   const { role } = useAuth()
   const usuarios = useApiQuery<AppUser[]>(role === 'ADMIN_CUMBRES' ? '/users' : null)
+  const fotosQuery = useApiQuery<FarmProfileImageCandidate[]>(finca ? `/evidence/farms/${finca.id}/public-profile-candidates` : null)
   const [name, setName] = useState(finca?.name ?? '')
   const [identifier, setIdentifier] = useState(finca?.identifier ?? '')
   const regionGuardada = finca?.region ?? ''
@@ -51,6 +52,14 @@ export function FincaForm({
   const [locationError, setLocationError] = useState<string | null>(null)
   const [climate, setClimate] = useState(finca?.climate ?? '')
   const [farmType, setFarmType] = useState<FarmType>(finca?.farmType ?? 'EN_TRANSICION')
+  const [publicDescription, setPublicDescription] = useState(finca?.publicDescription ?? '')
+  const [publicContactEmail, setPublicContactEmail] = useState(finca?.publicContactEmail ?? '')
+  const [publicContactPhone, setPublicContactPhone] = useState(finca?.publicContactPhone ?? '')
+  const [publicWebsite, setPublicWebsite] = useState(finca?.publicWebsite ?? '')
+  const [publicInstagram, setPublicInstagram] = useState(finca?.publicInstagram ?? '')
+  const [publicFacebook, setPublicFacebook] = useState(finca?.publicFacebook ?? '')
+  const [publicWhatsapp, setPublicWhatsapp] = useState(finca?.publicWhatsapp ?? '')
+  const [publicImageIds, setPublicImageIds] = useState<string[]>(finca?.publicImageIds ?? [])
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
@@ -83,6 +92,14 @@ export function FincaForm({
       areaHa: parseOptionalNumber(area) ?? null,
       climate: optionalText(climate) ?? null,
       farmType,
+      publicDescription: optionalText(publicDescription) ?? null,
+      publicContactEmail: optionalText(publicContactEmail) ?? null,
+      publicContactPhone: optionalText(publicContactPhone) ?? null,
+      publicWebsite: optionalText(publicWebsite) ?? null,
+      publicInstagram: optionalText(publicInstagram) ?? null,
+      publicFacebook: optionalText(publicFacebook) ?? null,
+      publicWhatsapp: optionalText(publicWhatsapp) ?? null,
+      publicImageIds,
     }
     const saved = finca ? await mutate<Farm>(`/farms/${finca.id}`, 'PATCH', body) : await mutate<Farm>('/farms', 'POST', body)
     if (saved) onSaved(saved)
@@ -135,6 +152,24 @@ export function FincaForm({
             ))}
           </SelectField>
         </div>
+        <section className="farm-profile-editor" aria-labelledby="farm-profile-heading">
+          <div><h3 id="farm-profile-heading">Perfil público de la finca</h3><p>Esta información aparecerá en el mapa y en el perfil público de origen.</p></div>
+          <label className="field farm-profile-description"><span>Descripción</span><textarea rows={4} maxLength={1600} value={publicDescription} onChange={(e) => setPublicDescription(e.target.value)} placeholder="Cuenta la historia de la finca, sus prácticas y lo que la hace especial." /><small>{publicDescription.length}/1600 caracteres</small></label>
+          <div className="form-grid three">
+            <TextField label="Correo de contacto público" type="email" optional value={publicContactEmail} onChange={(e) => setPublicContactEmail(e.target.value)} />
+            <TextField label="Celular de contacto público" optional value={publicContactPhone} onChange={(e) => setPublicContactPhone(e.target.value)} />
+            <TextField label="Sitio web" type="url" optional value={publicWebsite} onChange={(e) => setPublicWebsite(e.target.value)} placeholder="https://" />
+            <TextField label="Instagram" type="url" optional value={publicInstagram} onChange={(e) => setPublicInstagram(e.target.value)} placeholder="https://instagram.com/..." />
+            <TextField label="Facebook" type="url" optional value={publicFacebook} onChange={(e) => setPublicFacebook(e.target.value)} placeholder="https://facebook.com/..." />
+            <TextField label="WhatsApp público" optional value={publicWhatsapp} onChange={(e) => setPublicWhatsapp(e.target.value)} hint="Número con indicativo de país, por ejemplo +57 310 000 0000." />
+          </div>
+          {finca ? <div className="farm-profile-images"><div><strong>Imágenes del perfil</strong><small>Solo puedes mostrar fotos de esta finca aprobadas y autorizadas como públicas. Para agregar fotos nuevas, súbelas primero en Evidencias.</small></div>
+            {fotosQuery.loading && !fotosQuery.data && <span className="muted">Cargando fotos…</span>}
+            {fotosQuery.error && <ErrorNotice message={fotosQuery.error} onRetry={fotosQuery.reload} />}
+            {fotosQuery.data?.length ? <div className="farm-profile-image-grid">{fotosQuery.data.map((photo) => <label key={photo.id} className={`farm-profile-image ${publicImageIds.includes(photo.id) ? 'selected' : ''}`}><img src={photo.url} alt="Foto aprobada de la finca" /><span><input type="checkbox" checked={publicImageIds.includes(photo.id)} onChange={(e) => setPublicImageIds((current) => e.target.checked ? [...current, photo.id].slice(0, 12) : current.filter((id) => id !== photo.id))} /> Mostrar en el perfil</span></label>)}</div> : !fotosQuery.loading && <p className="muted">No hay fotos aprobadas y públicas para esta finca todavía.</p>}
+            <small>{publicImageIds.length}/12 fotos seleccionadas.</small>
+          </div> : <p className="muted">Después de crear la finca y aprobar sus fotos, podrás seleccionarlas aquí.</p>}
+        </section>
         {error && <ErrorNotice message={error} />}
         <div className="form-actions">
           <button type="button" className="btn btn-secondary" onClick={onCancel}>
