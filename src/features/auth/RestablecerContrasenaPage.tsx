@@ -4,7 +4,7 @@ import { useAuth } from '../../shared/auth/context'
 import { Button, ErrorNotice, Icon, TextField } from '../../shared/ui'
 
 export function RestablecerContrasenaPage({ forced = false }: { forced?: boolean }) {
-  const { token, loading, setPassword } = useAuth()
+  const { token, loading, setPassword, signOut } = useAuth()
   const navigate = useNavigate()
   const [password, setPasswordValue] = useState('')
   const [confirmation, setConfirmation] = useState('')
@@ -32,6 +32,7 @@ export function RestablecerContrasenaPage({ forced = false }: { forced?: boolean
       <TextField label="Confirmar contraseña" type="password" autoComplete="new-password" minLength={8} required value={confirmation} onChange={(e) => setConfirmation(e.target.value)} />
       {error && <ErrorNotice message={error} />}
       <Button type="submit" disabled={saving || password.length < 8 || confirmation.length < 8}>{saving ? 'Guardando…' : 'Guardar contraseña'}</Button>
+      {forced && <Button type="button" variant="secondary" onClick={() => { void signOut().then(() => navigate('/ingresar', { replace: true })) }}>Cerrar sesión</Button>}
     </>}
   </form></div></div>
 }

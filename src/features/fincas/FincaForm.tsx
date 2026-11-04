@@ -4,6 +4,7 @@ import type { AppUser, Farm, FarmType } from '../../shared/api/types'
 import { useAuth } from '../../shared/auth/context'
 import divipola from '../../shared/data/colombia-divipola.json'
 import { FARM_TYPE_LABEL, optionalText, parseOptionalNumber, toNumber } from '../../shared/format'
+import { localPhoneDisplay } from '../../shared/auth/phone'
 import { ErrorNotice, FormCard, SelectField, TextField } from '../../shared/ui'
 
 const OTRO = '__otro__'
@@ -94,7 +95,7 @@ export function FincaForm({
           <TextField label="Nombre" required value={name} onChange={(e) => setName(e.target.value)} placeholder="Ej: El Porvenir" />
           <TextField label="Identificador" optional value={identifier} onChange={(e) => setIdentifier(e.target.value)} />
         </div>
-        {role === 'ADMIN_CUMBRES' && <div className="form-grid"><SelectField label="Propietario" optional value={ownerId} onChange={(e) => setOwnerId(e.target.value)}><option value="">Asignarme / sin cambio</option>{(usuarios.data ?? []).map((user) => <option key={user.id} value={user.id}>{user.name} · {user.email ?? user.phone ?? 'sin contacto'}</option>)}</SelectField></div>}
+        {role === 'ADMIN_CUMBRES' && <div className="form-grid"><SelectField label="Propietario" optional value={ownerId} onChange={(e) => setOwnerId(e.target.value)}><option value="">Asignarme / sin cambio</option>{(usuarios.data ?? []).map((user) => <option key={user.id} value={user.id}>{user.name} · {user.email || localPhoneDisplay(user.phone) || 'sin contacto'}</option>)}</SelectField></div>}
         <div className="form-grid"><label className="field"><span>Geometría exacta de la finca (JSON, opcional)</span><textarea rows={3} value={exactLocationJson} onChange={(e) => setExactLocationJson(e.target.value)} placeholder='{"type":"Point","coordinates":[-76.05,1.89]}' /><small>Se mantiene privada. Usa los campos de latitud y longitud si solo tienes un punto.</small></label></div>
         {locationError && <p className="notice notice-error" role="alert">{locationError}</p>}
         <div className="form-grid">

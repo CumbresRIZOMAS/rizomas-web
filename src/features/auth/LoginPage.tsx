@@ -1,8 +1,8 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router'
 import { useAuth } from '../../shared/auth/context'
-import { ApiError } from '../../shared/api/client'
 import { missingEnv } from '../../shared/config/env'
+import { localPhoneInput } from '../../shared/auth/phone'
 import { Icon } from '../../shared/ui'
 
 export function LoginPage() {
@@ -20,10 +20,8 @@ export function LoginPage() {
     setError(null)
     try {
       await signIn(identifier.trim(), password)
-    } catch (err) {
-      setError(err instanceof ApiError
-        ? `Backend (HTTP ${err.status || 'sin respuesta'}): ${err.message}`
-        : err instanceof Error ? err.message : `Error de inicio de sesión: ${String(err)}`)
+    } catch {
+      setError('No se pudo iniciar sesión. Revisa el celular/correo y la contraseña, o inténtalo de nuevo más tarde.')
     } finally {
       setEnviando(false)
     }
@@ -72,7 +70,7 @@ export function LoginPage() {
             <>
               <label className="field">
                 <span>Correo electrónico o celular</span>
-                <input type="text" autoComplete="username" required placeholder="correo@ejemplo.com o 3001234567" value={identifier} onChange={(e) => setIdentifier(e.target.value)} />
+                <input type="text" autoComplete="username" required placeholder="correo@ejemplo.com o 310 207 4438" value={identifier} onChange={(e) => setIdentifier(localPhoneInput(e.target.value))} />
               </label>
               <label className="field">
                 <span>Contraseña</span>
@@ -90,10 +88,7 @@ export function LoginPage() {
                 </div>
               </label>
               {error && (
-                <div className="notice notice-error login-error-detail" role="alert" aria-live="assertive" aria-atomic="true">
-                  <strong>No se pudo iniciar sesión</strong>
-                  <span>{error}</span>
-                </div>
+                <div className="notice notice-error" role="alert">{error}</div>
               )}
               <button className="btn btn-primary" type="submit" disabled={enviando}>
                 {enviando ? 'Ingresando…' : 'Ingresar al panel'} <Icon name="arrow" />
